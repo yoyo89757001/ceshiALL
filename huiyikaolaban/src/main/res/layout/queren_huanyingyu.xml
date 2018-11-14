@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="360dp"
+    android:gravity="center_horizontal"
+    android:minWidth="330dp"
+    android:minHeight="300dp"
+    android:layout_height="340dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="360dp"
+        android:gravity="center_horizontal"
+        android:layout_height="340dp">
+
+
+
+    <TextView
+        android:textColor="@color/write"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/zidonghuoqu3"
+        android:text="欢迎语设置"
+        android:textSize="18sp"
+        android:padding="4dp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:textColor="@color/textcolor"
+        android:layout_marginTop="8dp"
+        android:text="(注意:用符号 #@ 代表姓名,用符号 %* 代表职位,你可以把姓名,也就是 #@ 这两个符号添加到欢迎语的任意位置,职位也是一样)"
+        android:textSize="14sp"
+        android:padding="4dp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/juese"
+            android:drawableRight="@drawable/lan_xia"
+            android:minWidth="140dp"
+            android:text="领导"
+            android:background="@drawable/zhongkong_lan"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:maxWidth="200dp"
+            android:textColor="@color/colorBar_bg"
+            android:textSize="16sp"
+            android:minHeight="36dp"
+            android:padding="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_below="@+id/juese"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="26dp"
+            android:hint="请输入欢迎语"
+            android:id="@+id/huanyin_et"
+            android:textSize="16sp"
+            android:textColor="@color/colorBar_bg"
+            android:textColorHint="@color/textcolor"
+            android:background="@drawable/zhongkong_lan"
+            android:minWidth="200dp"
+            android:padding="10dp"
+            android:layout_height="wrap_content" />
+
+
+
+    <View
+        android:background="@color/colorBar_bg"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/ee"
+        android:layout_height="0.8dp"/>
+        <LinearLayout
+            android:id="@+id/ee"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <Button
+                android:layout_width="0dp"
+                android:textColor="@color/colorBar_bg"
+                android:layout_weight="1"
+                android:text="确认"
+                android:id="@+id/queren"
+                android:textSize="16sp"
+                android:background="@null"
+                android:layout_height="50dp" />
+
+            <View
+                android:layout_width="0.8dp"
+                android:background="@color/colorBar_bg"
+                android:layout_height="match_parent"/>
+            <Button
+                android:layout_width="0dp"
+                android:background="@null"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:id="@+id/quxiao"
+                android:text="取消"
+                android:textColor="@color/colorBar_bg"
+                android:layout_height="50dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/gongdi_bg"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.ruitong.huiyi3.ui.GongDiYanShiActivity">
+
+
+    <TextView
+        android:textColor="@color/white"
+        android:textSize="22px"
+        android:layout_marginTop="24px"
+        android:layout_marginRight="50px"
+        android:layout_alignParentRight="true"
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginTop="70px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_weight="1.2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <RelativeLayout
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <View
+                        android:layout_weight="0.4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"/>
+
+
+                    <ImageView
+                        android:scaleType="fitXY"
+                        android:id="@+id/im1"
+                        android:background="@drawable/renbg"
+                        android:layout_marginRight="20px"
+                        android:layout_weight="2"
+                        android:layout_marginTop="120px"
+                        android:layout_marginBottom="120px"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:background="@drawable/renbg"
+                        android:id="@+id/im2"
+                        android:layout_marginLeft="20px"
+                        android:scaleType="fitXY"
+                        android:layout_marginTop="120px"
+                        android:layout_marginBottom="120px"
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:textSize="28px"
+                    android:id="@+id/name2"
+                    android:layout_marginLeft="60px"
+                    android:layout_marginTop="70px"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="0.4"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="实时人数"
+                    android:layout_marginTop="50px"
+                    android:textSize="50px"
+                    android:background="@drawable/zidonghuoqu3"
+                    android:gravity="center"
+                    android:padding="10px"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.robinhood.ticker.TickerView
+                    android:id="@+id/tickerview"
+                    android:layout_marginTop="10px"
+                    android:textColor="@color/white"
+                    android:textSize="50px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_weight="2"
+                android:padding="20px"
+                android:background="@drawable/gbgbg1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="最近进入人员"
+                    android:textSize="28px"
+                    android:layout_marginLeft="10px"
+                    android:layout_marginTop="10px"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="10px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <HorizontalScrollView
+                    android:id="@+id/ss1"
+                    android:layout_weight="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                    <LinearLayout
+                        android:id="@+id/ll1"
+                        android:layout_marginTop="20px"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+        <ImageView
+            android:background="@drawable/zhengchang_bg"
+            android:scaleType="fitXY"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_margin="20px"
+            android:background="@drawable/xm_bg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:textSize="28px"
+                android:id="@+id/eee"
+                android:layout_marginTop="16px"
+                android:layout_marginLeft="30px"
+                android:textColor="@color/white"
+                android:text="未备案人员"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <HorizontalScrollView
+                android:layout_below="@+id/eee"
+                android:id="@+id/ss2"
+                android:layout_margin="20px"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:id="@+id/ll2"
+                    android:paddingLeft="20px"
+                    android:paddingTop="10px"
+                    android:paddingRight="20px"
+                    android:paddingBottom="10px"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+    <Button
+        android:layout_width="200px"
+        android:id="@+id/dddk"
+        android:background="@color/img_full_opaque"
+        android:layout_height="200px" />
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/wangluo"
+        android:visibility="visible"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10px"
+        android:layout_marginTop="10px"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        app:lottie_fileName="wf.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true" />
+
+</RelativeLayout>

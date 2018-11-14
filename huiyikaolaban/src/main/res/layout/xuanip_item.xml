@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<RelativeLayout
+    android:layout_width="400dp"
+    android:layout_height="400dp">
+
+
+    <ListView
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:id="@+id/listview"
+        android:layout_height="300dp">
+
+    </ListView>
+
+
+    <Button
+        android:layout_alignParentBottom="true"
+        android:layout_width="100dp"
+        android:id="@+id/queren"
+        android:textSize="18sp"
+        android:text="确认"
+        android:textColor="@color/white"
+        android:background="@drawable/jiaohu3"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_height="60dp" />
+
+</RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 设置的类别 -->
+    <PreferenceCategory
+        android:key="ipass"
+        android:summary="我的位置"
+        android:title="后台地址">
+        <EditTextPreference
+            android:key="myname"
+            android:title="请输入后台地址"
+            android:summary="http://"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="mymsg"
+        android:summary="个人信息"
+        android:title="个人信息">
+        <EditTextPreference
+            android:key="myname"
+            android:title="请输入真实姓名"
+            android:summary="姓名"/>
+        <EditTextPreference
+            android:key="myname"
+            android:title="请输入真实姓名"
+            android:summary="姓名"/>
+
+    </PreferenceCategory>
+
+
+    <!--<PreferenceScreen-->
+
+            <!--android:summary="settings about emotions"-->
+        <!--android:title="Emotions" >-->
+             <!--<CheckBoxPreference-->
+                <!--android:defaultValue="true"-->
+                 <!--android:summaryOff="No,I am sorry."-->
+                 <!--android:summaryOn="Yes,I love you!"-->
+                 <!--android:title="Love me?" >-->
+             <!--</CheckBoxPreference>-->
+             <!--<CheckBoxPreference-->
+                 <!--android:defaultValue="false"-->
+                 <!--android:summaryOff="No,you are a good person."-->
+                 <!--android:summaryOn="Yes,I hate you!"-->
+                 <!--android:title="Hate me?" >-->
+             <!--</CheckBoxPreference>-->
+         <!--</PreferenceScreen>-->
+
+         <!--<PreferenceScreen-->
+
+             <!--android:summary="settings about relations"-->
+             <!--android:title="Relations" >-->
+             <!--<CheckBoxPreference-->
+                 <!--android:defaultValue="true"-->
+                 <!--android:summaryOff="No,I am sorry."-->
+                 <!--android:summaryOn="Yes,we are family!"-->
+                 <!--android:title="Family?" >-->
+             <!--</CheckBoxPreference>-->
+             <!--<CheckBoxPreference-->
+                 <!--android:defaultValue="false"-->
+                 <!--android:summaryOff="No,I am sorry."-->
+    <!--android:summaryOn="Yes,we are friends!"-->
+                 <!--android:title="Friends?" >-->
+             <!--</CheckBoxPreference>-->
+         <!--</PreferenceScreen>-->
+
+
+
+
+</PreferenceScreen>
