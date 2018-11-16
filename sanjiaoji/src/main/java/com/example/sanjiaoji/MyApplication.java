@@ -57,7 +57,7 @@ public class MyApplication extends MultiDexApplication {
 			ScreenAdapterTools.init(this);
 			mBoxStore = MyObjectBox.builder().androidContext(this).build();
 
-		Bugly.init(getApplicationContext(), "e37d57f5369999", false);
+		Bugly.init(getApplicationContext(), "4536442096", false);
 
 		} catch (Exception e) {
 			Log.d(TAG, e.getMessage()+"主程序");

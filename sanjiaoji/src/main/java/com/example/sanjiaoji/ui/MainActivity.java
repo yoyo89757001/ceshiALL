@@ -33,13 +33,12 @@ import com.arcsoft.face.FaceEngine;
 import com.arcsoft.face.FaceInfo;
 import com.arcsoft.face.VersionInfo;
 import com.badoo.mobile.util.WeakHandler;
-import com.example.sanjiaoji.MyApplication;
+
 import com.example.sanjiaoji.R;
-import com.example.sanjiaoji.model.BaoCunBean;
+
 import com.example.sanjiaoji.model.MenBean;
 import com.example.sanjiaoji.utils.ConfigUtil;
 import com.example.sanjiaoji.utils.Constants;
-import com.example.sanjiaoji.utils.CustomerEngine;
 import com.example.sanjiaoji.utils.DrawHelper;
 import com.example.sanjiaoji.utils.GsonUtil;
 import com.example.sanjiaoji.utils.SettingVar;
@@ -70,7 +69,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.objectbox.Box;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -113,13 +111,15 @@ public class MainActivity extends AppCompatActivity {
     // private FaceRectView faceRectView;
     private static boolean isLink = true;
     private ImageView ceshi;
-    private BaoCunBean baoCunBean = null;
-    private Box<BaoCunBean> baoCunBeanDao = null;
+   // private BaoCunBean baoCunBean = null;
+   // private Box<BaoCunBean> baoCunBeanDao = null;
     private static Vector<Long> longList = new Vector<>();
     private final Timer timer = new Timer();
     private TimerTask task;
     private SharedPreferenceHelper sharedPreferencesHelper = null;
     private String screen_token = null;
+    private String url="";
+
 
 
     WeakHandler weakHandler = new WeakHandler(new Handler.Callback() {
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
 
         myface.setDate(dw, dh);
 
-        baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
+      //  baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
 
         FaceEngine faceEngine = new FaceEngine();
         int activeCode = faceEngine.active(MainActivity.this, Constants.APP_ID, Constants.SDK_KEY);
@@ -332,8 +332,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            int cwidth = baoCunBean.getSize();
-                            int cheight = baoCunBean.getSize1();
+                            int cwidth = 640;
+                            int cheight = 480;
                             // Log.d(TAG, "cwidth:" + cwidth);
                             // Log.d(TAG, "cheight:" + cheight);
                             if (cwidth == 0) {
@@ -378,26 +378,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
-//                List<AgeInfo> ageInfoList = new ArrayList<>();
-//                List<GenderInfo> genderInfoList = new ArrayList<>();
-//                List<Face3DAngle> face3DAngleList = new ArrayList<>();
-//                List<LivenessInfo> faceLivenessInfoList = new ArrayList<>();
-//                int ageCode = faceEngine.getAge(ageInfoList);
-//                int genderCode = faceEngine.getGender(genderInfoList);
-//                int face3DAngleCode = faceEngine.getFace3DAngle(face3DAngleList);
-//                int livenessCode = faceEngine.getLiveness(faceLivenessInfoList);
-//
-//                //有其中一个的错误码不为0，return
-//                if ((ageCode | genderCode | face3DAngleCode | livenessCode) != ErrorInfo.MOK) {
-//                    return;
-//                }
-//                if (faceRectView != null && drawHelper != null) {
-//                    List<DrawInfo> drawInfoList = new ArrayList<>();
-//                    for (int i = 0; i < faceInfoList.size(); i++) {
-//                        drawInfoList.add(new DrawInfo(faceInfoList.get(i).getRect(), genderInfoList.get(i).getGender(), ageInfoList.get(i).getAge(), faceLivenessInfoList.get(i).getLiveness(), null));
-//                    }
-//                    drawHelper.draw(faceRectView, drawInfoList);
-//                }
             }
 
             @Override
@@ -469,10 +449,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
             } else {
-                CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+              //  CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
             }
         } else {
-            CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+           // CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
         }
 
         if (cameraHelper != null) {
@@ -486,7 +466,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onDataSynEvent(String event) {
         if (event.equals("quanxian")) {
-            CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+           // CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
         }
 
     }
@@ -518,11 +498,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        baoCunBean = baoCunBeanDao.get(123456L);
-        screen_token = sharedPreferencesHelper.getSharedPreference("screen_token", "").toString().trim();
+       // baoCunBean = baoCunBeanDao.get(123456L);
 
-        Log.d(TAG, baoCunBean.getTouxiangzhuji() + "hhh");
-        Log.d(TAG, screen_token);
+        screen_token = sharedPreferencesHelper.getSharedPreference("screen_token", "").toString().trim();
+        url = sharedPreferencesHelper.getSharedPreference("url", "http://192.168.2.2").toString().trim();
+
+
+        Log.d(TAG, url);
+       // Log.d(TAG, baoCunBean.getTouxiangzhuji() + "hhh");
+       // Log.d(TAG, screen_token);
         super.onResume();
 
     }
@@ -531,7 +515,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 1:N 对比
     private void link_P2(final File file) {
-        if (screen_token.equals("")) {
+        if (screen_token.equals("") || url.equals("")) {
             Log.d(TAG, "gfdgfdg3333");
             isLink = true;
             return;
@@ -557,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
         Request.Builder requestBuilder = new Request.Builder()
                 .header("Content-Type", "application/json")
                 .post(mBody)
-                .url(baoCunBean.getHoutaiDiZhi() + ":8866/recognize");
+                .url(url + ":8866/recognize");
 
         // step 3：创建 Call 对象
         Call call = okHttpClient.newCall(requestBuilder.build());

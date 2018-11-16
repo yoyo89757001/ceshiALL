@@ -1,21 +1,13 @@
 package com.example.sanjiaoji.ui;
 
 import android.app.Activity;
-
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
-
 import android.widget.Toast;
-
-
 import com.example.sanjiaoji.MyApplication;
-
 import com.example.sanjiaoji.R;
 import com.example.sanjiaoji.dialog.BangDingDialog;
 import com.example.sanjiaoji.dialog.XiuGaiDiZhiDialog;
@@ -27,16 +19,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.yatoooon.screenadaptation.ScreenAdapterTools;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-
 import java.io.IOException;
-
-import javax.security.auth.Subject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -63,12 +49,11 @@ public class SheZhiActivity extends Activity {
     private BangDingDialog bangDingDialog = null;
     private int cameraRotation;
     private static final String group_name = "face-pass-test-x";
-    private Box<BaoCunBean> baoCunBeanDao = null;
-    private BaoCunBean baoCunBean = null;
+   // private Box<BaoCunBean> baoCunBeanDao = null;
+   // private BaoCunBean baoCunBean = null;
     // public OkHttpClient okHttpClient = null;
-
-
-
+    private SharedPreferenceHelper sharedPreferencesHelper = null;
+    private String url=null,userName=null,pwd=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +63,16 @@ public class SheZhiActivity extends Activity {
         //ScreenAdapterTools.getInstance().reset(this);//如果希望android7.0分屏也适配的话,加上这句
         //在setContentView();后面加上适配语句
         ScreenAdapterTools.getInstance().loadView(getWindow().getDecorView());
-
-        baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
-
-        baoCunBean = baoCunBeanDao.get(123456L);
-
-
+       // baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
+       // baoCunBean = baoCunBeanDao.get(123456L);
         EventBus.getDefault().register(this);//订阅
 
+        sharedPreferencesHelper = new SharedPreferenceHelper(
+                SheZhiActivity.this, "xiaojun");
+
+        url = sharedPreferencesHelper.getSharedPreference("url", "").toString().trim();
+        userName = sharedPreferencesHelper.getSharedPreference("username", "").toString().trim();
+        pwd = sharedPreferencesHelper.getSharedPreference("passewod", "").toString().trim();
 
 
     }
@@ -97,14 +84,12 @@ public class SheZhiActivity extends Activity {
             case R.id.rl1:
                 final XiuGaiDiZhiDialog diZhiDialog = new XiuGaiDiZhiDialog(SheZhiActivity.this);
                 diZhiDialog.setCanceledOnTouchOutside(false);
-                diZhiDialog.setContents(baoCunBean.getHoutaiDiZhi(), baoCunBean.getZhanghuId(),baoCunBean.getGuanggaojiMing());
+                diZhiDialog.setContents(url, userName,pwd);
                 diZhiDialog.setOnQueRenListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        baoCunBean.setHoutaiDiZhi(diZhiDialog.getUrl());
-                        baoCunBean.setZhanghuId(diZhiDialog.getZhangHao());
-                        baoCunBean.setGuanggaojiMing(diZhiDialog.getMiMa());
-                        link_login();
+
+                        link_login(diZhiDialog.getUrl(),diZhiDialog.getZhangHao(),diZhiDialog.getMiMa());
                         diZhiDialog.dismiss();
 
                     }
@@ -142,9 +127,6 @@ public class SheZhiActivity extends Activity {
 
                 break;
 
-
-
-
         }
     }
 
@@ -159,17 +141,16 @@ public class SheZhiActivity extends Activity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);//解除订阅
 
-
     }
 
     //登陆旷世
-    private void link_login(){
+    private void link_login(final String url, final String zhangHao, final String miMa){
         //	final MediaType JSON=MediaType.parse("application/json; charset=utf-8");
         OkHttpClient okHttpClient= new OkHttpClient();
         //RequestBody requestBody = RequestBody.create(JSON, json);
         RequestBody body = new FormBody.Builder()
-                .add("username",baoCunBean.getZhanghuId())
-                .add("password",baoCunBean.getGuanggaojiMing())
+                .add("username",zhangHao)
+                .add("password",miMa)
                 .add("pad_id",FileUtil.getSerialNumber(this) == null ? FileUtil.getIMSI() : FileUtil.getSerialNumber(this))
                 .add("device_type", "2")
                 .build();
@@ -179,7 +160,7 @@ public class SheZhiActivity extends Activity {
                 //.post(requestBody)
                 //.get()
                 .post(body)
-                .url(baoCunBean.getHoutaiDiZhi()+"/pad/login");
+                .url(url+"/pad/login");
 
         // step 3：创建 Call 对象
         Call call = okHttpClient.newCall(requestBuilder.build());
@@ -210,14 +191,16 @@ public class SheZhiActivity extends Activity {
 					final JsonObject jsonObject= GsonUtil.parse(ss).getAsJsonObject();
 					Gson gson=new Gson();
 					if (jsonObject.get("code").getAsInt()==0){
-                       // Log.d("SheZhiActivity", jsonObject.get("data").getAsJsonObject().get("screen_token").getAsString());
-                        baoCunBean.setTouxiangzhuji(jsonObject.get("data").getAsJsonObject().get("screen_token").getAsString());
-                        SharedPreferenceHelper sharedPreferencesHelper = new SharedPreferenceHelper(
-                                SheZhiActivity.this, "xiaojun");
-                        sharedPreferencesHelper.put("screen_token", baoCunBean.getTouxiangzhuji());
 
-                        baoCunBeanDao.put(baoCunBean);
-                        Log.d("SheZhiActivity", baoCunBeanDao.get(123456L).toString());
+                        sharedPreferencesHelper.put("screen_token", jsonObject.get("data").getAsJsonObject().get("screen_token").getAsString());
+                        sharedPreferencesHelper.put("url", url);
+                        sharedPreferencesHelper.put("username", zhangHao);
+                        sharedPreferencesHelper.put("passewod", miMa);
+
+                        Log.d("SheZhiActivity",
+                                sharedPreferencesHelper.getSharedPreference("screen_token", "").toString());
+                       // baoCunBeanDao.put(baoCunBean);
+                      //  Log.d("SheZhiActivity", baoCunBeanDao.get(123456L).toString());
 
                         runOnUiThread(new Runnable() {
                             @Override

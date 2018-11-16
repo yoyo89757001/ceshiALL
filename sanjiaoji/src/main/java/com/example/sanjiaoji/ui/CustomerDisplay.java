@@ -3,7 +3,6 @@ package com.example.sanjiaoji.ui;
 import android.app.Activity;
 import android.app.Presentation;
 import android.content.Context;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -20,47 +19,33 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import com.arcsoft.face.ErrorInfo;
-
 import com.arcsoft.face.FaceEngine;
 import com.arcsoft.face.FaceInfo;
-
-
 import com.arcsoft.face.VersionInfo;
 import com.badoo.mobile.util.WeakHandler;
-import com.example.sanjiaoji.MyApplication;
+
 import com.example.sanjiaoji.R;
-import com.example.sanjiaoji.model.BaoCunBean;
 
 import com.example.sanjiaoji.model.MenBean;
 import com.example.sanjiaoji.utils.ConfigUtil;
-
-import com.example.sanjiaoji.utils.DrawHelper;
 import com.example.sanjiaoji.utils.GsonUtil;
-
 import com.example.sanjiaoji.utils.SharedPreferenceHelper;
-
 import com.example.sanjiaoji.utils.camera.CameraHelper;
 import com.example.sanjiaoji.utils.camera.CameraListener;
-
 import com.example.sanjiaoji.view.MyFaceview;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yatoooon.screenadaptation.ScreenAdapterTools;
 import com.yf.humansensor.humansensor_manager;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -73,8 +58,6 @@ import java.util.TimerTask;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
-
-import io.objectbox.Box;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -102,32 +85,33 @@ public class CustomerDisplay extends Presentation {
     // private TextView tv;
     private final String TAG = this.getClass().getSimpleName();
 
-    private int mWidth, mHeight, mFormat;
-    private Context context;
+  //  private int mWidth, mHeight, mFormat;
+   // private Context context;
     private int dw, dh;
     private CameraHelper cameraHelper;
-    private DrawHelper drawHelper;
+   // private DrawHelper drawHelper;
     private Camera.Size previewSize;
-    private Integer cameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
+  //  private Integer cameraID = Camera.CameraInfo.CAMERA_FACING_BACK;
     private FaceEngine faceEngine;
     private int afCode = -1;
     private int fd;
-    private int processMask = FaceEngine.ASF_AGE | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_GENDER | FaceEngine.ASF_LIVENESS;
+  //  private int processMask = FaceEngine.ASF_AGE | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_GENDER | FaceEngine.ASF_LIVENESS;
     /**
      * 相机预览显示的控件，可为SurfaceView或TextureView
      */
     private View previewView;
 
     private static boolean isLink = true;
-    private ImageView ceshi;
-    private BaoCunBean baoCunBean = null;
-    private Box<BaoCunBean> baoCunBeanDao = null;
+   // private ImageView ceshi;
+   // private BaoCunBean baoCunBean = null;
+   // private Box<BaoCunBean> baoCunBeanDao = null;
     private static Vector<Long> longList = new Vector<>();
     private final Timer timer = new Timer();
     private TimerTask task;
     private SharedPreferenceHelper sharedPreferencesHelper = null;
     private String screen_token = null;
     private ImageView logo;
+    private String url="";
 
 
     private WeakHandler weakHandler = new WeakHandler(  new Handler.Callback() {
@@ -175,7 +159,7 @@ public class CustomerDisplay extends Presentation {
                     humansensor_manager.set_gpio2_value(fd, 1);
 
                     //开继电器，即闸机开关
-                    humansensor_manager.set_gpio3_value(fd, 1);
+                    humansensor_manager.set_gpio4_value(fd, 1);
 
 
                     break;
@@ -189,7 +173,7 @@ public class CustomerDisplay extends Presentation {
                     //关灯
                     humansensor_manager.set_gpio2_value(fd, 0);
                     //关继电器
-                    humansensor_manager.set_gpio3_value(fd, 0);
+                    humansensor_manager.set_gpio4_value(fd, 0);
 
                     break;
 
@@ -203,7 +187,7 @@ public class CustomerDisplay extends Presentation {
 
     public CustomerDisplay(Context outerContext, Display display, Activity activity,int w,int h) {
         super(outerContext, display);
-        context=outerContext;
+       // context=outerContext;
         this.activity = activity;
     }
 
@@ -222,8 +206,8 @@ public class CustomerDisplay extends Presentation {
         Log.d("CustomerDisplay22", "dw:" + dw);
         Log.d("CustomerDisplay22", "dh:" + dh);
 
-        baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
-        baoCunBean = baoCunBeanDao.get(123456L);
+        //baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
+        //baoCunBean = baoCunBeanDao.get(123456L);
 
 
         setContentView(R.layout.view_display_customer);
@@ -244,9 +228,11 @@ public class CustomerDisplay extends Presentation {
         sharedPreferencesHelper = new SharedPreferenceHelper(
                 activity, "xiaojun");
         screen_token = sharedPreferencesHelper.getSharedPreference("screen_token", "").toString().trim();
+        url = sharedPreferencesHelper.getSharedPreference("url", "http://192.168.2.2").toString().trim();
+
 
         previewView = findViewById(R.id.texture_preview);
-        ceshi = findViewById(R.id.ceshi);
+        //ceshi = findViewById(R.id.ceshi);
         name=findViewById(R.id.name);
         rlrlrl=findViewById(R.id.rlrlrl);
         myface=findViewById(R.id.myface);
@@ -363,8 +349,8 @@ public class CustomerDisplay extends Presentation {
             public void onCameraOpened(Camera camera, int cameraId, int displayOrientation, boolean isMirror) {
                 Log.i(TAG, "onCameraOpened: " + cameraId + "  " + displayOrientation + " " + isMirror);
                 previewSize = camera.getParameters().getPreviewSize();
-                drawHelper = new DrawHelper(previewSize.width, previewSize.height, previewView.getWidth(), previewView.getHeight(), displayOrientation
-                        , cameraId, isMirror);
+                //drawHelper = new DrawHelper(previewSize.width, previewSize.height, previewView.getWidth(), previewView.getHeight(), displayOrientation
+                      //  , cameraId, isMirror);
             }
 
 
@@ -376,7 +362,6 @@ public class CustomerDisplay extends Presentation {
                 final List<FaceInfo> faceInfoList = new ArrayList<>();
                 int code = faceEngine.detectFaces(nv21, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfoList);
                 if (code != ErrorInfo.MOK && faceInfoList.size() <= 0) {
-
                     return;
                 }
 //                if (code == ErrorInfo.MOK && faceInfoList.size() > 0) {
@@ -404,14 +389,14 @@ public class CustomerDisplay extends Presentation {
                         @Override
                         public void run() {
 
-                            int cwidth = baoCunBean.getSize();
-                            int cheight = baoCunBean.getSize1();
+                            int cwidth = 640;
+                            int cheight = 480;
                             // Log.d(TAG, "cwidth:" + cwidth);
                             // Log.d(TAG, "cheight:" + cheight);
-                            if (cwidth == 0) {
-                                isLink = true;
-                                return;
-                            }
+//                            if (cwidth == 0) {
+//                                isLink = true;
+//                                return;
+//                            }
 
                             try {
 
@@ -497,7 +482,7 @@ public class CustomerDisplay extends Presentation {
 
     // 1:N 对比
     private void link_P2(final File file) {
-        if (screen_token.equals("")) {
+        if (screen_token.equals("")|| url.equals("")) {
             Log.d(TAG, "gfdgfdg3333");
             isLink = true;
             return;
@@ -523,7 +508,7 @@ public class CustomerDisplay extends Presentation {
         Request.Builder requestBuilder = new Request.Builder()
                 .header("Content-Type", "application/json")
                 .post(mBody)
-                .url(baoCunBean.getHoutaiDiZhi() + ":8866/recognize");
+                .url(url + ":8866/recognize");
 
         // step 3：创建 Call 对象
         Call call = okHttpClient.newCall(requestBuilder.build());

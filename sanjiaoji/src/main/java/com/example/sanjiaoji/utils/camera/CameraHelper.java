@@ -36,12 +36,12 @@ public class CameraHelper implements Camera.PreviewCallback {
     private int w1,h1;
     private Integer specificCameraId = null;
     private CameraListener cameraListener;
-    private BaoCunBean baoCunBean=null;
-    private Box<BaoCunBean> baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
+   // private BaoCunBean baoCunBean=null;
+   // private Box<BaoCunBean> baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
 
 
     private CameraHelper(CameraHelper.Builder builder,int w,int h) {
-        baoCunBean=baoCunBeanDao.get(123456L);
+       // baoCunBean=baoCunBeanDao.get(123456L);
         this.w1=w;this.h1=h;
         previewView = builder.previewDisplayView;
         specificCameraId = builder.specificCameraId;
@@ -101,10 +101,10 @@ public class CameraHelper implements Camera.PreviewCallback {
 
                 parameters.setPreviewSize(640, 480);
 
-                baoCunBean.setSize(640);
-                baoCunBean.setSize1(480);
-                baoCunBeanDao.put(baoCunBean);
-                EventBus.getDefault().post("gengxinggaokuan");
+               // baoCunBean.setSize(640);
+                //baoCunBean.setSize1(480);
+               // baoCunBeanDao.put(baoCunBean);
+              //  EventBus.getDefault().post("gengxinggaokuan");
 
 
                 //对焦模式设置
