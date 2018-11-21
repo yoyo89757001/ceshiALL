@@ -39,7 +39,8 @@ import com.example.sanjiaoji.R;
 import com.example.sanjiaoji.model.MenBean;
 import com.example.sanjiaoji.utils.ConfigUtil;
 import com.example.sanjiaoji.utils.Constants;
-import com.example.sanjiaoji.utils.DrawHelper;
+import com.example.sanjiaoji.utils.CustomerEngine;
+
 import com.example.sanjiaoji.utils.GsonUtil;
 import com.example.sanjiaoji.utils.SettingVar;
 import com.example.sanjiaoji.utils.SharedPreferenceHelper;
@@ -65,6 +66,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.logo)
     ImageView logo;
     private CameraHelper cameraHelper;
-    private DrawHelper drawHelper;
+    //private DrawHelper drawHelper;
     private Camera.Size previewSize;
     private FaceEngine faceEngine;
     private int afCode = -1;
@@ -119,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferenceHelper sharedPreferencesHelper = null;
     private String screen_token = null;
     private String url="";
-
+    private TanChuangThread tanChuangThread;
+    private LinkedBlockingQueue<MenBean> linkedBlockingQueue;
 
 
     WeakHandler weakHandler = new WeakHandler(new Handler.Callback() {
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                     MenBean menBean = (MenBean) msg.obj;
                     name.setText(menBean.getPerson().getTag().getName());
                     rlrlrl.setVisibility(View.VISIBLE);
-                    dabg.setVisibility(View.VISIBLE);
+                    dabg.setVisibility(View.GONE);
                     logo.setVisibility(View.GONE);
                     //启动定时器或重置定时器
                     if (task != null) {
@@ -169,19 +172,39 @@ public class MainActivity extends AppCompatActivity {
                     //开继电器，即闸机开关
                     humansensor_manager.set_gpio3_value(fd, 1);
 
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SystemClock.sleep(500);
+                            //关灯
+                            humansensor_manager.set_gpio2_value(fd, 0);
+                            //关继电器
+                            humansensor_manager.set_gpio3_value(fd, 0);
+
+                            SystemClock.sleep(4500);
+
+                            synchronized (tanChuangThread){
+                                longList.remove(0);
+                            }
+
+                        }
+                    }).start();
+
+
+
 
                     break;
 
                 case 999:
                     logo.setVisibility(View.VISIBLE);
-                    dabg.setVisibility(View.GONE);
+                    dabg.setVisibility(View.VISIBLE);
                     rlrlrl.setVisibility(View.INVISIBLE);
-                    if (longList.size() > 0)
-                        longList.remove(0);
+                  //  if (longList.size() > 0)
+                 //       longList.remove(0);
                     //关灯
-                    humansensor_manager.set_gpio2_value(fd, 0);
+                //    humansensor_manager.set_gpio2_value(fd, 0);
                     //关继电器
-                    humansensor_manager.set_gpio3_value(fd, 0);
+                 //   humansensor_manager.set_gpio3_value(fd, 0);
 
                     break;
 
@@ -201,6 +224,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         ScreenAdapterTools.getInstance().loadView(getWindow().getDecorView());
         EventBus.getDefault().register(this);//订阅
+
+        linkedBlockingQueue = new LinkedBlockingQueue<>();
 
 
         sharedPreferencesHelper = new SharedPreferenceHelper(
@@ -254,6 +279,11 @@ public class MainActivity extends AppCompatActivity {
         previewView.setLayoutParams(params2);
         previewView.invalidate();
 
+
+        tanChuangThread=new TanChuangThread();
+        tanChuangThread.start();
+
+
     }
 
     private void initEngine() {
@@ -266,17 +296,76 @@ public class MainActivity extends AppCompatActivity {
         faceEngine.getVersion(versionInfo);
         Log.i(TAG, "initEngine:  init: " + afCode + "  version:" + versionInfo);
         if (afCode != ErrorInfo.MOK) {
-            Toast.makeText(this, afCode + "", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, afCode + "初始化代码", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void unInitEngine() {
+
+        if (linkedBlockingQueue != null) {
+            linkedBlockingQueue.clear();
+        }
+
+        if (tanChuangThread != null) {
+            tanChuangThread.isRing = true;
+            tanChuangThread.interrupt();
+        }
 
         if (afCode == 0) {
             afCode = faceEngine.unInit();
             Log.i(TAG, "unInitEngine: " + afCode);
         }
     }
+
+
+
+    private class TanChuangThread extends Thread {
+        boolean isRing;
+
+        @Override
+        public void run() {
+            while (!isRing) {
+                try {
+                    //有动画 ，延迟到一秒一次
+                    MenBean menBean = linkedBlockingQueue.take();
+                    synchronized (TanChuangThread.this){
+                        if (longList.size()==0){
+                            Message message = Message.obtain();
+                            message.obj = menBean;
+                            message.what = 111;
+                            weakHandler.sendMessage(message);
+                            longList.add(Long.valueOf(menBean.getPerson().getId()));
+                        }
+                        boolean is=false;
+                        for (Long ll : longList){
+                            if (ll.equals(Long.valueOf(menBean.getPerson().getId()))){
+                                is=true;
+                                break;
+                            }
+                        }
+                        if (!is){
+                            Message message = Message.obtain();
+                            message.obj = menBean;
+                            message.what = 111;
+                            weakHandler.sendMessage(message);
+                            longList.add(Long.valueOf(menBean.getPerson().getId()));
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void interrupt() {
+            isRing = true;
+            super.interrupt();
+        }
+    }
+
+
 
     private void initCamera() {
         DisplayMetrics metrics = new DisplayMetrics();
@@ -287,8 +376,8 @@ public class MainActivity extends AppCompatActivity {
             public void onCameraOpened(Camera camera, int cameraId, int displayOrientation, boolean isMirror) {
                 Log.i(TAG, "onCameraOpened: " + cameraId + "  " + displayOrientation + " " + isMirror);
                 previewSize = camera.getParameters().getPreviewSize();
-                drawHelper = new DrawHelper(previewSize.width, previewSize.height, previewView.getWidth(), previewView.getHeight(), displayOrientation
-                        , cameraId, isMirror);
+              //  drawHelper = new DrawHelper(previewSize.width, previewSize.height, previewView.getWidth(), previewView.getHeight(), displayOrientation
+                   //     , cameraId, isMirror);
             }
 
 
@@ -336,10 +425,10 @@ public class MainActivity extends AppCompatActivity {
                             int cheight = 480;
                             // Log.d(TAG, "cwidth:" + cwidth);
                             // Log.d(TAG, "cheight:" + cheight);
-                            if (cwidth == 0) {
-                                isLink = true;
-                                return;
-                            }
+//                            if (cwidth == 0) {
+//                                isLink = true;
+//                                return;
+//                            }
 
                             try {
 
@@ -366,10 +455,13 @@ public class MainActivity extends AppCompatActivity {
                                     //截取单个人头像
                                     final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
                                     //Log.d(TAG, "bitmap.getWidth():" + bitmap.getWidth());
+
                                     link_P2(compressImage(bitmap));
+
 
                                 }
                             } catch (IOException e) {
+                                isLink = true;
                                 Log.d(TAG, e.getMessage() + "yiccvcvc");
                             }
 
@@ -392,9 +484,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCameraConfigurationChanged(int cameraID, int displayOrientation) {
-                if (drawHelper != null) {
-                    drawHelper.setCameraDisplayOrientation(displayOrientation);
-                }
+//                if (drawHelper != null) {
+//                    drawHelper.setCameraDisplayOrientation(displayOrientation);
+//                }
                 Log.i(TAG, "onCameraConfigurationChanged: " + cameraID + "  " + displayOrientation);
             }
         };
@@ -449,10 +541,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
             } else {
-              //  CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+               CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
             }
         } else {
-           // CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+            CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
         }
 
         if (cameraHelper != null) {
@@ -466,8 +558,11 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onDataSynEvent(String event) {
         if (event.equals("quanxian")) {
-           // CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+            CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+            return;
         }
+
+        Toast.makeText(this, event, Toast.LENGTH_LONG).show();
 
     }
 
@@ -516,8 +611,10 @@ public class MainActivity extends AppCompatActivity {
     // 1:N 对比
     private void link_P2(final File file) {
         if (screen_token.equals("") || url.equals("")) {
-            Log.d(TAG, "gfdgfdg3333");
-            isLink = true;
+            //Log.d(TAG, "gfdgfdg3333");
+            Log.d("CustomerDisplay", "file.delete():" + file.delete());
+            SystemClock.sleep(1000);
+            isLink=true;
             return;
         }
 
@@ -552,7 +649,8 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call call, IOException e) {
                 Log.d("CustomerDisplay", "file.delete():" + file.delete());
                 Log.d("AllConnects", "请求识别失败" + e.getMessage());
-                isLink = true;
+                SystemClock.sleep(1100);
+                isLink=true;
 
             }
 
@@ -564,7 +662,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     ResponseBody body = response.body();
                     String ss = body.string();
-                    Log.d("AllConnects", "传照片" + ss);
+                  //  Log.d("AllConnects", "传照片" + ss);
                     String s2 = ss.replace("\\\\u", "@!@#u").replace("\\", "")
                             .replace("tag\": \"{", "tag\":{")
                             .replace("jpg\"}\"", "jpg\"}")
@@ -585,45 +683,50 @@ public class MainActivity extends AppCompatActivity {
 //                        message.arg1=1;
 //                        message.obj=menBean;
 //                        handler.sendMessage(message);
-                        Log.d("CustomerDisplay", "识别");
-                        if (longList.size() == 0) {
-                            longList.add(Long.valueOf(menBean.getPerson().getId()));
-                            //开始弹窗
-                            // menBean.setBitmap(bitmap);
-                            Message message = Message.obtain();
-                            message.obj = menBean;
-                            message.what = 111;
-                            weakHandler.sendMessage(message);
+                    //    Log.d("CustomerDisplay", "识别");
 
-                        }
-
-
-                        for (long ll : longList) {
-                            if (ll != Long.valueOf(menBean.getPerson().getId())) {
-                                longList.add(Long.valueOf(menBean.getPerson().getId()));
-                                //开始弹窗
-                                // menBean.setBitmap(bitmap);
-                                Message message = Message.obtain();
-                                message.obj = menBean;
-                                message.what = 111;
-                                weakHandler.sendMessage(message);
-                                //开闸机
-
-                            } else {
-                                isLink = true;
-                            }
-
-                        }
-                        Log.d("MainActivity", "longList.size():" + longList.size());
+                        linkedBlockingQueue.offer(menBean);
+                     //   Log.d("MainActivity", "longList.size():" + linkedBlockingQueue.size());
+//                        if (longList.size() == 0) {
+//                            longList.add(Long.valueOf(menBean.getPerson().getId()));
+//                            //开始弹窗
+//                            // menBean.setBitmap(bitmap);
+//                            Message message = Message.obtain();
+//                            message.obj = menBean;
+//                            message.what = 111;
+//                            weakHandler.sendMessage(message);
+//
+//                        }
+//
+//
+//                        for (long ll : longList) {
+//                            if (ll != Long.valueOf(menBean.getPerson().getId())) {
+//                                longList.add(Long.valueOf(menBean.getPerson().getId()));
+//                                //开始弹窗
+//                                // menBean.setBitmap(bitmap);
+//                                Message message = Message.obtain();
+//                                message.obj = menBean;
+//                                message.what = 111;
+//                                weakHandler.sendMessage(message);
+//                                //开闸机
+//
+//                            } else {
+//                                SystemClock.sleep(300);
+//                                isLink = true;
+//                            }
+//
+//                        }
+                       // Log.d("MainActivity", "longList.size():" + longList.size());
 
                     } else {
-                        isLink = true;
+                       // SystemClock.sleep(300);
+                      //  isLink = true;
                         Log.d("CustomerDisplay", "陌生人222");
 
-                        if (menBean.getError() == 7) {
+                     //   if (menBean.getError() == 7) {
                             //陌生人频率过快稍微降低点
 //                            counts++;
-                            Log.d("CustomerDisplay", "陌生人");
+                       //     Log.d("CustomerDisplay", "陌生人");
 //                            if (counts>=2){
 //                                counts=0;
 //                                if (isMsr){
@@ -636,16 +739,17 @@ public class MainActivity extends AppCompatActivity {
 //                                }
 //                            }
 
-                        }
+                     //   }
                     }
 
 
                 } catch (Exception e) {
-                    isLink = true;
+
                     Log.d("WebsocketPushMsg", e.getMessage() + "klklklkl");
                 } finally {
                     Log.d("CustomerDisplay", "file.delete():" + file.delete());
-
+                    SystemClock.sleep(800);
+                    isLink=true;
                 }
 
             }

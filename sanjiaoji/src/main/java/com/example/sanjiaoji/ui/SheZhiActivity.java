@@ -70,7 +70,7 @@ public class SheZhiActivity extends Activity {
         sharedPreferencesHelper = new SharedPreferenceHelper(
                 SheZhiActivity.this, "xiaojun");
 
-        url = sharedPreferencesHelper.getSharedPreference("url", "").toString().trim();
+        url = sharedPreferencesHelper.getSharedPreference("url", "http://192.168.2.2").toString().trim();
         userName = sharedPreferencesHelper.getSharedPreference("username", "").toString().trim();
         pwd = sharedPreferencesHelper.getSharedPreference("passewod", "").toString().trim();
 
@@ -202,6 +202,7 @@ public class SheZhiActivity extends Activity {
                        // baoCunBeanDao.put(baoCunBean);
                       //  Log.d("SheZhiActivity", baoCunBeanDao.get(123456L).toString());
 
+                        EventBus.getDefault().post("dizhidizhi");
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

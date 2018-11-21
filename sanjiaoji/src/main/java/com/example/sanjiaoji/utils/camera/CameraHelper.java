@@ -33,7 +33,6 @@ public class CameraHelper implements Camera.PreviewCallback {
     private int displayOrientation = 0;
     private int rotation;
     private boolean isMirror = false;
-    private int w1,h1;
     private Integer specificCameraId = null;
     private CameraListener cameraListener;
    // private BaoCunBean baoCunBean=null;
@@ -42,7 +41,6 @@ public class CameraHelper implements Camera.PreviewCallback {
 
     private CameraHelper(CameraHelper.Builder builder,int w,int h) {
        // baoCunBean=baoCunBeanDao.get(123456L);
-        this.w1=w;this.h1=h;
         previewView = builder.previewDisplayView;
         specificCameraId = builder.specificCameraId;
         cameraListener = builder.cameraListener;
@@ -83,7 +81,14 @@ public class CameraHelper implements Camera.PreviewCallback {
                 }
                 return;
             }
-            mCamera = Camera.open(mCameraId);
+            try {
+                mCamera = Camera.open(mCameraId);
+            }catch (Exception e){
+                e.printStackTrace();
+                EventBus.getDefault().post("打开摄像头失败，请重启设备");
+                return;
+            }
+
             displayOrientation = getCameraOri(rotation);
             Log.d(TAG, "displayOrientation:" + displayOrientation);
             mCamera.setDisplayOrientation(displayOrientation);
