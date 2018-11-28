@@ -108,7 +108,7 @@ public class CustomerDisplay extends Presentation {
    // private ImageView ceshi;
    // private BaoCunBean baoCunBean = null;
    // private Box<BaoCunBean> baoCunBeanDao = null;
-    private static Vector<Long> longList = new Vector<>();
+    private static Vector<Long> longList2 = new Vector<>();
     private final Timer timer = new Timer();
     private TimerTask task;
     private SharedPreferenceHelper sharedPreferencesHelper = null;
@@ -186,7 +186,7 @@ public class CustomerDisplay extends Presentation {
                                 SystemClock.sleep(4500);
 
                                 synchronized (tanChuangThread){
-                                    longList.remove(0);
+                                    longList2.remove(0);
                                 }
 
                             }
@@ -202,8 +202,8 @@ public class CustomerDisplay extends Presentation {
                     rlrlrl.setVisibility(View.INVISIBLE);
 
 
-//                    if (longList.size() > 0)
-//                        longList.remove(0);
+//                    if (longList2.size() > 0)
+//                        longList2.remove(0);
 //                    //关灯
 //                    humansensor_manager.set_gpio2_value(fd, 0);
 //                    //关继电器
@@ -371,15 +371,15 @@ public class CustomerDisplay extends Presentation {
                     //有动画 ，延迟到一秒一次
                     MenBean menBean = linkedBlockingQueue.take();
                     synchronized (TanChuangThread.this){
-                    if (longList.size()==0){
+                    if (longList2.size()==0){
                         Message message = Message.obtain();
                         message.obj = menBean;
                         message.what = 111;
                         weakHandler.sendMessage(message);
-                        longList.add(Long.valueOf(menBean.getPerson().getId()));
+                        longList2.add(Long.valueOf(menBean.getPerson().getId()));
                     }
                     boolean is=false;
-                    for (Long ll : longList){
+                    for (Long ll : longList2){
                         if (ll.equals(Long.valueOf(menBean.getPerson().getId()))){
                             is=true;
                             break;
@@ -390,7 +390,7 @@ public class CustomerDisplay extends Presentation {
                         message.obj = menBean;
                         message.what = 111;
                         weakHandler.sendMessage(message);
-                        longList.add(Long.valueOf(menBean.getPerson().getId()));
+                        longList2.add(Long.valueOf(menBean.getPerson().getId()));
                     }
                     }
 
@@ -506,6 +506,7 @@ public class CustomerDisplay extends Presentation {
                                     y2 = (rect.top + (rect.bottom - rect.top)) > cheight ? (int) (cheight - rect.top) : (int) (rect.bottom - rect.top);
                                     //截取单个人头像
                                     final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
+
                                     //Log.d(TAG, "bitmap.getWidth():" + bitmap.getWidth());
 //                                    activity.runOnUiThread(new Runnable() {
 //                                        @Override
@@ -514,11 +515,19 @@ public class CustomerDisplay extends Presentation {
 //                                        }
 //                                    });
 
-                                    link_P2(compressImage(bitmap));
-
+                                    File file=null;
+                                    try {
+                                        file=compressImage(bitmap);
+                                        link_P2(file);
+                                    }catch (Exception e){
+                                        if (file!=null)
+                                            file.delete();
+                                        isLink = true;
+                                    }
 
                                 }
                             } catch (IOException e) {
+
                                 isLink = true;
                                 Log.d(TAG, e.getMessage() + "yiccvcvc");
                             }
@@ -580,7 +589,8 @@ public class CustomerDisplay extends Presentation {
     private void link_P2(final File file) {
         if (screen_token.equals("")|| url.equals("")) {
             //Log.d(TAG, "gfdgfdg3333");
-            Log.d("CustomerDisplay", "file.delete():" + file.delete());
+            file.delete();
+
             SystemClock.sleep(1000);
             isLink=true;
             return;
@@ -615,7 +625,8 @@ public class CustomerDisplay extends Presentation {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("CustomerDisplay", "file.delete():" + file.delete());
+                file.delete();
+
                 Log.d("AllConnects", "请求识别失败" + e.getMessage());
                 SystemClock.sleep(1100);
                 isLink=true;
@@ -656,8 +667,8 @@ public class CustomerDisplay extends Presentation {
                         linkedBlockingQueue.offer(menBean);
 
 //
-//                        if (longList.size() == 0) {
-//                            longList.add(Long.valueOf(menBean.getPerson().getId()));
+//                        if (longList2.size() == 0) {
+//                            longList2.add(Long.valueOf(menBean.getPerson().getId()));
 //                            //开始弹窗
 //                           // menBean.setBitmap(bitmap);
 //                            Message message = Message.obtain();
@@ -668,9 +679,9 @@ public class CustomerDisplay extends Presentation {
 //                        }
 //
 //
-//                        for (long ll : longList) {
+//                        for (long ll : longList2) {
 //                            if (ll != Long.valueOf(menBean.getPerson().getId())) {
-//                                longList.add(Long.valueOf(menBean.getPerson().getId()));
+//                                longList2.add(Long.valueOf(menBean.getPerson().getId()));
 //                                //开始弹窗
 //                               // menBean.setBitmap(bitmap);
 //                                Message message = Message.obtain();
@@ -685,7 +696,7 @@ public class CustomerDisplay extends Presentation {
 //                            }
 //
 //                        }
-                     //   Log.d("MainActivity", "longList.size():" + linkedBlockingQueue.size());
+                     //   Log.d("MainActivity", "longList2.size():" + linkedBlockingQueue.size());
 
                     } else {
                        // SystemClock.sleep(300);
@@ -715,9 +726,11 @@ public class CustomerDisplay extends Presentation {
                   //  SystemClock.sleep(300);
                    // isLink = true;
                     Log.d("WebsocketPushMsg", e.getMessage() + "klklklkl");
+
+
                 } finally {
                     Log.d("CustomerDisplay", "file.delete():" + file.delete());
-                    SystemClock.sleep(800);
+                    SystemClock.sleep(700);
                     isLink=true;
                 }
 
@@ -731,11 +744,11 @@ public class CustomerDisplay extends Presentation {
      * @param bitmap
      */
     private static File compressImage(Bitmap bitmap) {
-        File file = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".png");//将要保存图片的路径
+        File file = new File(Environment.getExternalStorageDirectory()+File.separator+"sanjiaoji", "cc"+System.currentTimeMillis() + ".png");//将要保存图片的路径
         try {
 
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, bos);
             bos.flush();
             bos.close();
         } catch (Exception e) {

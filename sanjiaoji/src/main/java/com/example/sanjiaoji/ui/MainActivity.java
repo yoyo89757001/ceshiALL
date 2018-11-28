@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private View previewView;
     // private FaceRectView faceRectView;
-    private static boolean isLink = true;
+    private static boolean isLink1 = true;
     private ImageView ceshi;
    // private BaoCunBean baoCunBean = null;
    // private Box<BaoCunBean> baoCunBeanDao = null;
@@ -406,12 +406,12 @@ public class MainActivity extends AppCompatActivity {
 //                }
 
 
-                if (isLink) {
+                if (isLink1) {
 
-                    isLink = false;
+                    isLink1 = false;
                     if (faceInfoList.size() == 0) {
                         myface.setVisibility(View.GONE);
-                        isLink = true;
+                        isLink1 = true;
                         return;
                     } else {
                         myface.setVisibility(View.VISIBLE);
@@ -423,10 +423,11 @@ public class MainActivity extends AppCompatActivity {
 
                             int cwidth = 640;
                             int cheight = 480;
+
                             // Log.d(TAG, "cwidth:" + cwidth);
                             // Log.d(TAG, "cheight:" + cheight);
 //                            if (cwidth == 0) {
-//                                isLink = true;
+//                                isLink1 = true;
 //                                return;
 //                            }
 
@@ -456,12 +457,20 @@ public class MainActivity extends AppCompatActivity {
                                     final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
                                     //Log.d(TAG, "bitmap.getWidth():" + bitmap.getWidth());
 
-                                    link_P2(compressImage(bitmap));
 
+                                    File file=null;
+                                    try {
+                                        file=compressImage(bitmap);
+                                        link_P2(file);
+                                    }catch (Exception e){
+                                        if (file!=null)
+                                            file.delete();
+                                        isLink1 = true;
+                                    }
 
                                 }
                             } catch (IOException e) {
-                                isLink = true;
+                                isLink1 = true;
                                 Log.d(TAG, e.getMessage() + "yiccvcvc");
                             }
 
@@ -541,10 +550,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
             } else {
-               CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+              // CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
             }
         } else {
-            CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+          //  CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
         }
 
         if (cameraHelper != null) {
@@ -558,7 +567,7 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onDataSynEvent(String event) {
         if (event.equals("quanxian")) {
-            CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+           // CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
             return;
         }
 
@@ -612,9 +621,10 @@ public class MainActivity extends AppCompatActivity {
     private void link_P2(final File file) {
         if (screen_token.equals("") || url.equals("")) {
             //Log.d(TAG, "gfdgfdg3333");
-            Log.d("CustomerDisplay", "file.delete():" + file.delete());
+            file.delete();
+
             SystemClock.sleep(1000);
-            isLink=true;
+            isLink1=true;
             return;
         }
 
@@ -647,10 +657,12 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("CustomerDisplay", "file.delete():" + file.delete());
+                file.delete();
+
+              //  Log.d("CustomerDisplay", "file.delete():" + );
                 Log.d("AllConnects", "请求识别失败" + e.getMessage());
                 SystemClock.sleep(1100);
-                isLink=true;
+                isLink1=true;
 
             }
 
@@ -712,7 +724,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //                            } else {
 //                                SystemClock.sleep(300);
-//                                isLink = true;
+//                                isLink1 = true;
 //                            }
 //
 //                        }
@@ -720,7 +732,7 @@ public class MainActivity extends AppCompatActivity {
 
                     } else {
                        // SystemClock.sleep(300);
-                      //  isLink = true;
+                      //  isLink1 = true;
                         Log.d("CustomerDisplay", "陌生人222");
 
                      //   if (menBean.getError() == 7) {
@@ -747,9 +759,10 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d("WebsocketPushMsg", e.getMessage() + "klklklkl");
                 } finally {
-                    Log.d("CustomerDisplay", "file.delete():" + file.delete());
-                    SystemClock.sleep(800);
-                    isLink=true;
+                    file.delete();
+
+                    SystemClock.sleep(700);
+                    isLink1=true;
                 }
 
             }
@@ -762,11 +775,11 @@ public class MainActivity extends AppCompatActivity {
      * @param bitmap
      */
     private static File compressImage(Bitmap bitmap) {
-        File file = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".png");//将要保存图片的路径
+        File file = new File(Environment.getExternalStorageDirectory()+File.separator+"sanjiaoji", "mm"+System.currentTimeMillis() + ".png");//将要保存图片的路径
         try {
 
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, bos);
             bos.flush();
             bos.close();
         } catch (Exception e) {
