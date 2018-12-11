@@ -26,6 +26,7 @@ import java.io.File;
 
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
+import megvii.facepass.FacePassHandler;
 import okhttp3.MediaType;
 
 
@@ -34,7 +35,7 @@ import okhttp3.MediaType;
  * Created by tangjun on 14-8-24.
  */
 public class MyApplication extends MultiDexApplication {
-
+	public FacePassHandler facePassHandler=null;
 	public static final MediaType JSON= MediaType.parse("application/json; charset=utf-8");
 	private final static String TAG = "CookiesManager";
 	public static MyApplication myApplication;
@@ -90,7 +91,14 @@ public class MyApplication extends MultiDexApplication {
 	public BoxStore getBoxStore(){
 		return mBoxStore;
 	}
+	public FacePassHandler getFacePassHandler() {
 
+		return facePassHandler;
+	}
+
+	public void setFacePassHandler(FacePassHandler facePassHandler1){
+		facePassHandler=facePassHandler1;
+	}
 
 	//旋转适配,如果应用屏幕固定了某个方向不旋转的话(比如qq和微信),下面可不写.
 	@Override

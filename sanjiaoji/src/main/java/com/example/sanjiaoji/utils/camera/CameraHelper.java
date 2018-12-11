@@ -9,17 +9,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
-
-
-import com.example.sanjiaoji.MyApplication;
-import com.example.sanjiaoji.model.BaoCunBean;
-
 import org.greenrobot.eventbus.EventBus;
-
 import java.io.IOException;
 import java.util.List;
 
-import io.objectbox.Box;
+
 
 
 public class CameraHelper implements Camera.PreviewCallback {
@@ -66,9 +60,11 @@ public class CameraHelper implements Camera.PreviewCallback {
     }
 
     public void start() {
-        synchronized (this) {
+        Log.d("mCameraId22", "gfgfd");
+       // synchronized (this) {
             //相机数量为2则打开1,1则打开0,相机ID 1为前置，0为后置
             mCameraId = Camera.getNumberOfCameras() - 1;
+        //  Log.d(TAG, "mCameraId22:" + (mCameraId+1));
             //若指定了相机ID且该相机存在，则打开指定的相机
             if (specificCameraId != null && specificCameraId <= mCameraId) {
                 mCameraId = specificCameraId;
@@ -82,7 +78,12 @@ public class CameraHelper implements Camera.PreviewCallback {
                 return;
             }
             try {
+                Log.d("mCameraId22", "mCamera:" + mCamera+mCameraId);
+
                 mCamera = Camera.open(mCameraId);
+
+
+                Log.d(TAG, "mCameraId22:" + mCameraId);
             }catch (Exception e){
                 e.printStackTrace();
                 EventBus.getDefault().post("打开摄像头失败，请重启设备");
@@ -142,7 +143,7 @@ public class CameraHelper implements Camera.PreviewCallback {
                 }
             }
         }
-    }
+  //  }
 
     private int getCameraOri(int rotation) {
 //        int degrees = rotation * 90;
@@ -250,6 +251,7 @@ public class CameraHelper implements Camera.PreviewCallback {
 
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+            Log.d("mCameraId22", "停止");
             stop();
             return false;
         }
@@ -262,7 +264,7 @@ public class CameraHelper implements Camera.PreviewCallback {
     private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-            start();
+            //start();
         }
 
         @Override

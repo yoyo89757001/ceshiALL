@@ -65,12 +65,11 @@ public class MyFaceview  extends View {
 
     private void init(){
 
-
         if (animator==null) {
             animator = new ValueAnimator();
             animator = ValueAnimator.ofFloat(0, 360);
             //动画时长，让进度条在CountDown时间内正好从0-360走完，
-            animator.setDuration(2000);
+            animator.setDuration(2200);
             animator.setRepeatMode(ValueAnimator.RESTART);
             animator.setInterpolator(new LinearInterpolator());//匀速
             animator.setRepeatCount(-1);//表示不循环，-1表示无限循环
@@ -109,8 +108,5 @@ public class MyFaceview  extends View {
         canvas.rotate(360-jiaodu,rectf3.centerX(),rectf3.centerY());
         canvas.drawBitmap(bitmap3,null,rectf3,null);
         canvas.restore();
-
-
-
     }
 }

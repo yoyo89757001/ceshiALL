@@ -15,6 +15,8 @@ public class SettingVar {
     public static String SharedPrefrence = "user";
     public static int mHeight;
     public static int mWidth;
+    public static int mHeight2;
+    public static int mWidth2;
     public static boolean cameraSettingOk = false;
     public static boolean iscameraNeedConfig = false;
     public static boolean isButtonInvisible = false;

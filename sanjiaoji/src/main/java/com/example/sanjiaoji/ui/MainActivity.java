@@ -5,11 +5,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+
+
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.YuvImage;
-import android.hardware.Camera;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +24,7 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -28,24 +33,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arcsoft.face.ErrorInfo;
-import com.arcsoft.face.FaceEngine;
-import com.arcsoft.face.FaceInfo;
-import com.arcsoft.face.VersionInfo;
 import com.badoo.mobile.util.WeakHandler;
 
+import com.example.sanjiaoji.MyApplication;
 import com.example.sanjiaoji.R;
+import com.example.sanjiaoji.camera.CameraManager;
+import com.example.sanjiaoji.camera.CameraPreview;
+import com.example.sanjiaoji.camera.CameraPreviewData;
 
 import com.example.sanjiaoji.model.MenBean;
-import com.example.sanjiaoji.utils.ConfigUtil;
-import com.example.sanjiaoji.utils.Constants;
+
 import com.example.sanjiaoji.utils.CustomerEngine;
 
+import com.example.sanjiaoji.utils.FacePassUtil;
 import com.example.sanjiaoji.utils.GsonUtil;
 import com.example.sanjiaoji.utils.SettingVar;
 import com.example.sanjiaoji.utils.SharedPreferenceHelper;
 import com.example.sanjiaoji.utils.camera.CameraHelper;
-import com.example.sanjiaoji.utils.camera.CameraListener;
+
 import com.example.sanjiaoji.view.MyFaceview;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -61,12 +66,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -74,6 +81,14 @@ import butterknife.ButterKnife;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
+import megvii.facepass.FacePassException;
+import megvii.facepass.FacePassHandler;
+import megvii.facepass.types.FacePassDetectionResult;
+import megvii.facepass.types.FacePassFace;
+import megvii.facepass.types.FacePassImage;
+import megvii.facepass.types.FacePassImageType;
+import megvii.facepass.types.FacePassRecognitionResult;
+import megvii.facepass.types.FacePassRecognitionResultType;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -85,7 +100,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CameraManager.CameraListener {
     private static final String TAG = "PreviewActivity";
     @BindView(R.id.name)
     TextView name;
@@ -97,21 +112,44 @@ public class MainActivity extends AppCompatActivity {
     ImageView dabg;
     @BindView(R.id.logo)
     ImageView logo;
+
     private CameraHelper cameraHelper;
     //private DrawHelper drawHelper;
-    private Camera.Size previewSize;
-    private FaceEngine faceEngine;
-    private int afCode = -1;
+    //private Camera.Size previewSize;
+   // private FaceEngine faceEngine;
+   // private int afCode = -1;
     private int dw, dh;
     private int fd;
- //   private int processMask = FaceEngine.ASF_AGE | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_GENDER | FaceEngine.ASF_LIVENESS;
+    private  final String group_name = "facepasstestx";
+    /* SDK 实例对象 */
+    FacePassHandler mFacePassHandler;
+    /* 相机实例 */
+    private CameraManager manager;
+    /* 相机预览界面 */
+    private CameraPreview cameraView;
+    private static final int cameraWidth = 640;
+    private static final int cameraHeight = 320;
 
-    /**
-     * 相机预览显示的控件，可为SurfaceView或TextureView
-     */
-    private View previewView;
-    // private FaceRectView faceRectView;
-    private static boolean isLink1 = true;
+    /*recognize thread*/
+    RecognizeThread mRecognizeThread;
+    FeedFrameThread mFeedFrameThread;
+    private static boolean isLink = true;
+    private long tID = -1;
+    private ConcurrentHashMap<Long, Integer> concurrentHashMap = new ConcurrentHashMap<Long, Integer>();
+    /*DetectResult queue*/
+    ArrayBlockingQueue<byte[]> mDetectResultQueue;
+    ArrayBlockingQueue<CameraPreviewData> mFeedFrameQueue;
+
+    private static final String authIP = "https://api-cn.faceplusplus.com";
+    private static final String apiKey = "zIvtfbe_qPHpLZzmRAE-zVg7-EaVhKX2";
+    private static final String apiSecret = "-H4Ik0iZ_5YTyw5NPT8LfnJREz_NCbo7";
+
+//    private static final String authIP = "https://api-cn.faceplusplus.com";
+//    private static final String apiKey = "JHt8TdGoELfkEKYkjQMogR8GPLIPAfRM";
+//    private static final String apiSecret = "qgPwtgw9Yiqn2aL9KQyv1ukigAV7xWup";
+
+    //private View previewView;
+  //  private static boolean isLink1 = true;
     private ImageView ceshi;
    // private BaoCunBean baoCunBean = null;
    // private Box<BaoCunBean> baoCunBeanDao = null;
@@ -121,8 +159,15 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferenceHelper sharedPreferencesHelper = null;
     private String screen_token = null;
     private String url="";
-    private TanChuangThread tanChuangThread;
-    private LinkedBlockingQueue<MenBean> linkedBlockingQueue;
+   // private TanChuangThread tanChuangThread;
+  //  private LinkedBlockingQueue<MenBean> linkedBlockingQueue;
+    private  final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            .writeTimeout(TIMEOUT2, TimeUnit.MILLISECONDS)
+            .connectTimeout(TIMEOUT2, TimeUnit.MILLISECONDS)
+            .readTimeout(TIMEOUT2, TimeUnit.MILLISECONDS)
+            //  .cookieJar(new CookiesManager())
+            // .retryOnConnectionFailure(true)
+            .build();
 
 
     WeakHandler weakHandler = new WeakHandler(new Handler.Callback() {
@@ -181,15 +226,15 @@ public class MainActivity extends AppCompatActivity {
                             //关继电器
                             humansensor_manager.set_gpio3_value(fd, 0);
 
-                            SystemClock.sleep(4500);
-
-                            synchronized (tanChuangThread){
+                            SystemClock.sleep(5000);
+                            try {
                                 longList.remove(0);
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
 
                         }
                     }).start();
-
 
 
 
@@ -225,8 +270,9 @@ public class MainActivity extends AppCompatActivity {
         ScreenAdapterTools.getInstance().loadView(getWindow().getDecorView());
         EventBus.getDefault().register(this);//订阅
 
-        linkedBlockingQueue = new LinkedBlockingQueue<>();
-
+     //   linkedBlockingQueue = new LinkedBlockingQueue<>();
+        mDetectResultQueue = new ArrayBlockingQueue<byte[]>(5);
+        mFeedFrameQueue = new ArrayBlockingQueue<CameraPreviewData>(1);
 
         sharedPreferencesHelper = new SharedPreferenceHelper(
                 MainActivity.this, "xiaojun");
@@ -234,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
         SettingVar.mHeight = displayMetrics.heightPixels;
         SettingVar.mWidth = displayMetrics.widthPixels;
         DisplayMetrics dm = new DisplayMetrics();
@@ -249,11 +294,11 @@ public class MainActivity extends AppCompatActivity {
 
       //  baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
 
-        FaceEngine faceEngine = new FaceEngine();
-        int activeCode = faceEngine.active(MainActivity.this, Constants.APP_ID, Constants.SDK_KEY);
-        Log.d(TAG, "activeCode:" + activeCode);
+      //  FaceEngine faceEngine = new FaceEngine();
+       // int activeCode = faceEngine.active(MainActivity.this, Constants.APP_ID, Constants.SDK_KEY);
+      //  Log.d(TAG, "activeCode:" + activeCode);
 
-        previewView = findViewById(R.id.texture_preview);
+        //previewView = findViewById(R.id.texture_preview);
         // faceRectView = findViewById(R.id.face_rect_view);
         ceshi = findViewById(R.id.ceshi);
         ceshi.setOnClickListener(new View.OnClickListener() {
@@ -264,8 +309,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //虹软的SharedPreferences
-        ConfigUtil.setFtOrient(MainActivity.this, 1);
+      //  ConfigUtil.setFtOrient(MainActivity.this, 1);
         fd = humansensor_manager.open();
+
+        manager = new CameraManager();
+        cameraView =  findViewById(R.id.preview);
+        manager.setPreviewDisplay(cameraView);
+        /* 注册相机回调函数 */
+        manager.setListener(this);
+
+
         quanxian();
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) rlrlrl.getLayoutParams();
@@ -273,86 +326,441 @@ public class MainActivity extends AppCompatActivity {
         rlrlrl.setLayoutParams(params);
         rlrlrl.invalidate();
 
-        RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) previewView.getLayoutParams();
+        RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) cameraView.getLayoutParams();
         params2.topMargin = (int) (dh * 0.3f);
         params2.height = (int) (dh * 0.7f);
-        previewView.setLayoutParams(params2);
-        previewView.invalidate();
+        cameraView.setLayoutParams(params2);
+        cameraView.invalidate();
 
 
-        tanChuangThread=new TanChuangThread();
-        tanChuangThread.start();
-
-
+        mRecognizeThread = new RecognizeThread();
+        mRecognizeThread.start();
+        mFeedFrameThread = new FeedFrameThread();
+        mFeedFrameThread.start();
     }
 
-    private void initEngine() {
+//    private void initEngine() {
+//
+//
+//        faceEngine = new FaceEngine();
+//        afCode = faceEngine.init(this.getApplicationContext(), FaceEngine.ASF_DETECT_MODE_VIDEO, ConfigUtil.getFtOrient(this),
+//                16, 10, FaceEngine.ASF_FACE_DETECT);
+//        VersionInfo versionInfo = new VersionInfo();
+//        faceEngine.getVersion(versionInfo);
+//        Log.i(TAG, "initEngine:  init: " + afCode + "  version:" + versionInfo);
+//        if (afCode != ErrorInfo.MOK) {
+//            Toast.makeText(this, afCode + "初始化代码", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+//    private void unInitEngine() {
+//
+//        if (linkedBlockingQueue != null) {
+//            linkedBlockingQueue.clear();
+//        }
+//
+////        if (tanChuangThread != null) {
+////            tanChuangThread.isRing = true;
+////            tanChuangThread.interrupt();
+////        }
+//
+//        if (afCode == 0) {
+//            afCode = faceEngine.unInit();
+//            Log.i(TAG, "unInitEngine: " + afCode);
+//        }
+//    }
+
+//    @Override
+//    public void onPictureTaken(final CameraPreviewData cameraPreviewData) {
+//
+//        final List<FaceInfo> faceInfoList = new ArrayList<>();
+//        int code = faceEngine.detectFaces(cameraPreviewData.nv21Data, cameraWidth, cameraHeight, FaceEngine.CP_PAF_NV21, faceInfoList);
+//        if (code != ErrorInfo.MOK && faceInfoList.size() <= 0) {
+//
+//            return;
+//        }
+////                if (code == ErrorInfo.MOK && faceInfoList.size() > 0) {
+////                    code = faceEngine.process(nv21, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfoList, processMask);
+////                    if (code != ErrorInfo.MOK) {
+////                        return;
+////                    }
+////                }else {
+////                    return;
+////                }
+//
+//
+//        if (isLink1) {
+//
+//            isLink1 = false;
+//            if (faceInfoList.size() == 0) {
+//                myface.setVisibility(View.GONE);
+//                isLink1 = true;
+//                return;
+//            } else {
+//                myface.setVisibility(View.VISIBLE);
+//            }
+//
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    int cwidth = 640;
+//                    int cheight = 480;
+//
+//                    // Log.d(TAG, "cwidth:" + cwidth);
+//                    // Log.d(TAG, "cheight:" + cheight);
+////                            if (cwidth == 0) {
+////                                isLink1 = true;
+////                                return;
+////                            }
+//
+//                    try {
+//
+//                        YuvImage image2 = new YuvImage(cameraPreviewData.nv21Data, ImageFormat.NV21, cwidth, cheight, null);
+//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                        image2.compressToJpeg(new Rect(0, 0, cwidth, cheight), 100, stream);
+//                        final Bitmap bmp = BitmapFactory.decodeByteArray(stream.toByteArray(), 0, stream.size());
+//                        stream.close();
+//
+//                        for (FaceInfo faceInfo : faceInfoList) {
+//                            //头像加宽加高点
+//                            Rect rect = new Rect(faceInfo.getRect().left - 40 < 0 ? 0 : faceInfo.getRect().left - 40,
+//                                    faceInfo.getRect().top - 100 < 0 ? 0 : faceInfo.getRect().top - 100,
+//                                    faceInfo.getRect().right + 40 > cwidth ?
+//                                            cwidth : faceInfo.getRect().right + 40,
+//                                    faceInfo.getRect().bottom + 100 > cheight
+//                                            ? cheight : faceInfo.getRect().bottom + 100);
+//                            int x1, y1, x2, y2 = 0;
+//                            x1 = rect.left;
+//                            y1 = rect.top;
+//                            //是宽高，不是坐标
+//                            x2 = (rect.left + (rect.right - rect.left)) > cwidth ? (int) (cwidth - rect.left) : (int) (rect.right - rect.left);
+//                            y2 = (rect.top + (rect.bottom - rect.top)) > cheight ? (int) (cheight - rect.top) : (int) (rect.bottom - rect.top);
+//                            //截取单个人头像
+//                            final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
+//                            //Log.d(TAG, "bitmap.getWidth():" + bitmap.getWidth());
+//
+//                            File file=null;
+//                            try {
+//                                file=compressImage(bitmap);
+//                                link_P2(file);
+//                            }catch (Exception e){
+//                                if (file!=null)
+//                                    file.delete();
+//                                isLink1 = true;
+//                            }
+//
+//                        }
+//                    } catch (IOException e) {
+//                        isLink1 = true;
+//                        Log.d(TAG, e.getMessage() + "yiccvcvc");
+//                    }
+//
+//                }
+//            }).start();
+//        }
+//
+//
+//    }
 
 
-        faceEngine = new FaceEngine();
-        afCode = faceEngine.init(this.getApplicationContext(), FaceEngine.ASF_DETECT_MODE_VIDEO, ConfigUtil.getFtOrient(this),
-                16, 10, FaceEngine.ASF_FACE_DETECT);
-        VersionInfo versionInfo = new VersionInfo();
-        faceEngine.getVersion(versionInfo);
-        Log.i(TAG, "initEngine:  init: " + afCode + "  version:" + versionInfo);
-        if (afCode != ErrorInfo.MOK) {
-            Toast.makeText(this, afCode + "初始化代码", Toast.LENGTH_SHORT).show();
-        }
+//    private class TanChuangThread extends Thread {
+//        boolean isRing;
+//
+//        @Override
+//        public void run() {
+//            while (!isRing) {
+//                try {
+//                    //有动画 ，延迟到一秒一次
+//                    MenBean menBean = linkedBlockingQueue.take();
+//
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public void interrupt() {
+//            isRing = true;
+//            super.interrupt();
+//        }
+//    }
+
+
+
+//    private void initCamera() {
+//        DisplayMetrics metrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//
+//        CameraListener cameraListener = new CameraListener() {
+//            @Override
+//            public void onCameraOpened(Camera camera, int cameraId, int displayOrientation, boolean isMirror) {
+//                Log.i(TAG, "onCameraOpened: " + cameraId + "  " + displayOrientation + " " + isMirror);
+//                previewSize = camera.getParameters().getPreviewSize();
+//              //  drawHelper = new DrawHelper(previewSize.width, previewSize.height, previewView.getWidth(), previewView.getHeight(), displayOrientation
+//                   //     , cameraId, isMirror);
+//            }
+//
+//
+//            @Override
+//            public void onPreview(final byte[] nv21, final Camera camera) {
+////
+////
+////                if (faceRectView != null) {
+////                    faceRectView.clearFaceInfo();
+////                }
+//
+//                final List<FaceInfo> faceInfoList = new ArrayList<>();
+//                int code = faceEngine.detectFaces(nv21, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfoList);
+//                if (code != ErrorInfo.MOK && faceInfoList.size() <= 0) {
+//
+//                    return;
+//                }
+////                if (code == ErrorInfo.MOK && faceInfoList.size() > 0) {
+////                    code = faceEngine.process(nv21, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfoList, processMask);
+////                    if (code != ErrorInfo.MOK) {
+////                        return;
+////                    }
+////                }else {
+////                    return;
+////                }
+//
+//
+//                if (isLink1) {
+//                    isLink1 = false;
+//                    if (faceInfoList.size() == 0) {
+//                        myface.setVisibility(View.GONE);
+//                        isLink1 = true;
+//                        return;
+//                    } else {
+//                        myface.setVisibility(View.VISIBLE);
+//                    }
+//
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            int cwidth = 640;
+//                            int cheight = 480;
+//
+//                            // Log.d(TAG, "cwidth:" + cwidth);
+//                            // Log.d(TAG, "cheight:" + cheight);
+////                            if (cwidth == 0) {
+////                                isLink1 = true;
+////                                return;
+////                            }
+//
+//                            try {
+//
+//                                YuvImage image2 = new YuvImage(nv21, ImageFormat.NV21, cwidth, cheight, null);
+//                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                                image2.compressToJpeg(new Rect(0, 0, cwidth, cheight), 100, stream);
+//                                final Bitmap bmp = BitmapFactory.decodeByteArray(stream.toByteArray(), 0, stream.size());
+//                                stream.close();
+//
+//                                for (FaceInfo faceInfo : faceInfoList) {
+//                                    //头像加宽加高点
+//                                    Rect rect = new Rect(faceInfo.getRect().left - 40 < 0 ? 0 : faceInfo.getRect().left - 40,
+//                                            faceInfo.getRect().top - 100 < 0 ? 0 : faceInfo.getRect().top - 100,
+//                                            faceInfo.getRect().right + 40 > cwidth ?
+//                                                    cwidth : faceInfo.getRect().right + 40,
+//                                            faceInfo.getRect().bottom + 100 > cheight
+//                                                    ? cheight : faceInfo.getRect().bottom + 100);
+//                                    int x1, y1, x2, y2 = 0;
+//                                    x1 = rect.left;
+//                                    y1 = rect.top;
+//                                    //是宽高，不是坐标
+//                                    x2 = (rect.left + (rect.right - rect.left)) > cwidth ? (int) (cwidth - rect.left) : (int) (rect.right - rect.left);
+//                                    y2 = (rect.top + (rect.bottom - rect.top)) > cheight ? (int) (cheight - rect.top) : (int) (rect.bottom - rect.top);
+//                                    //截取单个人头像
+//                                    final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
+//                                    //Log.d(TAG, "bitmap.getWidth():" + bitmap.getWidth());
+//
+//                                    File file=null;
+//                                    try {
+//                                        file=compressImage(bitmap);
+//                                        link_P2(file);
+//                                    }catch (Exception e){
+//                                        if (file!=null)
+//                                            file.delete();
+//                                        isLink1 = true;
+//                                    }
+//
+//                                }
+//                            } catch (IOException e) {
+//                                isLink1 = true;
+//                                Log.d(TAG, e.getMessage() + "yiccvcvc");
+//                            }
+//
+//                        }
+//                    }).start();
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onCameraClosed() {
+//                Log.i(TAG, "onCameraClosed: ");
+//            }
+//
+//            @Override
+//            public void onCameraError(Exception e) {
+//                Log.i(TAG, "onCameraError: " + e.getMessage());
+//            }
+//
+//            @Override
+//            public void onCameraConfigurationChanged(int cameraID, int displayOrientation) {
+////                if (drawHelper != null) {
+////                    drawHelper.setCameraDisplayOrientation(displayOrientation);
+////                }
+//                Log.i(TAG, "onCameraConfigurationChanged: " + cameraID + "  " + displayOrientation);
+//            }
+//        };
+//
+//        cameraHelper = new CameraHelper.Builder()
+//                .metrics(metrics)
+//                .rotation(0)
+//                .specificCameraId(0)
+//                .isMirror(false)
+//                .previewOn(previewView)
+//                .cameraListener(cameraListener)
+//                .build();
+//        cameraHelper.init();
+//
+//    }
+
+
+
+    /* 相机回调函数 */
+    @Override
+    public void onPictureTaken(CameraPreviewData cameraPreviewData) {
+        mFeedFrameQueue.offer(cameraPreviewData);
     }
 
-    private void unInitEngine() {
-
-        if (linkedBlockingQueue != null) {
-            linkedBlockingQueue.clear();
-        }
-
-        if (tanChuangThread != null) {
-            tanChuangThread.isRing = true;
-            tanChuangThread.interrupt();
-        }
-
-        if (afCode == 0) {
-            afCode = faceEngine.unInit();
-            Log.i(TAG, "unInitEngine: " + afCode);
-        }
-    }
-
-
-
-    private class TanChuangThread extends Thread {
-        boolean isRing;
+    private class FeedFrameThread extends Thread {
+        boolean isInterrupt;
 
         @Override
         public void run() {
-            while (!isRing) {
+            while (!isInterrupt) {
+                CameraPreviewData cameraPreviewData = null;
                 try {
-                    //有动画 ，延迟到一秒一次
-                    MenBean menBean = linkedBlockingQueue.take();
-                    synchronized (TanChuangThread.this){
-                        if (longList.size()==0){
-                            Message message = Message.obtain();
-                            message.obj = menBean;
-                            message.what = 111;
-                            weakHandler.sendMessage(message);
-                            longList.add(Long.valueOf(menBean.getPerson().getId()));
+                    cameraPreviewData = mFeedFrameQueue.take();
+                    // Log.d("takenpicture", "takenpicture");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                if (mFacePassHandler == null) {
+                   // Log.d("ddd", "mFacepass handler = null");
+                    continue;
+                }
+
+                final FacePassImage image;
+                try {
+                    image = new FacePassImage(cameraPreviewData.nv21Data, cameraPreviewData.width, cameraPreviewData.height, 0, FacePassImageType.NV21);
+                } catch (FacePassException e) {
+                    e.printStackTrace();
+                    continue;
+                }
+
+                /* 将每一帧FacePassImage 送入SDK算法， 并得到返回结果 */
+                FacePassDetectionResult detectionResult = null;
+                try {
+                    detectionResult = mFacePassHandler.feedFrame(image);
+
+                } catch (FacePassException e) {
+                    e.printStackTrace();
+                }
+
+                if (detectionResult != null && detectionResult.faceList.length > 0) {
+                    showFacePassFace(detectionResult.faceList, image);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            myface.setVisibility(View.VISIBLE);
                         }
-                        boolean is=false;
-                        for (Long ll : longList){
-                            if (ll.equals(Long.valueOf(menBean.getPerson().getId()))){
-                                is=true;
-                                break;
+                    });
+                }else {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            myface.setVisibility(View.GONE);
+                        }
+                    });
+                }
+
+            /*离线模式，将识别到人脸的，message不为空的result添加到处理队列中*/
+            if (detectionResult != null && detectionResult.message.length != 0) {
+                // Log.d(DEBUG_TAG, "mDetectResultQueue.offer");
+                mDetectResultQueue.offer(detectionResult.message);
+               // Log.d("ddd", "1 mDetectResultQueue.size = " + mDetectResultQueue.size());
+            }
+            //else {
+                // Log.d(DEBUG_TAG, "mDetectResultQueue.offer null");
+          //  }
+
+
+            }
+        }
+
+        @Override
+        public void interrupt() {
+            isInterrupt = true;
+            super.interrupt();
+        }
+    }
+
+    private class RecognizeThread extends Thread {
+
+        boolean isInterrupt;
+
+        @Override
+        public void run() {
+            while (!isInterrupt) {
+                try {
+
+                    byte[] detectionResult = mDetectResultQueue.take();
+
+                    Log.d("ddddddd", "mDetectResultQueue.recognize");
+                    FacePassRecognitionResult[] recognizeResult = mFacePassHandler.recognize(group_name, detectionResult);
+                    if (recognizeResult != null && recognizeResult.length > 0) {
+                        for (FacePassRecognitionResult result : recognizeResult) {
+                           // String faceToken = new String(result.faceToken);
+                            if (FacePassRecognitionResultType.RECOG_OK == result.facePassRecognitionResultType) {
+                                Log.d(TAG, "ddd识别");
+                            }else {
+                                Log.d("RecognizeThread", "未识别");
+                                //未识别的
+                                // 防止concurrentHashMap 数据过多 ,超过一定数据 删除没用的
+                                if (concurrentHashMap.size() > 10) {
+                                    concurrentHashMap.clear();
+                                }
+                                if (concurrentHashMap.get(result.trackId) == null) {
+                                    //找不到新增
+                                    concurrentHashMap.put(result.trackId, 1);
+                                } else {
+                                    //找到了 把value 加1
+                                    concurrentHashMap.put(result.trackId, (concurrentHashMap.get(result.trackId)) + 1);
+                                }
+                                //判断次数超过3次
+                                if (concurrentHashMap.get(result.trackId) == 2) {
+                                    tID = result.trackId;
+                                    isLink = true;
+                                    //   Log.d("RecognizeThread", "入库"+tID);
+                                }
                             }
-                        }
-                        if (!is){
-                            Message message = Message.obtain();
-                            message.obj = menBean;
-                            message.what = 111;
-                            weakHandler.sendMessage(message);
-                            longList.add(Long.valueOf(menBean.getPerson().getId()));
+
                         }
                     }
 
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (FacePassException e) {
                     e.printStackTrace();
                 }
             }
@@ -360,155 +768,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void interrupt() {
-            isRing = true;
+            isInterrupt = true;
             super.interrupt();
         }
-    }
-
-
-
-    private void initCamera() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        CameraListener cameraListener = new CameraListener() {
-            @Override
-            public void onCameraOpened(Camera camera, int cameraId, int displayOrientation, boolean isMirror) {
-                Log.i(TAG, "onCameraOpened: " + cameraId + "  " + displayOrientation + " " + isMirror);
-                previewSize = camera.getParameters().getPreviewSize();
-              //  drawHelper = new DrawHelper(previewSize.width, previewSize.height, previewView.getWidth(), previewView.getHeight(), displayOrientation
-                   //     , cameraId, isMirror);
-            }
-
-
-            @Override
-            public void onPreview(final byte[] nv21, final Camera camera) {
-//
-//
-//                if (faceRectView != null) {
-//                    faceRectView.clearFaceInfo();
-//                }
-
-
-                final List<FaceInfo> faceInfoList = new ArrayList<>();
-                int code = faceEngine.detectFaces(nv21, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfoList);
-                if (code != ErrorInfo.MOK && faceInfoList.size() <= 0) {
-
-                    return;
-                }
-//                if (code == ErrorInfo.MOK && faceInfoList.size() > 0) {
-//                    code = faceEngine.process(nv21, previewSize.width, previewSize.height, FaceEngine.CP_PAF_NV21, faceInfoList, processMask);
-//                    if (code != ErrorInfo.MOK) {
-//                        return;
-//                    }
-//                }else {
-//                    return;
-//                }
-
-
-                if (isLink1) {
-
-                    isLink1 = false;
-                    if (faceInfoList.size() == 0) {
-                        myface.setVisibility(View.GONE);
-                        isLink1 = true;
-                        return;
-                    } else {
-                        myface.setVisibility(View.VISIBLE);
-                    }
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            int cwidth = 640;
-                            int cheight = 480;
-
-                            // Log.d(TAG, "cwidth:" + cwidth);
-                            // Log.d(TAG, "cheight:" + cheight);
-//                            if (cwidth == 0) {
-//                                isLink1 = true;
-//                                return;
-//                            }
-
-                            try {
-
-                                YuvImage image2 = new YuvImage(nv21, ImageFormat.NV21, cwidth, cheight, null);
-                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                image2.compressToJpeg(new Rect(0, 0, cwidth, cheight), 100, stream);
-                                final Bitmap bmp = BitmapFactory.decodeByteArray(stream.toByteArray(), 0, stream.size());
-                                stream.close();
-
-                                for (FaceInfo faceInfo : faceInfoList) {
-                                    //头像加宽加高点
-                                    Rect rect = new Rect(faceInfo.getRect().left - 40 < 0 ? 0 : faceInfo.getRect().left - 40,
-                                            faceInfo.getRect().top - 100 < 0 ? 0 : faceInfo.getRect().top - 100,
-                                            faceInfo.getRect().right + 40 > cwidth ?
-                                                    cwidth : faceInfo.getRect().right + 40,
-                                            faceInfo.getRect().bottom + 100 > cheight
-                                                    ? cheight : faceInfo.getRect().bottom + 100);
-                                    int x1, y1, x2, y2 = 0;
-                                    x1 = rect.left;
-                                    y1 = rect.top;
-                                    //是宽高，不是坐标
-                                    x2 = (rect.left + (rect.right - rect.left)) > cwidth ? (int) (cwidth - rect.left) : (int) (rect.right - rect.left);
-                                    y2 = (rect.top + (rect.bottom - rect.top)) > cheight ? (int) (cheight - rect.top) : (int) (rect.bottom - rect.top);
-                                    //截取单个人头像
-                                    final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
-                                    //Log.d(TAG, "bitmap.getWidth():" + bitmap.getWidth());
-
-
-                                    File file=null;
-                                    try {
-                                        file=compressImage(bitmap);
-                                        link_P2(file);
-                                    }catch (Exception e){
-                                        if (file!=null)
-                                            file.delete();
-                                        isLink1 = true;
-                                    }
-
-                                }
-                            } catch (IOException e) {
-                                isLink1 = true;
-                                Log.d(TAG, e.getMessage() + "yiccvcvc");
-                            }
-
-                        }
-                    }).start();
-                }
-
-
-            }
-
-            @Override
-            public void onCameraClosed() {
-                Log.i(TAG, "onCameraClosed: ");
-            }
-
-            @Override
-            public void onCameraError(Exception e) {
-                Log.i(TAG, "onCameraError: " + e.getMessage());
-            }
-
-            @Override
-            public void onCameraConfigurationChanged(int cameraID, int displayOrientation) {
-//                if (drawHelper != null) {
-//                    drawHelper.setCameraDisplayOrientation(displayOrientation);
-//                }
-                Log.i(TAG, "onCameraConfigurationChanged: " + cameraID + "  " + displayOrientation);
-            }
-        };
-
-        cameraHelper = new CameraHelper.Builder()
-                .metrics(metrics)
-                .rotation(0)
-                .specificCameraId(0)
-                .isMirror(false)
-                .previewOn(previewView)
-                .cameraListener(cameraListener)
-                .build();
-        cameraHelper.init();
     }
 
 
@@ -526,6 +788,125 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void showFacePassFace(FacePassFace[] detectResult, final FacePassImage image) {
+
+        for (FacePassFace face : detectResult) {
+            boolean mirror = false; /* 前摄像头时mirror为true */
+            Matrix mat = new Matrix();
+            int w = cameraView.getMeasuredWidth();
+            int h = cameraView.getMeasuredHeight();
+
+            int cameraHeight = manager.getCameraheight();
+            int cameraWidth = manager.getCameraWidth();
+
+            float left = 0;
+            float top = 0;
+            float right = 0;
+            float bottom = 0;
+            switch (0) {
+                case 0:
+                    left = face.rect.left;
+                    top = face.rect.top;
+                    right = face.rect.right;
+                    bottom = face.rect.bottom;
+                    mat.setScale(mirror ? -1 : 1, 1);
+                    mat.postTranslate(mirror ? (float) cameraWidth : 0f, 0f);
+                    mat.postScale((float) w / (float) cameraWidth, (float) h / (float) cameraHeight);
+                    break;
+                case 90:
+                    mat.setScale(mirror ? -1 : 1, 1);
+                    mat.postTranslate(mirror ? (float) cameraHeight : 0f, 0f);
+                    mat.postScale((float) w / (float) cameraHeight, (float) h / (float) cameraWidth);
+                    left = face.rect.top;
+                    top = cameraWidth - face.rect.right;
+                    right = face.rect.bottom;
+                    bottom = cameraWidth - face.rect.left;
+                    break;
+                case 180:
+                    mat.setScale(1, mirror ? -1 : 1);
+                    mat.postTranslate(0f, mirror ? (float) cameraHeight : 0f);
+                    mat.postScale((float) w / (float) cameraWidth, (float) h / (float) cameraHeight);
+                    left = face.rect.right;
+                    top = face.rect.bottom;
+                    right = face.rect.left;
+                    bottom = face.rect.top;
+                    break;
+                case 270:
+                    mat.setScale(mirror ? -1 : 1, 1);
+                    mat.postTranslate(mirror ? (float) cameraHeight : 0f, 0f);
+                    mat.postScale((float) w / (float) cameraHeight, (float) h / (float) cameraWidth);
+                    left = cameraHeight - face.rect.bottom;
+                    top = face.rect.left;
+                    right = cameraHeight - face.rect.top;
+                    bottom = face.rect.right;
+            }
+
+            RectF drect = new RectF();
+            RectF srect = new RectF(left, top, right, bottom);
+            mat.mapRect(drect, srect);
+
+            //头像加宽加高点
+            RectF srect2 = new RectF(face.rect.left - 40 < 0 ? 0 : face.rect.left - 40, face.rect.top - 100 < 0 ? 0 : face.rect.top - 100,
+                    face.rect.right + 40 > image.width ? image.width : face.rect.right + 40, face.rect.bottom + 100 > image.height ? image.height : face.rect.bottom + 100);
+
+
+            float pitch = face.pose.pitch;
+            float roll = face.pose.roll;
+            float yaw = face.pose.yaw;
+            //  Log.d("MainActivity203", "pitch:" + pitch);
+            //  Log.d("MainActivity203", "roll:" + roll);
+            //  Log.d("MainActivity203", "yaw:" + yaw);
+            if (pitch < 30 && pitch > -30 && roll < 30 && roll > -30 && yaw < 30 && yaw > -30 && face.blur < 0.4) {
+                try {
+                    //  Log.d("MainActivity203", "tID:" + tID);
+                    //  Log.d("MainActivity203", "face.trackId:" + face.trackId);
+                    //   Log.d("MainActivity203", "isLink:" + isLink);
+                    if (tID == face.trackId && isLink) {  //入库成功后将 tID=-1;
+                        isLink = false;
+                        tID = -1;
+
+                        Log.d("MainActivity203", "进来");
+
+                        //获取图片
+                        YuvImage image2 = new YuvImage(image.image, ImageFormat.NV21, image.width, image.height, null);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        image2.compressToJpeg(new Rect(0, 0, image.width, image.height), 100, stream);
+                        final Bitmap bmp = BitmapFactory.decodeByteArray(stream.toByteArray(), 0, stream.size());
+                        stream.close();
+
+                        int x1, y1, x2, y2 = 0;
+                        x1 = (int) srect2.left;
+                        y1 = (int) srect2.top;
+                        //是宽高，不是坐标
+                        x2 = (srect2.left + (srect2.right - srect2.left)) > image.width ? (int) (image.width - srect2.left) : (int) (srect2.right - srect2.left);
+                        y2 = (srect2.top + (srect2.bottom - srect2.top)) > image.height ? (int) (image.height - srect2.top) : (int) (srect2.bottom - srect2.top);
+                        //截取单个人头像
+                        final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
+
+                        File file=null;
+                        try {
+                            file=compressImage(bitmap);
+                            link_P2(file);
+                        }catch (Exception e){
+                            if (file!=null)
+                                file.delete();
+                            isLink = true;
+                        }
+
+
+                    }
+
+
+                } catch (Exception ex) {
+                    isLink = true;
+                    Log.e("Sys", "Error:" + ex.getMessage());
+                }
+
+            }
+        }
+
+
+    }
 
     @PermissionSuccess(requestCode = 100)
     public void doSomething() {
@@ -533,8 +914,14 @@ public class MainActivity extends AppCompatActivity {
         //开启副屏
         Log.d("MainActivity", "fffff");
 
-        initEngine();
-        initCamera();
+       // initEngine();
+      //  initCamera();
+
+        FacePassHandler.getAuth(authIP, apiKey, apiSecret);
+        FacePassHandler.initSDK(getApplicationContext());
+
+        FacePassUtil util=new FacePassUtil();
+        util.init(MainActivity.this, getApplicationContext(),  null);
 
 
         if (Build.VERSION.SDK_INT >= 23) {
@@ -550,29 +937,36 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
             } else {
-              // CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
-            }
+
+                CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+
+          }
         } else {
-          //  CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+            CustomerEngine.getInstance(getApplicationContext(), MainActivity.this, dw, dh);
         }
 
-        if (cameraHelper != null) {
-            cameraHelper.start();
-        }
-
-
+//        if (cameraHelper != null) {
+//            cameraHelper.start();
+//        }
+       // Log.d(TAG, "gggg");
+       // manager.open(getWindowManager(), false, cameraWidth, cameraHeight);
+        manager.open(getWindowManager(), true, cameraWidth, cameraHeight);
     }
 
     //广播
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onDataSynEvent(String event) {
+
         if (event.equals("quanxian")) {
-           // CustomerEngine.getInstance(getApplicationContext(), MainActivity.this,dw,dh);
+            CustomerEngine.getInstance(getApplicationContext(), MainActivity.this, dw, dh);
             return;
         }
 
+        if (event.equals("mFacePassHandler")) {
+            mFacePassHandler = MyApplication.myApplication.getFacePassHandler();
+            return;
+        }
         Toast.makeText(this, event, Toast.LENGTH_LONG).show();
-
     }
 
 
@@ -594,8 +988,11 @@ public class MainActivity extends AppCompatActivity {
             cameraHelper.release();
             cameraHelper = null;
         }
-        unInitEngine();
+
+     //   unInitEngine();
+
         EventBus.getDefault().unregister(this);//解除订阅
+
         super.onDestroy();
     }
 
@@ -624,18 +1021,11 @@ public class MainActivity extends AppCompatActivity {
             file.delete();
 
             SystemClock.sleep(1000);
-            isLink1=true;
+            isLink=true;
             return;
         }
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .writeTimeout(TIMEOUT2, TimeUnit.MILLISECONDS)
-                .connectTimeout(TIMEOUT2, TimeUnit.MILLISECONDS)
-                .readTimeout(TIMEOUT2, TimeUnit.MILLISECONDS)
-                //  .cookieJar(new CookiesManager())
-                .retryOnConnectionFailure(true)
-                .build();
-        ;
+
         MultipartBody mBody;
         final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
 
@@ -658,12 +1048,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 file.delete();
-
               //  Log.d("CustomerDisplay", "file.delete():" + );
                 Log.d("AllConnects", "请求识别失败" + e.getMessage());
+                Runtime.getRuntime().gc();
                 SystemClock.sleep(1100);
-                isLink1=true;
-
+                isLink=true;
+                mFacePassHandler.reset();
             }
 
             @Override
@@ -696,8 +1086,30 @@ public class MainActivity extends AppCompatActivity {
 //                        message.obj=menBean;
 //                        handler.sendMessage(message);
                     //    Log.d("CustomerDisplay", "识别");
-
-                        linkedBlockingQueue.offer(menBean);
+                        synchronized (okHttpClient){
+                            if (longList.size()==0){
+                                Message message = Message.obtain();
+                                message.obj = menBean;
+                                message.what = 111;
+                                weakHandler.sendMessage(message);
+                                longList.add(Long.valueOf(menBean.getPerson().getId()));
+                            }
+                            boolean is=false;
+                            for (Long ll : longList){
+                                if (ll.equals(Long.valueOf(menBean.getPerson().getId()))){
+                                    is=true;
+                                    break;
+                                }
+                            }
+                            if (!is){
+                                Message message = Message.obtain();
+                                message.obj = menBean;
+                                message.what = 111;
+                                weakHandler.sendMessage(message);
+                                longList.add(Long.valueOf(menBean.getPerson().getId()));
+                            }
+                        }
+                      //  linkedBlockingQueue.offer(menBean);
                      //   Log.d("MainActivity", "longList.size():" + linkedBlockingQueue.size());
 //                        if (longList.size() == 0) {
 //                            longList.add(Long.valueOf(menBean.getPerson().getId()));
@@ -756,13 +1168,14 @@ public class MainActivity extends AppCompatActivity {
 
 
                 } catch (Exception e) {
-
+                    mFacePassHandler.reset();
                     Log.d("WebsocketPushMsg", e.getMessage() + "klklklkl");
                 } finally {
                     file.delete();
+                    Runtime.getRuntime().gc();
+                    SystemClock.sleep(1000);
+                    isLink=true;
 
-                    SystemClock.sleep(700);
-                    isLink1=true;
                 }
 
             }
@@ -785,8 +1198,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.d(TAG, e.getMessage() + "ffffgg");
         } finally {
-            if (bitmap != null)
+
+            if (bitmap != null){
                 bitmap.recycle();
+                bitmap=null;
+            }
+
         }
         return file;
 
@@ -820,6 +1237,8 @@ public class MainActivity extends AppCompatActivity {
 //        //	recycleBitmap(bitmap);
 //        return file;
     }
+
+
 
 
     public static class MyReceiver extends BroadcastReceiver {

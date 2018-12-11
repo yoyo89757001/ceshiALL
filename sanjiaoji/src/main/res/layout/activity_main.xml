@@ -6,10 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <TextureView
-        android:id="@+id/texture_preview"
+    <!--<TextureView-->
+        <!--android:id="@+id/texture_preview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+
+
+    <com.example.sanjiaoji.camera.CameraPreview
+        android:id="@+id/preview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
 
 
 
@@ -18,6 +26,8 @@
         android:background="@color/touming22"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
 
 
         <RelativeLayout
@@ -82,11 +92,11 @@
     <ImageView
         android:id="@+id/logo"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo11"
+        android:src="@drawable/logo2"
         android:scaleType="fitXY"
-        android:layout_marginTop="60px"
-        android:layout_width="526px"
-        android:layout_height="156px" />
+        android:layout_marginTop="100px"
+        android:layout_width="1300px"
+        android:layout_height="360px" />
 
 
 </RelativeLayout>

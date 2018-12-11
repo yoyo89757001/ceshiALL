@@ -9,17 +9,10 @@ android {
         applicationId "com.example.sanjiaoji"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        ndk {
-            abiFilters  "armeabi-v7a"
-        }
-        multiDexEnabled true
-        dexOptions {
-            preDexLibraries false
+        versionCode 3
+        versionName "1.1"
+  
 
-            javaMaxHeapSize "3072m"
-        }
     }
 
     buildTypes {
@@ -27,6 +20,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/maven/org.java-websocket/Java-WebSocket/pom.xml'
     }
 
 }
@@ -43,6 +45,14 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     // compile 'com.jude:rollviewpager:1.4.6'
+    implementation(name: 'FacePassAndroidSDK-release', ext: 'aar')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation('org.apache.httpcomponents:httpmime:4.3') {
+        exclude module: "httpclient"
+    }
+    implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.liulishuo.filedownloader:library:1.7.4'
     //文件下载
     // compile 'com.github.florent37:viewanimator:1.0.5'

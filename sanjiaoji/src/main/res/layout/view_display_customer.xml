@@ -6,13 +6,15 @@
 
 
 
-    <SurfaceView
-        android:layout_alignParentBottom="true"
-        android:id="@+id/texture_preview"
+    <!--<TextureView-->
+        <!--android:id="@+id/texture_preview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+    <com.example.sanjiaoji.camera.CameraPreview2
+        android:id="@+id/preview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-
+        android:layout_height="match_parent" />
 
     <ImageView
         android:id="@+id/dabg"
@@ -81,11 +83,11 @@
     <ImageView
         android:id="@+id/logo"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo11"
+        android:src="@drawable/logo2"
         android:scaleType="fitXY"
-        android:layout_marginTop="120px"
-        android:layout_width="920px"
-        android:layout_height="304px" />
+        android:layout_marginTop="180px"
+        android:layout_width="1500px"
+        android:layout_height="500px" />
 
 
 

@@ -74,7 +74,6 @@ public class SheZhiActivity extends Activity {
         userName = sharedPreferencesHelper.getSharedPreference("username", "").toString().trim();
         pwd = sharedPreferencesHelper.getSharedPreference("passewod", "").toString().trim();
 
-
     }
 
 

@@ -11,8 +11,6 @@ import android.view.WindowManager;
 
 import com.example.sanjiaoji.utils.SettingVar;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -136,27 +134,22 @@ public class CameraManager implements CameraPreview.CameraPreviewListener {
                 protected Object doInBackground(Object... params) {
                     cameraId = front ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
                     try {
-                        camera = Camera.open(cameraId);
+                        camera = Camera.open(0);
                     } catch (Exception e) {
-                        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-                        int count = Camera.getNumberOfCameras();
-                        if (count > 0) {
-                            cameraId = 0;
-                            try {
-                                camera = Camera.open(cameraId);
-                            }catch (Exception ee){
-                                ee.printStackTrace();
-                                EventBus.getDefault().post("摄像头开启失败");
-                            }
-
-                        } else {
-                            cameraId = -1;
-                            camera = null;
-                        }
+                        Log.d("CameraManager", e.getMessage()+"1111111111");
+//                        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+//                        int count = Camera.getNumberOfCameras();
+//                        if (count > 0) {
+//                            cameraId = 0;
+//                            camera = Camera.open(cameraId);
+//                        } else {
+//                            cameraId = -1;
+//                            camera = null;
+//                        }
                     }
                     if (camera != null) {
                         Camera.CameraInfo info = new Camera.CameraInfo();
-                        Camera.getCameraInfo(cameraId, info);
+                        Camera.getCameraInfo(0, info);
                         int rotation = windowManager.getDefaultDisplay().getRotation();
                         int degrees = 0;
                         switch (rotation) {
@@ -180,9 +173,11 @@ public class CameraManager implements CameraPreview.CameraPreviewListener {
                         } else {  // back-facing
                             previewRotation = (info.orientation - degrees + 360) % 360;
                         }
-//                        previewRotation = 90;
+                        previewRotation = 90;
+                        if (SettingVar.isSettingAvailable) {
+                            previewRotation = SettingVar.cameraPreviewRotation;
+                        }
 
-                        previewRotation = SettingVar.cameraPreviewRotation;
                         Log.i("CameraManager", String.format("camera rotation: %d %d %d", degrees, info.orientation, previewRotation));
                         camera.setDisplayOrientation(previewRotation);
                         Camera.Parameters param = camera.getParameters();
