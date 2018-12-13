@@ -46,12 +46,14 @@ import com.example.sanjiaoji.model.MenBean;
 import com.example.sanjiaoji.utils.CustomerEngine;
 
 import com.example.sanjiaoji.utils.FacePassUtil;
+
+import com.example.sanjiaoji.utils.FileUtil;
 import com.example.sanjiaoji.utils.GsonUtil;
 import com.example.sanjiaoji.utils.SettingVar;
 import com.example.sanjiaoji.utils.SharedPreferenceHelper;
 import com.example.sanjiaoji.utils.camera.CameraHelper;
 
-import com.example.sanjiaoji.view.MyFaceview;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yatoooon.screenadaptation.ScreenAdapterTools;
@@ -70,7 +72,6 @@ import java.io.IOException;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -106,13 +107,14 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
     TextView name;
     @BindView(R.id.rlrlrl)
     RelativeLayout rlrlrl;
-    @BindView(R.id.myface)
-    MyFaceview myface;
+   // @BindView(R.id.myface)
+   // MyFaceview myface;
     @BindView(R.id.dabg)
     ImageView dabg;
     @BindView(R.id.logo)
     ImageView logo;
-
+  //  long l1=0;
+   // long l2=0;
     private CameraHelper cameraHelper;
     //private DrawHelper drawHelper;
     //private Camera.Size previewSize;
@@ -120,40 +122,33 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
    // private int afCode = -1;
     private int dw, dh;
     private int fd;
-    private  final String group_name = "facepasstestx";
     /* SDK 实例对象 */
-    FacePassHandler mFacePassHandler;
+  private   FacePassHandler mFacePassHandler;
     /* 相机实例 */
     private CameraManager manager;
     /* 相机预览界面 */
     private CameraPreview cameraView;
-    private static final int cameraWidth = 640;
-    private static final int cameraHeight = 320;
+    private static final int cameraWidth = 1024;
+    private static final int cameraHeight = 600;
 
-    /*recognize thread*/
-    RecognizeThread mRecognizeThread;
-    FeedFrameThread mFeedFrameThread;
     private static boolean isLink = true;
     private long tID = -1;
     private ConcurrentHashMap<Long, Integer> concurrentHashMap = new ConcurrentHashMap<Long, Integer>();
     /*DetectResult queue*/
-    ArrayBlockingQueue<byte[]> mDetectResultQueue;
-    ArrayBlockingQueue<CameraPreviewData> mFeedFrameQueue;
+   private ArrayBlockingQueue<byte[]> mDetectResultQueue;
+   private ArrayBlockingQueue<CameraPreviewData> mFeedFrameQueue;
 
-    private static final String authIP = "https://api-cn.faceplusplus.com";
-    private static final String apiKey = "zIvtfbe_qPHpLZzmRAE-zVg7-EaVhKX2";
-    private static final String apiSecret = "-H4Ik0iZ_5YTyw5NPT8LfnJREz_NCbo7";
+ //   private static final String authIP = "https://api-cn.faceplusplus.com";
+  //  private static final String apiKey = "zIvtfbe_qPHpLZzmRAE-zVg7-EaVhKX2";
+  //  private static final String apiSecret = "-H4Ik0iZ_5YTyw5NPT8LfnJREz_NCbo7";
 
 //    private static final String authIP = "https://api-cn.faceplusplus.com";
 //    private static final String apiKey = "JHt8TdGoELfkEKYkjQMogR8GPLIPAfRM";
 //    private static final String apiSecret = "qgPwtgw9Yiqn2aL9KQyv1ukigAV7xWup";
 
-    //private View previewView;
-  //  private static boolean isLink1 = true;
-    private ImageView ceshi;
-   // private BaoCunBean baoCunBean = null;
+    // private BaoCunBean baoCunBean = null;
    // private Box<BaoCunBean> baoCunBeanDao = null;
-    private static Vector<Long> longList = new Vector<>();
+   // private static Vector<Long> longList = new Vector<>();
     private final Timer timer = new Timer();
     private TimerTask task;
     private SharedPreferenceHelper sharedPreferencesHelper = null;
@@ -211,8 +206,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
 
                     //红外状态,value判断
                     //  int value = humansensor_manager.get_gpio1_value(fd);
-                    //开灯
-                    humansensor_manager.set_gpio2_value(fd, 1);
+
 
                     //开继电器，即闸机开关
                     humansensor_manager.set_gpio3_value(fd, 1);
@@ -221,17 +215,16 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
                         @Override
                         public void run() {
                             SystemClock.sleep(500);
-                            //关灯
-                            humansensor_manager.set_gpio2_value(fd, 0);
+
                             //关继电器
                             humansensor_manager.set_gpio3_value(fd, 0);
 
-                            SystemClock.sleep(5000);
-                            try {
-                                longList.remove(0);
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
+//                            SystemClock.sleep(5000);
+//                            try {
+//                                longList.remove(0);
+//                            }catch (Exception e){
+//                                e.printStackTrace();
+//                            }
 
                         }
                     }).start();
@@ -290,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
         Log.d(TAG, "dw:" + dw);
         Log.d(TAG, "dh:" + dh);
 
-        myface.setDate(dw, dh);
+        //myface.setDate(dw, dh);
 
       //  baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
 
@@ -300,7 +293,9 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
 
         //previewView = findViewById(R.id.texture_preview);
         // faceRectView = findViewById(R.id.face_rect_view);
-        ceshi = findViewById(R.id.ceshi);
+        //private View previewView;
+        //  private static boolean isLink1 = true;
+        ImageView ceshi = findViewById(R.id.ceshi);
         ceshi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -333,9 +328,10 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
         cameraView.invalidate();
 
 
-        mRecognizeThread = new RecognizeThread();
+        /*recognize thread*/
+        RecognizeThread mRecognizeThread = new RecognizeThread();
         mRecognizeThread.start();
-        mFeedFrameThread = new FeedFrameThread();
+        FeedFrameThread mFeedFrameThread = new FeedFrameThread();
         mFeedFrameThread.start();
     }
 
@@ -677,22 +673,30 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
                 }
 
                 if (detectionResult != null && detectionResult.faceList.length > 0) {
+                    //开灯
+                    humansensor_manager.set_gpio2_value(fd, 1);
                     showFacePassFace(detectionResult.faceList, image);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            myface.setVisibility(View.VISIBLE);
-                        }
-                    });
-                }else {
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            myface.setVisibility(View.GONE);
-                        }
-                    });
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            myface.setVisibility(View.VISIBLE);
+//                        }
+//                    });
+                }else {
+                    //关灯
+                    humansensor_manager.set_gpio2_value(fd, 0);
                 }
+
+//                else {
+//
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            myface.setVisibility(View.GONE);
+//                        }
+//                    });
+//                }
 
             /*离线模式，将识别到人脸的，message不为空的result添加到处理队列中*/
             if (detectionResult != null && detectionResult.message.length != 0) {
@@ -726,15 +730,16 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
 
                     byte[] detectionResult = mDetectResultQueue.take();
 
-                    Log.d("ddddddd", "mDetectResultQueue.recognize");
-                    FacePassRecognitionResult[] recognizeResult = mFacePassHandler.recognize(group_name, detectionResult);
+                  //  Log.d("ddddddd", "mDetectResultQueue.recognize");
+
+                    FacePassRecognitionResult[] recognizeResult = mFacePassHandler.recognize("facepasstestx", detectionResult);
                     if (recognizeResult != null && recognizeResult.length > 0) {
                         for (FacePassRecognitionResult result : recognizeResult) {
                            // String faceToken = new String(result.faceToken);
                             if (FacePassRecognitionResultType.RECOG_OK == result.facePassRecognitionResultType) {
                                 Log.d(TAG, "ddd识别");
                             }else {
-                                Log.d("RecognizeThread", "未识别");
+                              //  Log.d("RecognizeThread", "未识别");
                                 //未识别的
                                 // 防止concurrentHashMap 数据过多 ,超过一定数据 删除没用的
                                 if (concurrentHashMap.size() > 10) {
@@ -748,7 +753,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
                                     concurrentHashMap.put(result.trackId, (concurrentHashMap.get(result.trackId)) + 1);
                                 }
                                 //判断次数超过3次
-                                if (concurrentHashMap.get(result.trackId) == 2) {
+                                if (concurrentHashMap.get(result.trackId) == 1) {
                                     tID = result.trackId;
                                     isLink = true;
                                     //   Log.d("RecognizeThread", "入库"+tID);
@@ -758,9 +763,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
                         }
                     }
 
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (FacePassException e) {
+                } catch (InterruptedException | FacePassException e) {
                     e.printStackTrace();
                 }
             }
@@ -864,9 +867,8 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
                     if (tID == face.trackId && isLink) {  //入库成功后将 tID=-1;
                         isLink = false;
                         tID = -1;
-
-                        Log.d("MainActivity203", "进来");
-
+                    //    l1=System.currentTimeMillis();
+                       // Log.d("MainActivity203", "进来");
                         //获取图片
                         YuvImage image2 = new YuvImage(image.image, ImageFormat.NV21, image.width, image.height, null);
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -883,9 +885,12 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
                         //截取单个人头像
                         final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
 
+                        Bitmap fileBitmap = FileUtil.adjustPhotoRotation(bitmap, 270);
+
                         File file=null;
                         try {
-                            file=compressImage(bitmap);
+
+                            file=compressImage(fileBitmap);
                             link_P2(file);
                         }catch (Exception e){
                             if (file!=null)
@@ -917,7 +922,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
        // initEngine();
       //  initCamera();
 
-        FacePassHandler.getAuth(authIP, apiKey, apiSecret);
+     //   FacePassHandler.getAuth(authIP, apiKey, apiSecret);
         FacePassHandler.initSDK(getApplicationContext());
 
         FacePassUtil util=new FacePassUtil();
@@ -1020,7 +1025,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
             //Log.d(TAG, "gfdgfdg3333");
             file.delete();
 
-            SystemClock.sleep(1000);
+          //  SystemClock.sleep(1000);
             isLink=true;
             return;
         }
@@ -1049,9 +1054,9 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
             public void onFailure(Call call, IOException e) {
                 file.delete();
               //  Log.d("CustomerDisplay", "file.delete():" + );
-                Log.d("AllConnects", "请求识别失败" + e.getMessage());
+                Log.d("AllConnects", "请求识别失败" + e.getMessage()+call.request().url());
                 Runtime.getRuntime().gc();
-                SystemClock.sleep(1100);
+             //   SystemClock.sleep(1100);
                 isLink=true;
                 mFacePassHandler.reset();
             }
@@ -1061,18 +1066,19 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
 
                 Log.d("AllConnects", "请求识别成功" + call.request().toString());
                 //获得返回体
+                String s2="";
                 try {
                     ResponseBody body = response.body();
                     String ss = body.string();
-                  //  Log.d("AllConnects", "传照片" + ss);
-                    String s2 = ss.replace("\\\\u", "@!@#u").replace("\\", "")
+                    Log.d("AllConnects", "传照片" + ss);
+                     s2 = ss.replace("\\\\u", "@!@#u").replace("\\", "")
                             .replace("tag\": \"{", "tag\":{")
                             .replace("jpg\"}\"", "jpg\"}")
                             .replace("@!@#", "\\")
                             .replace("0}\"", "0}");
 
 
-                    //    Log.d("AllConnects", "传照片2" + s2);
+                        Log.d("AllConnects", "传照片2" + s2);
 
                     JsonObject jsonObject = GsonUtil.parse(s2).getAsJsonObject();
                     Gson gson = new Gson();
@@ -1086,29 +1092,32 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
 //                        message.obj=menBean;
 //                        handler.sendMessage(message);
                     //    Log.d("CustomerDisplay", "识别");
-                        synchronized (okHttpClient){
-                            if (longList.size()==0){
-                                Message message = Message.obtain();
-                                message.obj = menBean;
-                                message.what = 111;
-                                weakHandler.sendMessage(message);
-                                longList.add(Long.valueOf(menBean.getPerson().getId()));
-                            }
-                            boolean is=false;
-                            for (Long ll : longList){
-                                if (ll.equals(Long.valueOf(menBean.getPerson().getId()))){
-                                    is=true;
-                                    break;
-                                }
-                            }
-                            if (!is){
-                                Message message = Message.obtain();
-                                message.obj = menBean;
-                                message.what = 111;
-                                weakHandler.sendMessage(message);
-                                longList.add(Long.valueOf(menBean.getPerson().getId()));
-                            }
-                        }
+
+                        Message message = Message.obtain();
+                        message.obj = menBean;
+                        message.what = 111;
+                        weakHandler.sendMessage(message);
+
+//                        synchronized (okHttpClient){
+//                            if (longList.size()==0){
+//
+//                                longList.add(Long.valueOf(menBean.getPerson().getId()));
+//                            }
+//                            boolean is=false;
+//                            for (Long ll : longList){
+//                                if (ll.equals(Long.valueOf(menBean.getPerson().getId()))){
+//                                    is=true;
+//                                    break;
+//                                }
+//                            }
+//                            if (!is){
+//                                Message message = Message.obtain();
+//                                message.obj = menBean;
+//                                message.what = 111;
+//                                weakHandler.sendMessage(message);
+//                                longList.add(Long.valueOf(menBean.getPerson().getId()));
+//                            }
+//                        }
                       //  linkedBlockingQueue.offer(menBean);
                      //   Log.d("MainActivity", "longList.size():" + linkedBlockingQueue.size());
 //                        if (longList.size() == 0) {
@@ -1168,14 +1177,38 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
 
 
                 } catch (Exception e) {
-                    mFacePassHandler.reset();
-                    Log.d("WebsocketPushMsg", e.getMessage() + "klklklkl");
+                    try {
+                        String s3=s2.replace("null}\"","null}");
+                        JsonObject jsonObject = GsonUtil.parse(s3).getAsJsonObject();
+                        Gson gson = new Gson();
+                        MenBean menBean = gson.fromJson(jsonObject, MenBean.class);
+
+                        if (menBean.isCan_door_open() || (menBean.getPerson() != null && menBean.getPerson().getConfidence() > 75)) {
+
+                            Message message = Message.obtain();
+                            message.obj = menBean;
+                            message.what = 111;
+                            weakHandler.sendMessage(message);
+
+                        } else {
+                            // SystemClock.sleep(300);
+                            //  isLink1 = true;
+                            Log.d("CustomerDisplay", "陌生人222");
+                        }
+
+                    }catch (Exception ee){
+                        ee.printStackTrace();
+                        mFacePassHandler.reset();
+                    }
+                    Log.d("WebsocketPushMsg", e.getMessage() + "json异常");
+
                 } finally {
                     file.delete();
                     Runtime.getRuntime().gc();
-                    SystemClock.sleep(1000);
+                   // SystemClock.sleep(1000);
                     isLink=true;
-
+                   // l2=System.currentTimeMillis();
+                  //  Log.d("MainActivity", "l2-l1:" + (l2 - l1));
                 }
 
             }

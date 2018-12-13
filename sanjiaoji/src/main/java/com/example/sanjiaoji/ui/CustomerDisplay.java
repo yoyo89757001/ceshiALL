@@ -45,7 +45,7 @@ import com.example.sanjiaoji.utils.SettingVar;
 import com.example.sanjiaoji.utils.SharedPreferenceHelper;
 import com.example.sanjiaoji.utils.camera.CameraHelper;
 
-import com.example.sanjiaoji.view.MyFaceview;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yatoooon.screenadaptation.ScreenAdapterTools;
@@ -60,7 +60,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
+
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -91,10 +91,10 @@ import okhttp3.ResponseBody;
 
 public class CustomerDisplay extends Presentation implements CameraManager2.CameraListener {
 
-    ImageView dabg;
-    TextView name;
-    RelativeLayout rlrlrl;
-    MyFaceview myface;
+    private ImageView dabg;
+    private TextView name;
+    private RelativeLayout rlrlrl;
+  //  MyFaceview myface;
     ImageView ceshi;
    // private  TanChuangThread tanChuangThread;
     private final Activity activity;
@@ -112,35 +112,26 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
    // private int afCode = -1;
     private int fd;
   //  private int processMask = FaceEngine.ASF_AGE | FaceEngine.ASF_FACE3DANGLE | FaceEngine.ASF_GENDER | FaceEngine.ASF_LIVENESS;
-    /**
-     * 相机预览显示的控件，可为SurfaceView或TextureView
-     */
-   // private View previewView;
-
-    private  final String group_name = "facepasstestx";
     /* SDK 实例对象 */
-    FacePassHandler mFacePassHandler;
+    private FacePassHandler mFacePassHandler;
     /* 相机实例 */
     private CameraManager2 manager;
     /* 相机预览界面 */
     private CameraPreview2 cameraView;
-    private static final int cameraWidth = 640;
-    private static final int cameraHeight = 320;
+    private static final int cameraWidth = 1024;
+    private static final int cameraHeight = 600;
 
-    /*recognize thread*/
-    RecognizeThread mRecognizeThread;
-    FeedFrameThread mFeedFrameThread;
     private static boolean isLink = true;
     private long tID = -1;
     private ConcurrentHashMap<Long, Integer> concurrentHashMap = new ConcurrentHashMap<Long, Integer>();
     /*DetectResult queue*/
-    ArrayBlockingQueue<byte[]> mDetectResultQueue;
-    ArrayBlockingQueue<CameraPreviewData2> mFeedFrameQueue;
+    private ArrayBlockingQueue<byte[]> mDetectResultQueue;
+    private ArrayBlockingQueue<CameraPreviewData2> mFeedFrameQueue;
 
    // private ImageView ceshi;
    // private BaoCunBean baoCunBean = null;
    // private Box<BaoCunBean> baoCunBeanDao = null;
-    private static Vector<Long> longList2 = new Vector<>();
+  //  private static Vector<Long> longList2 = new Vector<>();
     private final Timer timer = new Timer();
     private TimerTask task;
     private SharedPreferenceHelper sharedPreferencesHelper = null;
@@ -202,8 +193,7 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
 
                     //红外状态,value判断
                     //  int value = humansensor_manager.get_gpio1_value(fd);
-                    //开灯
-                    humansensor_manager.set_gpio2_value(fd, 1);
+
 
                     //开继电器，即闸机开关
                     humansensor_manager.set_gpio4_value(fd, 1);
@@ -212,17 +202,16 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
                             @Override
                             public void run() {
                                 SystemClock.sleep(500);
-                                   //关灯
-                                humansensor_manager.set_gpio2_value(fd, 0);
+
                                  //关继电器
                                 humansensor_manager.set_gpio4_value(fd, 0);
 
-                                SystemClock.sleep(5000);
-                                try {
-                                    longList2.remove(0);
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
+//                                SystemClock.sleep(5000);
+//                                try {
+//                                    longList2.remove(0);
+//                                }catch (Exception e){
+//                                    e.printStackTrace();
+//                                }
 
 
                             }
@@ -273,10 +262,10 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        getWindow().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         DisplayMetrics dm = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        getWindow().getWindowManager().getDefaultDisplay().getMetrics(dm);
         dw = dm.widthPixels;
         dh = dm.heightPixels;
         SettingVar.mHeight2 = dh;
@@ -287,8 +276,8 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
         mFeedFrameQueue = new ArrayBlockingQueue<CameraPreviewData2>(1);
 
 
-        Log.d("CustomerDisplay22", "dw:" + dw);
-        Log.d("CustomerDisplay22", "dh:" + dh);
+     //   Log.d("CustomerDisplay22", "dw:" + dw);
+      //  Log.d("CustomerDisplay22", "dh:" + dh);
 
         //baoCunBeanDao = MyApplication.myApplication.getBoxStore().boxFor(BaoCunBean.class);
         //baoCunBean = baoCunBeanDao.get(123456L);
@@ -320,7 +309,7 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
         //ceshi = findViewById(R.id.ceshi);
         name=findViewById(R.id.name);
         rlrlrl=findViewById(R.id.rlrlrl);
-        myface=findViewById(R.id.myface);
+      //  myface=findViewById(R.id.myface);
         dabg=findViewById(R.id.dabg);
 
         manager = new CameraManager2();
@@ -329,8 +318,8 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
         /* 注册相机回调函数 */
         manager.setListener(this);
 
-        Log.d("CustomerDisplay", "dw2:" + dw);
-        Log.d("CustomerDisplay", "dh2:" + dh);
+       // Log.d("CustomerDisplay", "dw2:" + dw);
+       // Log.d("CustomerDisplay", "dh2:" + dh);
 
 
         fd = humansensor_manager.open();
@@ -349,9 +338,10 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
        // tanChuangThread=new TanChuangThread();
         //tanChuangThread.start();
 
-        mRecognizeThread = new RecognizeThread();
+        /*recognize thread*/
+        RecognizeThread mRecognizeThread = new RecognizeThread();
         mRecognizeThread.start();
-        mFeedFrameThread = new FeedFrameThread();
+        FeedFrameThread mFeedFrameThread = new FeedFrameThread();
         mFeedFrameThread.start();
 
     }
@@ -400,21 +390,27 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
                 }
 
                 if (detectionResult != null && detectionResult.faceList.length > 0) {
+                    //开灯
+                   // humansensor_manager.set_gpio2_value(fd, 1);
+
                     showFacePassFace(detectionResult.faceList, image);
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            myface.setVisibility(View.VISIBLE);
-                        }
-                    });
-                }else {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            myface.setVisibility(View.GONE);
-                        }
-                    });
+//                    activity.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            myface.setVisibility(View.VISIBLE);
+//                        }
+//                    });
                 }
+               // else {
+                    //关灯
+                  //  humansensor_manager.set_gpio2_value(fd, 0);
+//                    activity.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            myface.setVisibility(View.GONE);
+//                        }
+//                    });
+              //  }
 
                 /*离线模式，将识别到人脸的，message不为空的result添加到处理队列中*/
                 if (detectionResult != null && detectionResult.message.length != 0) {
@@ -449,6 +445,12 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
                     byte[] detectionResult = mDetectResultQueue.take();
 
                     Log.d("ddddddd", "mDetectResultQueue.recognize");
+                    /*
+      相机预览显示的控件，可为SurfaceView或TextureView
+     */ /**
+                     * 相机预览显示的控件，可为SurfaceView或TextureView
+                     */ // private View previewView;
+                    String group_name = "facepasstestx";
                     FacePassRecognitionResult[] recognizeResult = mFacePassHandler.recognize(group_name, detectionResult);
                     if (recognizeResult != null && recognizeResult.length > 0) {
                         for (FacePassRecognitionResult result : recognizeResult) {
@@ -470,7 +472,7 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
                                     concurrentHashMap.put(result.trackId, (concurrentHashMap.get(result.trackId)) + 1);
                                 }
                                 //判断次数超过3次
-                                if (concurrentHashMap.get(result.trackId) == 2) {
+                                if (concurrentHashMap.get(result.trackId) == 1) {
                                     tID = result.trackId;
                                     isLink = true;
                                     //   Log.d("RecognizeThread", "入库"+tID);
@@ -616,7 +618,7 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
     public void show() {
         super.show();
 
-        myface.setDate(dw,dh);
+      //  myface.setDate(dw,dh);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) rlrlrl.getLayoutParams();
         params.height = (int) (dh * 0.3f);
         rlrlrl.setLayoutParams(params);
@@ -907,8 +909,7 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
         if (screen_token.equals("")|| url.equals("")) {
             //Log.d(TAG, "gfdgfdg3333");
             file.delete();
-
-            SystemClock.sleep(1400);
+          //  SystemClock.sleep(1400);
             isLink=true;
             return;
         }
@@ -939,7 +940,7 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
                 file.delete();
                 Log.d("AllConnects", "请求识别失败" + e.getMessage());
                 Runtime.getRuntime().gc();
-                SystemClock.sleep(1400);
+              //  SystemClock.sleep(1400);
                 isLink=true;
 
             }
@@ -950,11 +951,12 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
 
                 Log.d("AllConnects", "请求识别成功" + call.request().toString());
                 //获得返回体
+                String s2="";
                 try {
                     ResponseBody body = response.body();
                     String ss = body.string();
                   //  Log.d("AllConnects", "传照片" + ss);
-                    String s2 = ss.replace("\\\\u", "@!@#u").replace("\\", "")
+                     s2 = ss.replace("\\\\u", "@!@#u").replace("\\", "")
                             .replace("tag\": \"{", "tag\":{")
                             .replace("jpg\"}\"", "jpg\"}")
                             .replace("@!@#", "\\")
@@ -973,29 +975,31 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
 //                        message.obj=menBean;
 //                        handler.sendMessage(message);
                      //   Log.d("CustomerDisplay", "识别");
-                        synchronized (okHttpClient){
-                            if (longList2.size()==0){
-                                Message message = Message.obtain();
-                                message.obj = menBean;
-                                message.what = 111;
-                                weakHandler.sendMessage(message);
-                                longList2.add(Long.valueOf(menBean.getPerson().getId()));
-                            }
-                            boolean is=false;
-                            for (Long ll : longList2){
-                                if (ll.equals(Long.valueOf(menBean.getPerson().getId()))){
-                                    is=true;
-                                    break;
-                                }
-                            }
-                            if (!is){
-                                Message message = Message.obtain();
-                                message.obj = menBean;
-                                message.what = 111;
-                                weakHandler.sendMessage(message);
-                                longList2.add(Long.valueOf(menBean.getPerson().getId()));
-                            }
-                        }
+                        Message message = Message.obtain();
+                        message.obj = menBean;
+                        message.what = 111;
+                        weakHandler.sendMessage(message);
+
+//                        synchronized (okHttpClient){
+//                            if (longList2.size()==0){
+//
+//                                longList2.add(Long.valueOf(menBean.getPerson().getId()));
+//                            }
+//                            boolean is=false;
+//                            for (Long ll : longList2){
+//                                if (ll.equals(Long.valueOf(menBean.getPerson().getId()))){
+//                                    is=true;
+//                                    break;
+//                                }
+//                            }
+//                            if (!is){
+//                                Message message = Message.obtain();
+//                                message.obj = menBean;
+//                                message.what = 111;
+//                                weakHandler.sendMessage(message);
+//                                longList2.add(Long.valueOf(menBean.getPerson().getId()));
+//                            }
+//                        }
                      //   linkedBlockingQueue.offer(menBean);
 
 //
@@ -1030,12 +1034,14 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
 //                        }
                      //   Log.d("MainActivity", "longList2.size():" + linkedBlockingQueue.size());
 
-                    }else {
-
-                        Message message = Message.obtain();
-                        message.what = 333;
-                        weakHandler.sendMessage(message);
                     }
+
+//                    else {
+//
+//                        Message message = Message.obtain();
+//                        message.what = 333;
+//                        weakHandler.sendMessage(message);
+//                    }
 //                    else {
 //                       // SystemClock.sleep(300);
 //                       // isLink = true;
@@ -1061,16 +1067,36 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
 //                    }
 
                 } catch (Exception e) {
-                  //  SystemClock.sleep(300);
-                   // isLink = true;
-                    Log.d("WebsocketPushMsg", e.getMessage() + "klklklkl");
+                    try {
+                        String s3=s2.replace("null}\"","null}");
+                        JsonObject jsonObject = GsonUtil.parse(s3).getAsJsonObject();
+                        Gson gson = new Gson();
+                        MenBean menBean = gson.fromJson(jsonObject, MenBean.class);
 
+                        if (menBean.isCan_door_open() || (menBean.getPerson() != null && menBean.getPerson().getConfidence() > 75)) {
+
+                            Message message = Message.obtain();
+                            message.obj = menBean;
+                            message.what = 111;
+                            weakHandler.sendMessage(message);
+
+                        } else {
+                            // SystemClock.sleep(300);
+                            //  isLink1 = true;
+                            Log.d("CustomerDisplay", "陌生人222");
+                        }
+
+                    }catch (Exception ee){
+                        ee.printStackTrace();
+                        mFacePassHandler.reset();
+                    }
+                    Log.d("WebsocketPushMsg", e.getMessage() + "json异常");
 
                 } finally {
                     file.delete();
                   //  Log.d("CustomerDisplay", "file.delete():" + );
                     Runtime.getRuntime().gc();
-                    SystemClock.sleep(1000);
+                   // SystemClock.sleep(1000);
                     isLink=true;
 
 

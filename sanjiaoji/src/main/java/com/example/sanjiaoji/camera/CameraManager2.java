@@ -49,7 +49,7 @@ public class CameraManager2 implements CameraPreview2.CameraPreviewListener {
         Camera.Parameters camPara = mCamera.getParameters();
         List<Camera.Size> allSupportedSize = camPara.getSupportedPreviewSizes();
         for (Camera.Size tmpSize : allSupportedSize) {
-            Log.i("metrics", "support height" + tmpSize.height + "width " + tmpSize.width);
+            Log.i("metrics222", "support height" + tmpSize.height + "width " + tmpSize.width);
             if (tmpSize.height == height && tmpSize.width == width)
                 return true;
         }
@@ -181,17 +181,18 @@ public class CameraManager2 implements CameraPreview2.CameraPreviewListener {
                         Log.i("CameraManager", String.format("camera rotation: %d %d %d", degrees, info.orientation, previewRotation));
                         camera.setDisplayOrientation(previewRotation);
                         Camera.Parameters param = camera.getParameters();
-                        if (manualHeight > 0 && manualWidth > 0 && isSupportedPreviewSize(manualWidth, manualHeight, camera)) {
-                            param.setPreviewSize(manualWidth, manualHeight);
-                        } else {
-                            Camera.Size bestPreviewSize = getBestPreviewSize(camera);
-                            Log.i("metrics", "best height is" + bestPreviewSize.height + "width is " + bestPreviewSize.width);
-                            manualWidth = bestPreviewSize.width;
-                            manualHeight = bestPreviewSize.height;
-                            param.setPreviewSize(bestPreviewSize.width, bestPreviewSize.height);
-                            SettingVar.iscameraNeedConfig = true;
-                            Log.i("cameraManager", "camerawidth : " + bestPreviewSize.width + "  height  : " + bestPreviewSize.height);
-                        }
+                        isSupportedPreviewSize(manualWidth, manualHeight, camera);
+                      //  if (manualHeight > 0 && manualWidth > 0 && isSupportedPreviewSize(manualWidth, manualHeight, camera)) {
+                            param.setPreviewSize(640, 480);
+//                        } else {
+//                            Camera.Size bestPreviewSize = getBestPreviewSize(camera);
+//                            Log.i("metrics", "best height is" + bestPreviewSize.height + "width is " + bestPreviewSize.width);
+//                            manualWidth = bestPreviewSize.width;
+//                            manualHeight = bestPreviewSize.height;
+//                            param.setPreviewSize(bestPreviewSize.width, bestPreviewSize.height);
+//                            SettingVar.iscameraNeedConfig = true;
+//                            Log.i("cameraManager", "camerawidth : " + bestPreviewSize.width + "  height  : " + bestPreviewSize.height);
+//                        }
                         SettingVar.cameraSettingOk = true;
                         param.setPreviewFormat(ImageFormat.NV21);
                         camera.setParameters(param);

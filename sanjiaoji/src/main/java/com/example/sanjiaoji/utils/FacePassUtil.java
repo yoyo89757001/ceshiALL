@@ -31,7 +31,7 @@ import megvii.facepass.types.FacePassPose;
 
 
 public class FacePassUtil {
-    FacePassModel trackModel;
+   // FacePassModel trackModel;
     FacePassModel poseModel;
     FacePassModel blurModel;
     FacePassModel livenessModel;
@@ -40,17 +40,17 @@ public class FacePassUtil {
     FacePassModel detectRectModel;
     FacePassModel landmarkModel;
     /* SDK 实例对象 */
-    private Context context;
-    private int TIMEOUT=30*1000;
+   // private Context context;
+   // private int TIMEOUT=30*1000;
 
     private FacePassHandler mFacePassHandler;  /* 人脸识别Group */
     private  final String group_name = "facepasstestx";
     private  boolean isLocalGroupExist = false;
-    private BaoCunBean baoCunBean;
+   // private BaoCunBean baoCunBean;
 
     public  void init(final Activity activity , final Context context,  final BaoCunBean baoCunBean){
-        this.context=context;
-        this.baoCunBean=baoCunBean;
+      //  this.context=context;
+      //  this.baoCunBean=baoCunBean;
 
             new Thread() {
                 @Override
@@ -70,13 +70,13 @@ public class FacePassUtil {
                             float searchThreshold = 99;
                             float livenessThreshold = 60;
                             boolean livenessEnabled = false;
-                            int faceMinThreshold =80;
-                            FacePassPose poseThreshold = new FacePassPose(30f, 30f, 30f);
+                            int faceMinThreshold =40;
+                            FacePassPose poseThreshold = new FacePassPose(35f, 35f, 35f);
                             float blurThreshold = 0.3f;
                             float lowBrightnessThreshold = 70f;
                             float highBrightnessThreshold = 210f;
                             float brightnessSTDThreshold = 60f;
-                            int retryCount = 2;
+                            int retryCount = 1;
                             //int rotation = cameraRotation;
                             String fileRootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
                             FacePassConfig config;
@@ -86,7 +86,7 @@ public class FacePassUtil {
                                 config = new FacePassConfig(searchThreshold, livenessThreshold, livenessEnabled,
                                         faceMinThreshold, poseThreshold, blurThreshold,
                                         lowBrightnessThreshold, highBrightnessThreshold, brightnessSTDThreshold,
-                                        retryCount, 0, fileRootPath,
+                                        retryCount, 90, fileRootPath,
                                         poseModel, blurModel, livenessModel, searchModel, detectModel,
                                         detectRectModel, landmarkModel);
                                 /* 创建SDK实例 */
@@ -160,40 +160,40 @@ public class FacePassUtil {
         }
 
 
-    private  void checkGroup(Activity activity, final Context context) {
-        if (mFacePassHandler == null) {
-            return;
-        }
-        String[] localGroups = mFacePassHandler.getLocalGroups();
-        isLocalGroupExist = false;
-        if (localGroups == null || localGroups.length == 0) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast tastyToast= TastyToast.makeText(context,"还没创建识别组",TastyToast.LENGTH_LONG,TastyToast.INFO);
-                    tastyToast.setGravity(Gravity.CENTER,0,0);
-                    tastyToast.show();
-                }
-            });
-            return;
-        }
-        for (String group : localGroups) {
-            if (group_name.equals(group)) {
-
-                isLocalGroupExist = true;
-            }
-        }
-        if (!isLocalGroupExist) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast tastyToast= TastyToast.makeText(context,"还没创建识别组",TastyToast.LENGTH_LONG,TastyToast.INFO);
-                    tastyToast.setGravity(Gravity.CENTER,0,0);
-                    tastyToast.show();
-                }
-            });
-        }
-    }
+//    private  void checkGroup(Activity activity, final Context context) {
+//        if (mFacePassHandler == null) {
+//            return;
+//        }
+//        String[] localGroups = mFacePassHandler.getLocalGroups();
+//        isLocalGroupExist = false;
+//        if (localGroups == null || localGroups.length == 0) {
+//            activity.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Toast tastyToast= TastyToast.makeText(context,"还没创建识别组",TastyToast.LENGTH_LONG,TastyToast.INFO);
+//                    tastyToast.setGravity(Gravity.CENTER,0,0);
+//                    tastyToast.show();
+//                }
+//            });
+//            return;
+//        }
+//        for (String group : localGroups) {
+//            if (group_name.equals(group)) {
+//
+//                isLocalGroupExist = true;
+//            }
+//        }
+//        if (!isLocalGroupExist) {
+//            activity.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Toast tastyToast= TastyToast.makeText(context,"还没创建识别组",TastyToast.LENGTH_LONG,TastyToast.INFO);
+//                    tastyToast.setGravity(Gravity.CENTER,0,0);
+//                    tastyToast.show();
+//                }
+//            });
+//        }
+//    }
 
 //    private void chaxuncuowu(){
 //        final MediaType JSON = MediaType.parse("application/json; charset=utf-8");

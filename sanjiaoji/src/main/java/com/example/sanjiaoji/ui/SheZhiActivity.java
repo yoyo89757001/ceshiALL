@@ -7,11 +7,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import com.example.sanjiaoji.MyApplication;
 import com.example.sanjiaoji.R;
 import com.example.sanjiaoji.dialog.BangDingDialog;
 import com.example.sanjiaoji.dialog.XiuGaiDiZhiDialog;
-import com.example.sanjiaoji.model.BaoCunBean;
 import com.example.sanjiaoji.utils.FileUtil;
 import com.example.sanjiaoji.utils.GsonUtil;
 import com.example.sanjiaoji.utils.SharedPreferenceHelper;
@@ -26,7 +24,6 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.objectbox.Box;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -70,14 +67,14 @@ public class SheZhiActivity extends Activity {
         sharedPreferencesHelper = new SharedPreferenceHelper(
                 SheZhiActivity.this, "xiaojun");
 
-        url = sharedPreferencesHelper.getSharedPreference("url", "http://192.168.2.2").toString().trim();
-        userName = sharedPreferencesHelper.getSharedPreference("username", "").toString().trim();
-        pwd = sharedPreferencesHelper.getSharedPreference("passewod", "").toString().trim();
+        url = sharedPreferencesHelper.getSharedPreference("url", "http://192.168.1.50").toString().trim();
+        userName = sharedPreferencesHelper.getSharedPreference("username", "jiushiqizhong1@163.com").toString().trim();
+        pwd = sharedPreferencesHelper.getSharedPreference("passewod", "123456").toString().trim();
 
     }
 
 
-    @OnClick({R.id.rl1, R.id.rl2, R.id.rl3,  })
+    @OnClick({R.id.rl1, R.id.rl2, R.id.rl3})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl1:
@@ -144,6 +141,8 @@ public class SheZhiActivity extends Activity {
 
     //登陆旷世
     private void link_login(final String url, final String zhangHao, final String miMa){
+        Log.d("SheZhiActivity", zhangHao);
+        Log.d("SheZhiActivity", miMa);
         //	final MediaType JSON=MediaType.parse("application/json; charset=utf-8");
         OkHttpClient okHttpClient= new OkHttpClient();
         //RequestBody requestBody = RequestBody.create(JSON, json);

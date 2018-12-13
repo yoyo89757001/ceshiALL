@@ -10,14 +10,14 @@ public class SettingVar {
     public static boolean cameraFacingFront = false;
 
     public static boolean isSettingAvailable = true;
-    public static int cameraPreviewRotation = 0;
+    public static int cameraPreviewRotation = 90;
     public static boolean isCross = false;
     public static String SharedPrefrence = "user";
     public static int mHeight;
     public static int mWidth;
     public static int mHeight2;
     public static int mWidth2;
-    public static boolean cameraSettingOk = false;
-    public static boolean iscameraNeedConfig = false;
+    public static boolean cameraSettingOk = true;
+    public static boolean iscameraNeedConfig = true;
     public static boolean isButtonInvisible = false;
 }

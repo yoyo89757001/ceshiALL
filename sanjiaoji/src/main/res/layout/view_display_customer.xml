@@ -65,12 +65,12 @@
     </RelativeLayout>
 
 
-    <com.example.sanjiaoji.view.MyFaceview
-        android:id="@+id/myface"
-        android:visibility="gone"
-        android:layout_below="@+id/rlrlrl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <!--<com.example.sanjiaoji.view.MyFaceview-->
+        <!--android:id="@+id/myface"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_below="@+id/rlrlrl"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 
 
     <!--<ImageView-->
@@ -86,8 +86,8 @@
         android:src="@drawable/logo2"
         android:scaleType="fitXY"
         android:layout_marginTop="180px"
-        android:layout_width="1500px"
-        android:layout_height="500px" />
+        android:layout_width="1700px"
+        android:layout_height="600px" />
 
 
 

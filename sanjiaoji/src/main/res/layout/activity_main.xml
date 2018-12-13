@@ -72,12 +72,12 @@
         </RelativeLayout>
 
 
-    <com.example.sanjiaoji.view.MyFaceview
-        android:id="@+id/myface"
-        android:visibility="gone"
-        android:layout_below="@+id/rlrlrl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <!--<com.example.sanjiaoji.view.MyFaceview-->
+        <!--android:id="@+id/myface"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_below="@+id/rlrlrl"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 
 
 

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="@color/itemlistview1"
+    android:orientation="horizontal">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:gravity="center"
+    android:textColor="@color/black"
+    android:textSize="16px"
+    android:text="序号"
+    android:layout_weight="1"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="16px"
+        android:gravity="center"
+        android:text="药名"
+        android:layout_weight="1"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="16px"
+        android:gravity="center"
+        android:text="数量"
+        android:layout_weight="1"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_cz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="操作"
+            android:textColor="@color/black"
+            android:textSize="16px" />
+
+        <TextView
+            android:id="@+id/tv_cz1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_cz"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:text="操作"
+            android:textColor="@color/black"
+            android:textSize="16px" />
+    </RelativeLayout>
+
+</LinearLayout>
