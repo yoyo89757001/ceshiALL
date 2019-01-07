@@ -88,4 +88,5 @@ dependencies {
     implementation 'me.yatoooon:screenadaptation:1.1.1'//适配
     implementation 'com.google.android:flexbox:1.1.0'
     implementation 'com.lovedise:permissiongen:0.0.6'
+    implementation 'de.mrmaffen:libvlc-android:2.1.12@aar'
 }

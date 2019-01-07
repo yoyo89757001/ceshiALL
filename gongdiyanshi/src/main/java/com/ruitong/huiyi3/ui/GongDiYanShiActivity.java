@@ -66,6 +66,9 @@ import com.yatoooon.screenadaptation.ScreenAdapterTools;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
+import org.videolan.libvlc.LibVLC;
+
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -142,6 +145,8 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
     // 主控制类，所有合成控制方法从这个类开始
     private MySyntherizer synthesizer;
     WebsocketPushMsg websocketPushMsg=null;
+    private LibVLC libVLC=null;
+
 
 
     public Handler handler = new Handler(new Handler.Callback() {

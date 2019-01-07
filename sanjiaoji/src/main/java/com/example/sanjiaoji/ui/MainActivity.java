@@ -138,9 +138,9 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
    private ArrayBlockingQueue<byte[]> mDetectResultQueue;
    private ArrayBlockingQueue<CameraPreviewData> mFeedFrameQueue;
 
- //   private static final String authIP = "https://api-cn.faceplusplus.com";
-  //  private static final String apiKey = "zIvtfbe_qPHpLZzmRAE-zVg7-EaVhKX2";
-  //  private static final String apiSecret = "-H4Ik0iZ_5YTyw5NPT8LfnJREz_NCbo7";
+    private static final String authIP = "https://api-cn.faceplusplus.com";
+    private static final String apiKey = "zIvtfbe_qPHpLZzmRAE-zVg7-EaVhKX2";
+    private static final String apiSecret = "-H4Ik0iZ_5YTyw5NPT8LfnJREz_NCbo7";
 
 //    private static final String authIP = "https://api-cn.faceplusplus.com";
 //    private static final String apiKey = "JHt8TdGoELfkEKYkjQMogR8GPLIPAfRM";
@@ -885,12 +885,12 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
                         //截取单个人头像
                         final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
 
-                        Bitmap fileBitmap = FileUtil.adjustPhotoRotation(bitmap, 270);
+                      //  Bitmap fileBitmap = FileUtil.adjustPhotoRotation(bitmap, 270);
 
                         File file=null;
                         try {
 
-                            file=compressImage(fileBitmap);
+                            file=compressImage(bitmap);
                             link_P2(file);
                         }catch (Exception e){
                             if (file!=null)
@@ -922,7 +922,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
        // initEngine();
       //  initCamera();
 
-     //   FacePassHandler.getAuth(authIP, apiKey, apiSecret);
+       // FacePassHandler.getAuth(authIP, apiKey, apiSecret);
         FacePassHandler.initSDK(getApplicationContext());
 
         FacePassUtil util=new FacePassUtil();

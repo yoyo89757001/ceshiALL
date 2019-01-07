@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+        <SurfaceView
+            android:id="@+id/surfaceview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/t1"
+            android:textSize="20sp"
+            android:textColor="@color/maroon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/t2"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/maroon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+        <EditText
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+        <!--<com.example.advanceSuggest.CustomEditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:textColor="@color/black"-->
+            <!--android:focusable="true"-->
+            <!--android:id="@+id/name"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_height="100dp" />-->
+
+</RelativeLayout>

@@ -54,7 +54,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.GongDiYanShiActivity" android:screenOrientation="landscape"/>
+        <activity
+            android:name=".ui.GongDiYanShiActivity"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.BoAoHengActivity"
             android:screenOrientation="portrait" />
@@ -197,6 +199,8 @@
         <!-- 宽         	240 	320 	480 	720     1080 	1440 -->
         <!-- DPI等级	        LDPI	MDPI	HDPI	XHDPI	XXHDPI	XXXHDPI -->
         <!-- DPI数值	        120	160	240	320	480	640 -->
+
+        <activity android:name=".ui.TestActivity" android:screenOrientation="portrait"/>
 
     </application>
 

@@ -40,17 +40,21 @@
         android:textColor="#ffffff"
         android:textSize="12px" />
 <ImageView
-    android:layout_above="@+id/ly_tz"
+    android:layout_marginTop="90dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:src="@drawable/ercode"
     android:layout_marginLeft="20dp"
-    android:layout_marginBottom="50dp"
+    android:layout_marginBottom="10dp"
+    android:paddingTop="40dp"
+    android:paddingBottom="60dp"
+    android:paddingRight="50dp"
+    android:paddingLeft="50dp"
     android:background="@drawable/ercode_bg"/>
     <LinearLayout
         android:id="@+id/ly_tz"
-        android:layout_width="460dp"
-        android:layout_height="290dp"
+        android:layout_width="360dp"
+        android:layout_height="250dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="11dp"
@@ -64,7 +68,7 @@
             android:padding="20dp"
             android:lineSpacingExtra="5dp"
             android:text="关于举办2018年广东省食品药品可不宣传基地\n“一日游”活动的通告"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <com.xiaojun.yaodiandemo.utils.JustifyTextView
@@ -73,7 +77,7 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:text="\u3000\u3000为进一步向社会公众普及食品药品知识，树立食品药品安全人人有责的观念，根据2018年省食品药品监督管理局宣传工作计划安排，结合科普宣传工作要求，广东执业药师注册中心将开展 2018年度“广东省食品药品科普宣传基地一日游”活动。详情及报名扫描二维码关注安安有约微信公众号"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:lineSpacingExtra="3dp"
             android:textColor="#e0999999"
             />
@@ -81,8 +85,8 @@
 
 
     <LinearLayout
-        android:layout_width="796dp"
-        android:layout_height="125dp"
+        android:layout_width="606dp"
+        android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:gravity="center"

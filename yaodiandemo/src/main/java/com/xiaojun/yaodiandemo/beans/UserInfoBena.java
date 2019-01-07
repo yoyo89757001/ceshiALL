@@ -12,7 +12,7 @@ import io.objectbox.annotation.Id;
 @Entity
 public class UserInfoBena implements Parcelable {
 
-    @Id(assignable = false)
+    @Id(assignable = true)
     private Long id;
     private String partyName;
     private String gender;

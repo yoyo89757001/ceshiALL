@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.ruitong.huiyikaolaban"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         ndk {
@@ -72,7 +72,7 @@ dependencies {
 
     // compile 'com.zhy:base-rvadapter:3.0.3'
 
-    //  implementation project(':vlc-android-sdk-master')
+      implementation project(':vlc-android-sdk-master')
 
     // GPUImage
     implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
@@ -96,7 +96,6 @@ dependencies {
 
     //    compile "com.badlogicgames.gdx:gdx-backend-android:1.9.8"
     implementation 'com.facebook.rebound:rebound:0.3.8'
-
     //抖动动画
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.airbnb.android:lottie:2.5.4'
@@ -117,5 +116,5 @@ dependencies {
 
     //implementation 'de.mrmaffen:libvlc-android:2.1.12@aar'
     implementation 'com.lovedise:permissiongen:0.0.6'
-    implementation project(':vlc-android-sdk-master')
+   // implementation 'de.mrmaffen:libvlc-android:2.1.12@aar'
 }

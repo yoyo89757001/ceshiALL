@@ -49,7 +49,6 @@ import com.ruitong.huiyi3.MyApplication;
 import com.ruitong.huiyi3.R;
 import com.ruitong.huiyi3.beans.BaoCunBean;
 import com.ruitong.huiyi3.beans.BaoCunBeanDao;
-import com.ruitong.huiyi3.beans.BenDiQianDao;
 import com.ruitong.huiyi3.beans.BenDiQianDaoDao;
 import com.ruitong.huiyi3.beans.ShiBieBean;
 import com.ruitong.huiyi3.beans.TanChuangBean;
@@ -118,9 +117,9 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
     //	private IjkVideoView ijkVideoView;
     private MyReceiver myReceiver = null;
     //private SurfaceView surfaceview;
-    private ScrollView recyclerView;
+ //   private ScrollView recyclerView;
     //private MyAdapter adapter=null;
-    private HorizontalScrollView recyclerView2;
+   // private HorizontalScrollView recyclerView2;
     //private MyAdapter2 adapter2=null;
 
     private static WebSocketClient webSocketClient = null;
@@ -214,7 +213,7 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
                     TextView huanyingyu = view_dk.findViewById(R.id.huanyinyu);
                     TextView name = view_dk.findViewById(R.id.name);
                     name.setText(bean2.getName());
-                    huanyingyu.setText("莅临指导工作");
+                  //  huanyingyu.setText("莅临指导工作");
                     Glide.get(GongDiYanShiActivity.this).clearMemory();
                     Glide.with(GongDiYanShiActivity.this)
                             .load(baoCunBean.getHoutaiDiZhi() + bean2.getAvatar())
@@ -512,7 +511,6 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
 ////                        ll1.removeViewAt(0);
 ////                    }
 
-
                     break;
 
                 case 2:
@@ -576,7 +574,7 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
 
     @PermissionFail(requestCode = 100)
     public void doFailSomething() {
-        Log.d("MainActivity", "dddddd");
+       // Log.d("MainActivity", "dddddd");
         Toast.makeText(this, "Contact permission is not granted", Toast.LENGTH_SHORT).show();
     }
 
@@ -597,7 +595,6 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
                     public void run() {
                         yuangongList.clear();
                         lingdaoList.clear();
-
                     }
                 });
 
@@ -637,7 +634,7 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
 
         TextView topzi = findViewById(R.id.trtrtt);
         // topzi.setTypeface(tf2);
-        topzi.setText("2018年基建\n精益管理现场交流会");
+        //topzi.setText("2018年基建\n精益管理现场交流会");
 
         dabg = (ImageView) findViewById(R.id.dabg);
         wangluo = (LottieAnimationView) findViewById(R.id.wangluo);
@@ -701,10 +698,10 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
             }
         });
         RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) surfaceview.getLayoutParams();
-        params2.topMargin = (int) ((float) dh * 0.3f);
-        params2.leftMargin = (int) ((float) dw * 0.3f / 2f);
-        params2.width = (int) ((float) dw * 0.7f);
-        params2.height = (int) ((float) dw * 0.4f);
+        params2.topMargin = (int) ((float) dh * 0.2f);
+//        params2.leftMargin = (int) ((float) dw * 0.3f / 2f);
+        params2.width = (int) ((float) dw);
+        params2.height = (int) ((float) dw * 0.8f);
         surfaceview.setLayoutParams(params2);
         surfaceview.invalidate();
 
@@ -728,23 +725,30 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
         rootLayout.setLayoutParams(ppp2);
         rootLayout.invalidate();
 
-
         play();
 
         tanChuangThread = new TanChuangThread();
         tanChuangThread.start();
-
-
     }
 
     private void play() {
+        if (mediaPlayer!=null){
+            mediaPlayer.stop();
+        }
+        if (vlcVout!=null){
+            vlcVout.removeCallback(callback);
+            vlcVout.detachViews();
+        }
+
         libvlc = new LibVLC(GongDiYanShiActivity.this);
         mediaPlayer = new MediaPlayer(libvlc);
         vlcVout = mediaPlayer.getVLCVout();
 
         callback = new IVLCVout.Callback() {
+
+
             @Override
-            public void onNewLayout(IVLCVout ivlcVout, int i, int i1, int i2, int i3, int i4, int i5) {
+            public void onNewLayout(IVLCVout vlcVout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
 
             }
 
@@ -775,12 +779,26 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
             public void onHardwareAccelerationError(IVLCVout vlcVout) {
 
             }
+
         };
 
         vlcVout.addCallback(callback);
         vlcVout.setVideoView(surfaceview);
         vlcVout.attachViews();
-
+//        mediaPlayer.setEventListener(new MediaPlayer.EventListener() {
+//            @Override
+//            public void onEvent(MediaPlayer.Event event) {
+//                Log.d(TAG, "event.getEsChangedID():" + event.getEsChangedID());
+//                Log.d(TAG, "event.getEsChangedType():" + event.getEsChangedType());
+//                Log.d(TAG, "event.getVoutCount():" + event.getVoutCount());
+//                Log.d(TAG, "event.getSeekable():" + event.getSeekable());
+//                Log.d(TAG, "event.getTimeChanged():" + event.getTimeChanged());
+//                Log.d(TAG, "event.getPositionChanged():" + event.getPositionChanged());
+//                Log.d(TAG, "event.type:" + event.type);
+//                Log.d(TAG, "event.getBuffering():" + event.getBuffering());
+//               // Log.d(TAG, "event.getPausable():" + event.getPausable());
+//            }
+//        });
 
     }
 
@@ -803,7 +821,7 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
                     messagey.obj = subject;
                     handler.sendMessage(messagey);
 
-                    SystemClock.sleep(2000);
+                    SystemClock.sleep(500);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -924,13 +942,13 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
                 if (isLianJie) {
                     Log.d(TAG, "进来2");
                     try {
+                        play();
                         Log.d(TAG, baoCunBean.getZhujiDiZhi() + "ddddd");
                         Log.d(TAG, baoCunBean.getShipingIP());
                         if (baoCunBean.getHoutaiDiZhi() != null && baoCunBean.getShipingIP() != null) {
                             Log.d(TAG, "jin");
                             websocketPushMsg.startConnection(baoCunBean.getHoutaiDiZhi(), baoCunBean.getShipingIP());
                         }
-
                     } catch (Exception e) {
                         Log.d(TAG, e.getMessage() + "aaa");
 
@@ -939,7 +957,6 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
 
 
             }
-
 
             if (intent.getAction().equals("guanbi")) {
                 Log.d(TAG, "关闭");
@@ -1208,14 +1225,14 @@ public class GongDiYanShiActivity extends Activity implements RecytviewCash {
 
                             final ShiBieBean dataBean = gson.fromJson(jsonObject, ShiBieBean.class);
                             // Log.d("WebsocketPushMsg", dataBean.getPerson().getSrc());
-                            BenDiQianDao qianDao = benDiQianDaoDao.load(dataBean.getPerson().getId());
+                           // BenDiQianDao qianDao = benDiQianDaoDao.load(dataBean.getPerson().getId());
+                            linkedBlockingQueue.offer(dataBean.getPerson());
 
-                            if (qianDao == null) {
-                                linkedBlockingQueue.offer(dataBean.getPerson());
-                                BenDiQianDao diQianDao = new BenDiQianDao();
-                                diQianDao.setId(dataBean.getPerson().getId());
-                                benDiQianDaoDao.insert(diQianDao);
-                            }
+//                            if (qianDao == null) {
+//                                BenDiQianDao diQianDao = new BenDiQianDao();
+//                                diQianDao.setId(dataBean.getPerson().getId());
+//                                benDiQianDaoDao.insert(diQianDao);
+//                            }
 
 //                            Message message = new Message();
 //                            message.what = 1;

@@ -78,7 +78,7 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 //				QbSdk.initX5Environment(getApplicationContext(),  cb);
 
 
-				Bugly.init(getApplicationContext(), "e37d57f536", false);
+				Bugly.init(getApplicationContext(), "1f18c0b4d8", false);
 					JPushInterface.init(getApplicationContext());
 					JPushInterface.setAlias(getApplicationContext(),1, Utils.getSerialNumber(this)==null?Utils.getIMSI():Utils.getSerialNumber(this));
 

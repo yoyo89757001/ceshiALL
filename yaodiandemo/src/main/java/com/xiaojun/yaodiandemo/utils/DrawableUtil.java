@@ -6,7 +6,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.StateListDrawable;
 
 /**
- * Created by xin.xie on 2016/12/15.
+ * Created by lemon.deng on 2018/12/13.
  * Description: 动态设置selecter,drawable
  */
 
