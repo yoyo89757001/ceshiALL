@@ -15,23 +15,45 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.ruitong.huiyi3.beans.DaoMaster;
-import com.ruitong.huiyi3.beans.DaoSession;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.ruitong.huiyi3.beans.BaoCunBean;
+import com.ruitong.huiyi3.beans.BenDiJiLuBean;
+import com.ruitong.huiyi3.beans.ChengShiIDBean;
+
+
+import com.ruitong.huiyi3.beans.GuanHuai;
+import com.ruitong.huiyi3.beans.LunBoBean;
+import com.ruitong.huiyi3.beans.MyObjectBox;
+import com.ruitong.huiyi3.beans.Subject;
+import com.ruitong.huiyi3.beans.TodayBean;
+import com.ruitong.huiyi3.beans.XinXiAll;
+import com.ruitong.huiyi3.beans.XinXiIdBean;
+import com.ruitong.huiyi3.beans.ZhiChiChengShi;
+import com.ruitong.huiyi3.beans.ZhuJiBean;
+import com.ruitong.huiyi3.beans.ZhuJiBeanH;
 import com.ruitong.huiyi3.cookies.CookiesManager;
 import com.ruitong.huiyi3.dialogall.CommonData;
 import com.ruitong.huiyi3.dialogall.CommonDialogService;
 import com.ruitong.huiyi3.dialogall.ToastUtils;
+import com.ruitong.huiyi3.utils.GsonUtil;
 import com.tencent.bugly.Bugly;
 import com.ruitong.huiyi3.utils.Utils;
 import com.yatoooon.screenadaptation.ScreenAdapterTools;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 
-import cn.jpush.android.api.JPushInterface;
+
+import io.objectbox.Box;
+import io.objectbox.BoxStore;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 
 
 /**
@@ -42,12 +64,26 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 	private final static String TAG = "CookiesManager";
 	public static MyApplication myApplication;
 	public static OkHttpClient okHttpClient=null;
-	private DaoMaster.DevOpenHelper mHelper;
-	public DaoMaster mDaoMaster;
-	public DaoSession mDaoSession;
+
 	// 超时时间
 	public static final int TIMEOUT = 1000 * 60;
 
+	private Box<ChengShiIDBean> chengShiIDBeanBox=null;
+	private Box<BaoCunBean> baoCunBeanBox=null;
+	private Box<Subject> subjectBox=null;
+	private Box<LunBoBean> lunBoBeanBox=null;
+	private Box<XinXiAll> xinXiAllBox=null;
+	private Box<XinXiIdBean> xinXiIdBeanBox= null;
+	private Box<GuanHuai> guanHuaiBox=null;
+	private Box<TodayBean> todayBeanBox = null;
+	private Box<BenDiJiLuBean> benDiJiLuBeanBox = null;
+	private Box<ZhuJiBeanH> zhuJiBeanBox = null;
+	private BaoCunBean baoCunBean=null;
+
+	public static final String SDPATH = Environment.getExternalStorageDirectory().getAbsolutePath()+
+			File.separator+"ruitongzipyqt";
+	public static final String SDPATH2 = Environment.getExternalStorageDirectory().getAbsolutePath()+
+			File.separator+"ruitongyqt";
 
 	@Override
 	public void onCreate() {
@@ -57,8 +93,7 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 				try {
 					ScreenAdapterTools.init(this);
 
-					setDatabase();
-			//	JPushInterface.init(getApplicationContext());
+					BoxStore mBoxStore = MyObjectBox.builder().androidContext(this).build();
 
 //				// /搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
 //				QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
@@ -79,8 +114,6 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 
 
 				Bugly.init(getApplicationContext(), "1f18c0b4d8", false);
-					JPushInterface.init(getApplicationContext());
-					JPushInterface.setAlias(getApplicationContext(),1, Utils.getSerialNumber(this)==null?Utils.getIMSI():Utils.getSerialNumber(this));
 
 					this.registerActivityLifecycleCallbacks(this);//注册
 
@@ -93,6 +126,17 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 					Intent dialogservice = new Intent(this, CommonDialogService.class);
 					startService(dialogservice);
 
+
+					baoCunBeanBox= mBoxStore.boxFor(BaoCunBean.class);
+					subjectBox= mBoxStore.boxFor(Subject.class);
+					lunBoBeanBox= mBoxStore.boxFor(LunBoBean.class);
+					xinXiAllBox= mBoxStore.boxFor(XinXiAll.class);
+					xinXiIdBeanBox= mBoxStore.boxFor(XinXiIdBean.class);
+					guanHuaiBox= mBoxStore.boxFor(GuanHuai.class);
+					chengShiIDBeanBox= mBoxStore.boxFor(ChengShiIDBean.class);
+					todayBeanBox= mBoxStore.boxFor(TodayBean.class);
+					benDiJiLuBeanBox= mBoxStore.boxFor(BenDiJiLuBean.class);
+					zhuJiBeanBox= mBoxStore.boxFor(ZhuJiBeanH.class);
 				} catch (Exception e) {
 					Log.d(TAG, e.getMessage()+"主程序");
 				}
@@ -105,72 +149,133 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 			destDir.mkdirs();
 		}
 
-		//getOkHttpClient();
 
-	//	JPushInterface.init(this);
+		if(chengShiIDBeanBox.getAll().size()==0){
+			OkHttpClient okHttpClient= new OkHttpClient();
+			okhttp3.Request.Builder requestBuilder = new okhttp3.Request.Builder()
+					.get()
+					.url("http://v.juhe.cn/weather/citys?key=356bf690a50036a5cfc37d54dc6e8319");
+			// .url("http://v.juhe.cn/weather/index?format=2&cityname="+text1+"&key=356bf690a50036a5cfc37d54dc6e8319");
+			// step 3：创建 Call 对象
+			Call call = okHttpClient.newCall(requestBuilder.build());
+			//step 4: 开始异步请求
+			call.enqueue(new Callback() {
+				@Override
+				public void onFailure(Call call, IOException e) {
+					Log.d("AllConnects", "请求失败"+e.getMessage());
+				}
 
-//		try {
-//			File cacheDir = getDiskCacheDir("bitmap");
-//			if (!cacheDir.exists()) {
-//				cacheDir.mkdirs();
-//			}
-//			mDiskLruCache = DiskLruCache.open(cacheDir, getAppVersion(), 1, 8 * 1024 * 1024);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		//保存当前时间
-		//Log.d(TAG, DateUtils.timedate(System.currentTimeMillis() + ""));
-//		Type resultType3 = new TypeToken<String>() {}.getType();
-//		try {
-//
-//			String s = Reservoir.get("time", resultType3);
-//		}catch (Exception e){
-//
-//			try {
-//				String s=System.currentTimeMillis()+"";
-//
-//				Reservoir.put("time", DateUtils.timedate(s.substring(0,s.length()-3)));
-//				Log.d(TAG,DateUtils.timedate(s.substring(0,s.length()-3)) + "");
-//			} catch (Exception ei) {
-//				//failure;
-//				Log.d(TAG, ei.getMessage());
-//			}
-//
-//		}
+				@Override
+				public void onResponse(Call call, okhttp3.Response response) throws IOException {
+					Log.d("AllConnects", "请求成功"+call.request().toString());
+					//获得返回体
+					try{
+						ResponseBody body = response.body();
+						String ss=body.string().trim();
+						Log.d("AllConnects", "天气"+ss);
+
+						JsonObject jsonObject= GsonUtil.parse(ss).getAsJsonObject();
+						Gson gson=new Gson();
+						final ZhiChiChengShi renShu=gson.fromJson(jsonObject,ZhiChiChengShi.class);
+						int size=renShu.getResult().size();
+						//  chengShiIDBeanBox.removeAll();
+
+						for (int i=0;i<size;i++){
+							ChengShiIDBean bean=new ChengShiIDBean();
+							bean.setId(renShu.getResult().get(i).getId());
+							bean.setCity(renShu.getResult().get(i).getCity());
+							bean.setDistrict(renShu.getResult().get(i).getDistrict());
+							bean.setProvince(renShu.getResult().get(i).getProvince());
+							chengShiIDBeanBox.put(bean);
+						}
+
+					}catch (Exception e){
+						Log.d("WebsocketPushMsg", e.getMessage()+"ttttt");
+					}
+
+				}
+			});
+		}
+
+
+
+
+		baoCunBean = baoCunBeanBox.get(123456L);
+		if (baoCunBean == null) {
+			baoCunBean = new BaoCunBean();
+			baoCunBean.setId(123456L);
+			baoCunBean.setHoutaiDiZhi("http://hy.inteyeligence.com/front");
+			baoCunBean.setTouxiangzhuji("http://192.168.2.78");
+			baoCunBean.setShibieFaceSize(20);
+			baoCunBean.setShibieFaZhi(70);
+			baoCunBean.setYudiao(5);
+			baoCunBean.setYusu(5);
+			baoCunBean.setBoyingren(4);
+			baoCunBean.setRuKuFaceSize(60);
+			baoCunBean.setRuKuMoHuDu(0.3f);
+			baoCunBean.setHuoTiFZ(70);
+			baoCunBean.setHuoTi(false);
+			baoCunBean.setJihuoma("0000-0000-0000-0000-0000");
+			baoCunBean.setDangqianShiJian("d");
+			baoCunBean.setTianQi(false);
+			baoCunBean.setMoban(1);
+			baoCunBeanBox.put(baoCunBean);
+		}
+
+
 
 	}
 
-//	//旋转适配,如果应用屏幕固定了某个方向不旋转的话(比如qq和微信),下面可不写.
-//	@Override
-//	public void onConfigurationChanged(Configuration newConfig) {
-//		super.onConfigurationChanged(newConfig);
-//		ScreenAdapterTools.getInstance().reset(this);
-//	}
+
+
+//    public BoxStore getBoxStore(){
+//        return mBoxStore;
+//    }
+
+	public Box<TodayBean> getTodayBeanBox(){
+		return todayBeanBox;
+	}
+
+	public Box<BenDiJiLuBean> getBenDiJiLuBeanBox(){
+		return benDiJiLuBeanBox;
+	}
+	public Box<ChengShiIDBean> getChengShiIDBeanBox(){
+		return chengShiIDBeanBox;
+	}
+
+	public Box<Subject> getSubjectBox(){
+		return subjectBox;
+	}
+
+	public Box<LunBoBean> getLunBoBeanBox(){
+		return lunBoBeanBox;
+	}
+
+	public Box<XinXiAll> getXinXiAllBox(){
+		return xinXiAllBox;
+	}
+	public Box<XinXiIdBean> getXinXiIdBeanBox(){
+		return xinXiIdBeanBox;
+	}
+	public Box<GuanHuai> getGuanHuaiBox(){
+		return guanHuaiBox;
+	}
+	public Box<BaoCunBean> getBaoCunBeanBox(){
+		return baoCunBeanBox;
+	}
+
+	public Box<ZhuJiBeanH> getZhuJiBeanBox(){
+		return zhuJiBeanBox;
+	}
+
 
 	public static MyApplication getAppContext() {
 		return myApplication;
 	}
 
-	/**
-	 * 设置greenDao
-	 */
-	private void setDatabase() {
-		// 通过 DaoMaster 的内部类 DevOpenHelper，你可以得到一个便利的 SQLiteOpenHelper 对象。
-		// 可能你已经注意到了，你并不需要去编写「CREATE TABLE」这样的 SQL 语句，因为 greenDAO 已经帮你做了。
-		// 注意：默认的 DaoMaster.DevOpenHelper 会在数据库升级时，删除所有的表，意味着这将导致数据的丢失。
-		// 所以，在正式的项目中，你还应该做一层封装，来实现数据库的安全升级。
-		mHelper = new DaoMaster.DevOpenHelper(this, "noteukyy", null);
-		SQLiteDatabase db = mHelper.getWritableDatabase();
-		// 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
-		mDaoMaster = new DaoMaster(db);
-		mDaoSession = mDaoMaster.newSession();
-
-	}
 
 
-	public  DaoSession getDaoSession() {
-		return mDaoSession;
-	}
+
 
 
 

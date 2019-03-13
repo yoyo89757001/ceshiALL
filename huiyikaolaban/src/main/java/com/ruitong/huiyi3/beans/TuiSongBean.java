@@ -8,19 +8,39 @@ public class TuiSongBean {
 
 
     /**
-     * content : {"id":10000102,"status":2}
-     * title : 主机管理
+     * id : 1019047083040571392
+     * title : 绑定激活
+     * url : /app/getMachine
      */
 
-    private ContentBean content;
+    private String id;
     private String title;
+    private String url;
+    private int status;
+    private String failureId;
 
-    public ContentBean getContent() {
-        return content;
+    public String getFailureId() {
+        return failureId;
     }
 
-    public void setContent(ContentBean content) {
-        this.content = content;
+    public void setFailureId(String failureId) {
+        this.failureId = failureId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -31,29 +51,11 @@ public class TuiSongBean {
         this.title = title;
     }
 
-    public static class ContentBean {
-        /**
-         * id : 10000102
-         * status : 2
-         */
+    public String getUrl() {
+        return url;
+    }
 
-        private int id;
-        private int status;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public void setStatus(int status) {
-            this.status = status;
-        }
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -19,9 +19,9 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
@@ -43,6 +43,7 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
+        android:largeHeap="true"
         android:icon="@drawable/logogg"
         android:label="@string/app_name"
         android:roundIcon="@drawable/logogg"
@@ -58,13 +59,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.GongDiYanShiActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.MainActivity204" android:screenOrientation="portrait"/>
         <activity android:name=".ui.SheZhiActivity" />
 
 
         <service android:name=".service.HorizonService" />
 
         <receiver android:name=".service.AlarmReceiver" />
+
+        <service
+            android:name=".ljkplay.services.MediaPlayerService"
+            android:enabled="false"
+            android:exported="false"
+            android:label="@string/app_name" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

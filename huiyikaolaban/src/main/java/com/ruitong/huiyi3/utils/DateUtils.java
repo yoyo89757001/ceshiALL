@@ -17,6 +17,14 @@ public class DateUtils {
         return format.format(new Date());
     }
 
+    public static String nyr(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+//        int i = Integer.parseInt(time);
+        return sdr.format(new Date(lcc));
+    }
+
     /**
      * 掉此方法输入所要转换的时间输入例如（"2014年06月14日16时09分00秒"）返回时间戳
      *
@@ -51,7 +59,7 @@ public class DateUtils {
      * @return
      */
     public static String getCurrentTime_Today() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss",Locale.CHINA);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss", Locale.CHINA);
         return sdf.format(new Date());
     }
 
@@ -99,7 +107,7 @@ public class DateUtils {
      * @return
      */
     public static String times(String time) {
-            SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒",Locale.CHINA);
+            SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
@@ -110,7 +118,7 @@ public class DateUtils {
 
 
     public static String datas(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("dd",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("dd", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
        // int i = Integer.parseInt(time);
@@ -125,7 +133,7 @@ public class DateUtils {
      * @return
      */
     public static String timedate(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("MM-dd",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("MM-dd", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
@@ -140,7 +148,7 @@ public class DateUtils {
      * @return
      */
     public static String timeHore(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("HH:mm:ss",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
@@ -155,7 +163,7 @@ public class DateUtils {
      * @return
      */
     public static String timet(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日  HH:mm",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日  HH:mm", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
@@ -169,7 +177,7 @@ public class DateUtils {
      * @return
      */
     public static String timeslash(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy/MM/dd,HH:mm",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy/MM/dd,HH:mm", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
@@ -183,7 +191,7 @@ public class DateUtils {
      * @return
      */
     public static String timeslashData(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy/MM/dd",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy/MM/dd", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
 //      int i = Integer.parseInt(time);
@@ -197,25 +205,33 @@ public class DateUtils {
      * @return
      */
     public static String timeMinute(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("HH:mm",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("HH:mm", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
      //   int i = Integer.parseInt(time);
-        String times = sdr.format(new Date(lcc));
-        return times;
+        return sdr.format(new Date(lcc));
 
     }
 
     public static String tim(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("MM-dd HH:mm",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyyMMdd HH:mm", Locale.CHINA);
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+        int i = Integer.parseInt(time);
+        String times = sdr.format(new Date(i * 1000L));
+        return times;
+    }
+
+    public static String time(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
 //        int i = Integer.parseInt(time);
         return sdr.format(new Date(lcc));
     }
 
-    public static String time(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.CHINA);
+    public static String yrn(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
 //        int i = Integer.parseInt(time);
@@ -224,7 +240,7 @@ public class DateUtils {
 
     // 调用此方法输入所要转换的时间戳例如（1402733340）输出（"2014年06月14日16时09分00秒"）
     public static String times(long timeStamp) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日 HH:mm",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日 - HH:mm", Locale.CHINA);
         return sdr.format(new Date(timeStamp));
 
     }
@@ -262,7 +278,7 @@ public class DateUtils {
      * @return
      */
     public static String timesOne(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
        // int i = Integer.parseInt(time);
@@ -272,17 +288,34 @@ public class DateUtils {
     }
 
     public static String timesTwo(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
       //  int i = Integer.parseInt(time);
         String times = sdr.format(new Date(lcc));
         return times;
+    }
 
+    public static String xiaoshi(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("HH-mm", Locale.CHINA);
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+        //  int i = Integer.parseInt(time);
+        String times = sdr.format(new Date(lcc));
+        return times;
+    }
+
+    public static String timesTwodian(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy.MM.dd", Locale.CHINA);
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+        //  int i = Integer.parseInt(time);
+        String times = sdr.format(new Date(lcc));
+        return times;
     }
 
     public static String timesRi(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("MM.dd",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("MM.dd", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
       //  int i = Integer.parseInt(time);
@@ -292,7 +325,7 @@ public class DateUtils {
     }
 
     public static String timesNian(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
       //  int i = Integer.parseInt(time);
@@ -308,7 +341,7 @@ public class DateUtils {
      * @return
      */
     public static String[] timestamp(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
@@ -329,7 +362,7 @@ public class DateUtils {
 
         Date date = new Date(Long.valueOf(str));
 
-        SimpleDateFormat format = new SimpleDateFormat(type,Locale.CHINA);
+        SimpleDateFormat format = new SimpleDateFormat(type, Locale.CHINA);
 
         String time = format.format(date);
 
@@ -357,7 +390,7 @@ public class DateUtils {
      * @return
      */
     public static String changeweek(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒", Locale.CHINA);
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
         String times = sdr.format(new Date(i * 1000L));
@@ -412,7 +445,7 @@ public class DateUtils {
      * @return
      */
     public static String changeweekOne(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.CHINA);
         long lcc = Long.valueOf(time);
         int i = Integer.parseInt(time);
         String times = sdr.format(new Date(i * 1000L));
@@ -454,7 +487,7 @@ public class DateUtils {
      * @return
      */
     public static String getCurrentTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.CHINA);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
         return sdf.format(new Date());
     }
 
@@ -466,7 +499,7 @@ public class DateUtils {
      */
     public String week(String time) {
         Date date = null;
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒", Locale.CHINA);
         int mydate = 0;
         String week = null;
         try {
@@ -505,7 +538,7 @@ public class DateUtils {
      */
     public String weekOne(String time) {
         Date date = null;
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss",Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.CHINA);
         int mydate = 0;
         String week = null;
         try {
@@ -558,7 +591,7 @@ public class DateUtils {
 
     public static boolean isInDate(Date date, String strDateBegin,
 
-    String strDateEnd) {
+                                   String strDateEnd) {
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

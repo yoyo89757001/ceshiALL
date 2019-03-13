@@ -1,9 +1,8 @@
 package com.ruitong.huiyi3.beans;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
-import org.greenrobot.greendao.annotation.Generated;
+
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
 
 /**
  * Created by Administrator on 2018/5/30.
@@ -26,8 +25,7 @@ public class BenDiMBbean {
      * modifyTime : 1527647796122
      * pageNum : 0
      */
-    @Id
-    @NotNull
+    @Id(assignable = true)
     private Long id;
     private String screenId;
     private int sid;
@@ -42,113 +40,116 @@ public class BenDiMBbean {
     private long modifyTime;
     private int pageNum;
     private int photo_index;
-    @Generated(hash = 284274718)
-    public BenDiMBbean(@NotNull Long id, String screenId, int sid, long createTime,
-            String bottemImageUrl, String welcomeSpeak, String subType, int pageSize,
-            String popupImageUrl, int dtoResult, int companyId, long modifyTime, int pageNum,
-            int photo_index) {
-        this.id = id;
-        this.screenId = screenId;
-        this.sid = sid;
-        this.createTime = createTime;
-        this.bottemImageUrl = bottemImageUrl;
-        this.welcomeSpeak = welcomeSpeak;
-        this.subType = subType;
-        this.pageSize = pageSize;
-        this.popupImageUrl = popupImageUrl;
-        this.dtoResult = dtoResult;
-        this.companyId = companyId;
-        this.modifyTime = modifyTime;
-        this.pageNum = pageNum;
-        this.photo_index = photo_index;
-    }
-    @Generated(hash = 628008177)
-    public BenDiMBbean() {
-    }
+
     public Long getId() {
-        return this.id;
+        return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getScreenId() {
-        return this.screenId;
+        return screenId;
     }
+
     public void setScreenId(String screenId) {
         this.screenId = screenId;
     }
+
     public int getSid() {
-        return this.sid;
+        return sid;
     }
+
     public void setSid(int sid) {
         this.sid = sid;
     }
+
     public long getCreateTime() {
-        return this.createTime;
+        return createTime;
     }
+
     public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
+
     public String getBottemImageUrl() {
-        return this.bottemImageUrl;
+        return bottemImageUrl;
     }
+
     public void setBottemImageUrl(String bottemImageUrl) {
         this.bottemImageUrl = bottemImageUrl;
     }
+
     public String getWelcomeSpeak() {
-        return this.welcomeSpeak;
+        return welcomeSpeak;
     }
+
     public void setWelcomeSpeak(String welcomeSpeak) {
         this.welcomeSpeak = welcomeSpeak;
     }
+
     public String getSubType() {
-        return this.subType;
+        return subType;
     }
+
     public void setSubType(String subType) {
         this.subType = subType;
     }
+
     public int getPageSize() {
-        return this.pageSize;
+        return pageSize;
     }
+
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
+
     public String getPopupImageUrl() {
-        return this.popupImageUrl;
+        return popupImageUrl;
     }
+
     public void setPopupImageUrl(String popupImageUrl) {
         this.popupImageUrl = popupImageUrl;
     }
+
     public int getDtoResult() {
-        return this.dtoResult;
+        return dtoResult;
     }
+
     public void setDtoResult(int dtoResult) {
         this.dtoResult = dtoResult;
     }
+
     public int getCompanyId() {
-        return this.companyId;
+        return companyId;
     }
+
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
     }
+
     public long getModifyTime() {
-        return this.modifyTime;
+        return modifyTime;
     }
+
     public void setModifyTime(long modifyTime) {
         this.modifyTime = modifyTime;
     }
+
     public int getPageNum() {
-        return this.pageNum;
+        return pageNum;
     }
+
     public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
     }
+
     public int getPhoto_index() {
-        return this.photo_index;
+        return photo_index;
     }
+
     public void setPhoto_index(int photo_index) {
         this.photo_index = photo_index;
     }
-
-
 }

@@ -1,61 +1,156 @@
 package com.ruitong.huiyi3.beans;
 
-import android.support.annotation.NonNull;
+import android.view.View;
 
 import java.util.Comparator;
+
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
+import io.objectbox.annotation.Transient;
 
 /**
  * Created by Administrator on 2018/5/31.
  */
-
+@Entity
 public class Subject implements Comparator<Subject> {
-
-    private String id;
-    private String remark;
-    private String location;
-    private String name;
-    private String phone;
-    private String comeFrom;
-    private String interviewee;
-    private String city;
-    private String department;
-    private String email;
-    private String title;
-    private String assemblyId;
-    private String sourceMeeting;
-    private String photo;
-    private int  lingshiZPID;
-
-    public int getLingshiZPID() {
-        return lingshiZPID;
+    public Subject() {
     }
 
-    public void setLingshiZPID(int  lingshiZPID) {
-        this.lingshiZPID = lingshiZPID;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
+    public Subject(long id) {
         this.id = id;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
+    public Subject(long id, String sid, String name, String companyId, String companyName, String workNumber, String sex, String phone, String peopleType, String email, String position, int employeeStatus, int quitType, String remark, String photo, String storeId, String storeName, String entryTime, String birthday, String teZhengMa, String departmentName, int daka, String shijian, String displayPhoto, View view) {
+        this.id = id;
+        this.sid = sid;
+        this.name = name;
+        this.companyId = companyId;
+        this.companyName = companyName;
+        this.workNumber = workNumber;
+        this.sex = sex;
+        this.phone = phone;
+        this.peopleType = peopleType;
+        this.email = email;
+        this.position = position;
+        this.employeeStatus = employeeStatus;
+        this.quitType = quitType;
         this.remark = remark;
+        this.photo = photo;
+        this.storeId = storeId;
+        this.storeName = storeName;
+        this.entryTime = entryTime;
+        this.birthday = birthday;
+        this.teZhengMa = teZhengMa;
+        this.departmentName = departmentName;
+        this.daka = daka;
+        this.shijian = shijian;
+        this.displayPhoto = displayPhoto;
+        this.view = view;
     }
 
-    public String getLocation() {
-        return location;
+
+
+    @Id(assignable = true)
+    private long id;
+    private String sid;
+    private String name;// 姓名
+    private String companyId; // 公司ID
+    private String companyName; // 公司名称
+    private String workNumber; // 工号
+    private String sex; // 性别
+    private String phone;// 手机号
+    private String peopleType;// 人员类型
+    private String email;// 电子邮箱
+    private String position; // 职位
+    private int employeeStatus; // 是否在职
+    private int quitType; // 离职类型
+    private String remark;// 备注
+    private String photo;// 照片
+    private String storeId;// 门店ID
+    private String storeName;// 门店名称
+    private String entryTime; // 入职时间
+    private String birthday; // 生日
+    private String teZhengMa;
+    private String departmentName;
+    private int daka;
+    private String shijian;
+    private String displayPhoto;
+    private byte[] bitmap;
+
+
+    public byte[] getBitmap() {
+        return bitmap;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setBitmap(byte[] bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public String getDisplayPhoto() {
+        return displayPhoto;
+    }
+
+    public void setDisplayPhoto(String displayPhoto) {
+        this.displayPhoto = displayPhoto;
+    }
+
+    public String getShijian() {
+        return shijian;
+    }
+
+    public void setShijian(String shijian) {
+        this.shijian = shijian;
+    }
+
+    public int getDaka() {
+        return daka;
+    }
+
+    public void setDaka(int daka) {
+        this.daka = daka;
+    }
+
+    @Transient
+    private View view;
+
+    public View getView() {
+        return view;
+    }
+
+    public void setView(View view) {
+        this.view = view;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getTeZhengMa() {
+        return teZhengMa;
+    }
+
+    public void setTeZhengMa(String teZhengMa) {
+        this.teZhengMa = teZhengMa;
+    }
+
+    public String getSid() {
+        return sid;
+    }
+
+    public void setSid(String sid) {
+        this.sid = sid;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -66,6 +161,38 @@ public class Subject implements Comparator<Subject> {
         this.name = name;
     }
 
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getWorkNumber() {
+        return workNumber;
+    }
+
+    public void setWorkNumber(String workNumber) {
+        this.workNumber = workNumber;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -74,36 +201,12 @@ public class Subject implements Comparator<Subject> {
         this.phone = phone;
     }
 
-    public String getComeFrom() {
-        return comeFrom;
+    public String getPeopleType() {
+        return peopleType;
     }
 
-    public void setComeFrom(String comeFrom) {
-        this.comeFrom = comeFrom;
-    }
-
-    public String getInterviewee() {
-        return interviewee;
-    }
-
-    public void setInterviewee(String interviewee) {
-        this.interviewee = interviewee;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setPeopleType(String peopleType) {
+        this.peopleType = peopleType;
     }
 
     public String getEmail() {
@@ -114,28 +217,36 @@ public class Subject implements Comparator<Subject> {
         this.email = email;
     }
 
-    public String getTitle() {
-        return title;
+    public String getPosition() {
+        return position;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
-    public String getAssemblyId() {
-        return assemblyId;
+    public int getEmployeeStatus() {
+        return employeeStatus;
     }
 
-    public void setAssemblyId(String assemblyId) {
-        this.assemblyId = assemblyId;
+    public void setEmployeeStatus(int employeeStatus) {
+        this.employeeStatus = employeeStatus;
     }
 
-    public String getSourceMeeting() {
-        return sourceMeeting;
+    public int getQuitType() {
+        return quitType;
     }
 
-    public void setSourceMeeting(String sourceMeeting) {
-        this.sourceMeeting = sourceMeeting;
+    public void setQuitType(int quitType) {
+        this.quitType = quitType;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getPhoto() {
@@ -146,30 +257,71 @@ public class Subject implements Comparator<Subject> {
         this.photo = photo;
     }
 
-    @Override
-    public String toString() {
-        return "Subject{" +
-                "id='" + id + '\'' +
-                ", remark='" + remark + '\'' +
-                ", location='" + location + '\'' +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", comeFrom='" + comeFrom + '\'' +
-                ", interviewee='" + interviewee + '\'' +
-                ", city='" + city + '\'' +
-                ", department='" + department + '\'' +
-                ", email='" + email + '\'' +
-                ", title='" + title + '\'' +
-                ", assemblyId='" + assemblyId + '\'' +
-                ", sourceMeeting='" + sourceMeeting + '\'' +
-                ", photo='" + photo + '\'' +
-                '}';
+    public String getStoreId() {
+        return storeId;
     }
 
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
 
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getEntryTime() {
+        return entryTime;
+    }
+
+    public void setEntryTime(String entryTime) {
+        this.entryTime = entryTime;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
 
     @Override
     public int compare(Subject o1, Subject o2) {
-        return o1.getId().compareTo(o2.getId());
+        return o1.getSid().compareTo(o2.getSid());
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "id=" + id +
+                ", sid='" + sid + '\'' +
+                ", name='" + name + '\'' +
+                ", companyId='" + companyId + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", workNumber='" + workNumber + '\'' +
+                ", sex='" + sex + '\'' +
+                ", phone='" + phone + '\'' +
+                ", peopleType='" + peopleType + '\'' +
+                ", email='" + email + '\'' +
+                ", position='" + position + '\'' +
+                ", employeeStatus=" + employeeStatus +
+                ", quitType=" + quitType +
+                ", remark='" + remark + '\'' +
+                ", photo='" + photo + '\'' +
+                ", storeId='" + storeId + '\'' +
+                ", storeName='" + storeName + '\'' +
+                ", entryTime='" + entryTime + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", teZhengMa=" + teZhengMa +
+                ", departmentName='" + departmentName + '\'' +
+                ", daka=" + daka +
+                ", shijian='" + shijian + '\'' +
+                ", displayPhoto='" + displayPhoto + '\'' +
+                ", view=" + view +
+                '}';
     }
 }

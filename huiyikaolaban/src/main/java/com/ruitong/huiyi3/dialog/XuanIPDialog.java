@@ -25,7 +25,7 @@ import com.ruitong.huiyi3.MyApplication;
 import com.ruitong.huiyi3.R;
 import com.ruitong.huiyi3.adapter.SheBeiAdapter;
 import com.ruitong.huiyi3.beans.BaoCunBean;
-import com.ruitong.huiyi3.beans.BaoCunBeanDao;
+
 import com.ruitong.huiyi3.beans.IPbean;
 import com.ruitong.huiyi3.beans.IPfanhuibean;
 import com.ruitong.huiyi3.cookies.CookiesManager;
@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.objectbox.Box;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -56,7 +57,7 @@ import okhttp3.ResponseBody;
 public class XuanIPDialog extends Dialog  {
 
     private OkHttpClient okHttpClient=null;
-    private BaoCunBeanDao baoCunBeanDao=null;
+    private Box<BaoCunBean> baoCunBeanDao=null;
     private BaoCunBean baoCunBean=null;
     private Button button;
     private ListView listView;
@@ -70,8 +71,8 @@ public class XuanIPDialog extends Dialog  {
     public XuanIPDialog(Activity context) {
         super(context, R.style.dialog_style2);
         this.context=context;
-        baoCunBeanDao = MyApplication.myApplication.getDaoSession().getBaoCunBeanDao();
-        baoCunBean = baoCunBeanDao.load(123456L);
+        baoCunBeanDao = MyApplication.myApplication.getBaoCunBeanBox();
+        baoCunBean = baoCunBeanDao.get(123456L);
         if (baoCunBean.getWenzi()==null || baoCunBean.getWenzi1()==null){
             Toast tastyToast= TastyToast.makeText(context,"请先设置账号密码!",TastyToast.LENGTH_LONG,TastyToast.ERROR);
             tastyToast.setGravity(Gravity.CENTER,0,0);
@@ -183,7 +184,7 @@ public class XuanIPDialog extends Dialog  {
         Request.Builder requestBuilder = new Request.Builder()
                 .header("user-agent", "Koala Admin")
                 .post(body)
-                .url(baoCunBean.getHoutaiDiZhi() + "/auth/login");
+                .url(baoCunBean.getTouxiangzhuji() + "/auth/login");
         // step 3：创建 Call 对象
         Call call = okHttpClient.newCall(requestBuilder.build());
 
@@ -240,7 +241,7 @@ public class XuanIPDialog extends Dialog  {
         Request.Builder requestBuilder = new Request.Builder()
                 .header("user-agent", "Koala Admin")
                 .get()
-                .url(baoCunBean.getHoutaiDiZhi() + "/system/screen");
+                .url(baoCunBean.getTouxiangzhuji() + "/system/screen");
         // step 3：创建 Call 对象
         Call call = okHttpClient.newCall(requestBuilder.build());
 

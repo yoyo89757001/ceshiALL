@@ -24,16 +24,15 @@ import com.google.gson.JsonObject;
 import com.ruitong.huiyi3.MyApplication;
 import com.ruitong.huiyi3.R;
 import com.ruitong.huiyi3.beans.BaoCunBean;
-import com.ruitong.huiyi3.beans.BaoCunBeanDao;
+
 import com.ruitong.huiyi3.beans.Subject;
+import com.ruitong.huiyi3.beans.ZhuJiBean;
 import com.ruitong.huiyi3.beans.ZhuJiBeanH;
-import com.ruitong.huiyi3.beans.ZhuJiBeanHDao;
+
 import com.ruitong.huiyi3.cookies.CookiesManager;
 import com.ruitong.huiyi3.dialog.DuQuDialog;
 import com.ruitong.huiyi3.dialog.GaiNiMaBi;
-import com.ruitong.huiyi3.dialog.HuanYingYuDialog;
 import com.ruitong.huiyi3.dialog.MoBanDialog;
-import com.ruitong.huiyi3.dialog.ShanChuKuDialog;
 import com.ruitong.huiyi3.dialog.XiuGaiHouTaiDialog;
 
 import com.ruitong.huiyi3.dialog.XiuGaiXinXiDialog;
@@ -71,6 +70,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
+import io.objectbox.Box;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -88,19 +88,17 @@ import static com.ruitong.huiyi3.view.AutoScrollTextView.TAG;
 public class SheZhiActivity extends Activity implements View.OnClickListener, View.OnFocusChangeListener, FileUtil.ZipListener {
     private Button bt1,bt2,bt3,bt4,bt5,bt6,bt7,bt8,bt9,bt10,bt11,bt12;
     private List<Button> sheZhiBeanList;
-    private BaoCunBeanDao baoCunBeanDao=null;
+    private Box<BaoCunBean> baoCunBeanDao=null;
     private BaoCunBean baoCunBean=null;
     private int dw,dh;
-    private ZhuJiBeanHDao zhuJiBeanHDao=null;
+    private Box<ZhuJiBeanH> zhuJiBeanHDao=null;
     public  OkHttpClient okHttpClient=null;
     private ZhuJiBeanH zhuJiBeanH=null;
     private DuQuDialog duQuDialog=null;
     private static String usbPath=null;
     private StringBuilder stringBuilder=new StringBuilder();
-
     //private UnzipFileListener mUnzipFileListener;
     private int curpercent = 0;
-
 
 
     @Override
@@ -108,15 +106,15 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
         super.onCreate(savedInstanceState);
         dw = Utils.getDisplaySize(SheZhiActivity.this).x;
         dh = Utils.getDisplaySize(SheZhiActivity.this).y;
-        zhuJiBeanHDao = MyApplication.myApplication.getDaoSession().getZhuJiBeanHDao();
-        baoCunBeanDao= MyApplication.myApplication.getDaoSession().getBaoCunBeanDao();
-        baoCunBean=baoCunBeanDao.load(123456L);
+        zhuJiBeanHDao = MyApplication.myApplication.getZhuJiBeanBox();
+        baoCunBeanDao= MyApplication.myApplication.getBaoCunBeanBox();
+        baoCunBean=baoCunBeanDao.get(123456L);
         if (baoCunBean.getWenzi()==null){
             baoCunBean.setWenzi("");
         }
 
-        baoCunBeanDao.update(baoCunBean);
-        baoCunBean=baoCunBeanDao.load(123456L);
+        baoCunBeanDao.put(baoCunBean);
+        baoCunBean=baoCunBeanDao.get(123456L);
 
         setContentView(R.layout.activity_she_zhi);
 
@@ -202,7 +200,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
         //  Log.d("SheZhiActivity", "baoCunBean.getMoban():" + baoCunBean.getMoban());
         switch (baoCunBean.getMoban()){
             case 1:
-                startActivity(new Intent(SheZhiActivity.this,GongDiYanShiActivity.class));
+                startActivity(new Intent(SheZhiActivity.this,MainActivity204.class));
                 SystemClock.sleep(1600);
 
                 break;
@@ -255,8 +253,8 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                                 @Override
                                 public void onClick(View v) {
                                     baoCunBean.setShipingIP(dialog.xuanze());
-                                    baoCunBeanDao.update(baoCunBean);
-                                    baoCunBean=baoCunBeanDao.load(123456L);
+                                    baoCunBeanDao.put(baoCunBean);
+                                    baoCunBean=baoCunBeanDao.get(123456L);
                                     dialog.dismiss();
                                 }
                             });
@@ -291,8 +289,8 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                             @Override
                             public void onClick(View v) {
                                 baoCunBean.setZhujiDiZhi(dialog.getContents());
-                                baoCunBeanDao.update(baoCunBean);
-                                baoCunBean=baoCunBeanDao.load(123456L);
+                                baoCunBeanDao.put(baoCunBean);
+                                baoCunBean=baoCunBeanDao.get(123456L);
                                 dialog.dismiss();
                             }
                         });
@@ -378,8 +376,8 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                             @Override
                             public void onClick(View v) {
                                 baoCunBean.setTouxiangzhuji(dialog.getContents());
-                                baoCunBeanDao.update(baoCunBean);
-                                baoCunBean=baoCunBeanDao.load(123456L);
+                                baoCunBeanDao.put(baoCunBean);
+                                baoCunBean=baoCunBeanDao.get(123456L);
                                 dialog.dismiss();
                             }
                         });
@@ -410,20 +408,20 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                 animatorSet5.setDuration(300);
                 animatorSet5.addListener(new AnimatorListenerAdapter(){
                     @Override public void onAnimationEnd(Animator animation) {
-                        if (baoCunBean.getIsShowMoshengren()){ //false为 竖屏
-                            baoCunBean.setIsShowMoshengren(false);
-                            baoCunBeanDao.update(baoCunBean);
-                            baoCunBean=baoCunBeanDao.load(123456L);
-                            bt5.setText("已设置为不弹");
-                            TastyToast.makeText(SheZhiActivity.this,"已设置为不弹",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
-
-                        }else {
-                            baoCunBean.setIsShowMoshengren(true);
-                            baoCunBeanDao.update(baoCunBean);
-                            baoCunBean=baoCunBeanDao.load(123456L);
-                            bt5.setText("已设置为弹出");
-                            TastyToast.makeText(SheZhiActivity.this,"已设置为弹出",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
-                        }
+//                        if (baoCunBean.getIsShowMoshengren()){ //false为 竖屏
+//                            baoCunBean.setIsShowMoshengren(false);
+//                            baoCunBeanDao.update(baoCunBean);
+//                            baoCunBean=baoCunBeanDao.load(123456L);
+//                            bt5.setText("已设置为不弹");
+//                            TastyToast.makeText(SheZhiActivity.this,"已设置为不弹",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
+//
+//                        }else {
+//                            baoCunBean.setIsShowMoshengren(true);
+//                            baoCunBeanDao.update(baoCunBean);
+//                            baoCunBean=baoCunBeanDao.load(123456L);
+//                            bt5.setText("已设置为弹出");
+//                            TastyToast.makeText(SheZhiActivity.this,"已设置为弹出",TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
+//                        }
 
 
                     }
@@ -556,7 +554,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
 
 
                         baoCunBean.setSize(0);
-                        baoCunBeanDao.update(baoCunBean);
+                        baoCunBeanDao.put(baoCunBean);
 
                         bt8.setEnabled(true);
                     }
@@ -583,19 +581,19 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                     @Override public void onAnimationEnd(Animator animation) {
                         //弹窗
                         final XiuGaiHouTaiDialog dialog=new XiuGaiHouTaiDialog(SheZhiActivity.this);
-                        if (baoCunBean.getHoutaiDiZhi()==null && baoCunBean.getGuanggaojiMing()==null){
+                        if (baoCunBean.getTouxiangzhuji()==null && baoCunBean.getGuanggaojiMing()==null){
                             dialog.setContents("http://192.168.2.78","账号","密码");
                         }else {
-                            dialog.setContents(baoCunBean.getHoutaiDiZhi(),baoCunBean.getWenzi(),baoCunBean.getWenzi1());
+                            dialog.setContents(baoCunBean.getTouxiangzhuji(),baoCunBean.getWenzi(),baoCunBean.getWenzi1());
                         }
                         dialog.setOnQueRenListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                baoCunBean.setHoutaiDiZhi(dialog.getIp());
+                                baoCunBean.setTouxiangzhuji(dialog.getIp());
                                 baoCunBean.setWenzi(dialog.getZhanghao());
                                 baoCunBean.setWenzi1(dialog.getMima());
-                                baoCunBeanDao.update(baoCunBean);
-                                baoCunBean=baoCunBeanDao.load(123456L);
+                                baoCunBeanDao.put(baoCunBean);
+                                baoCunBean=baoCunBeanDao.get(123456L);
                               //  try {
                                   //  link_login();
 
@@ -649,8 +647,8 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                             @Override
                             public void onClick(View v) {
                                 baoCunBean.setZhanghuId(dialog.getContents());
-                                baoCunBeanDao.update(baoCunBean);
-                                baoCunBean=baoCunBeanDao.load(123456L);
+                                baoCunBeanDao.put(baoCunBean);
+                                baoCunBean=baoCunBeanDao.get(123456L);
                                 dialog.dismiss();
                             }
                         });
@@ -707,22 +705,22 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
 //                        });
 //                        dialog.show();
 
-                        final HuanYingYuDialog dialog=new HuanYingYuDialog(SheZhiActivity.this);
-                        dialog.setOnPositiveListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.saveText();
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.setOnQuXiaoListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        dialog.show();
+//                        final HuanYingYuDialog dialog=new HuanYingYuDialog(SheZhiActivity.this);
+//                        dialog.setOnPositiveListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                dialog.saveText();
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        dialog.setOnQuXiaoListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//
+//                        dialog.show();
 
 
                         bt11.setEnabled(true);
@@ -1379,11 +1377,11 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                         String s=s1.split("//")[1];
                         baoCunBean.setTouxiangzhuji(zhaoPianBean.getHostUrl()+"/");
                         baoCunBean.setZhujiDiZhi("ws://"+s+":9000/video");
-                        baoCunBeanDao.update(baoCunBean);
+                        baoCunBeanDao.put(baoCunBean);
                     }
 
-                    zhuJiBeanHDao.deleteAll();
-                    zhuJiBeanHDao.insert(zhaoPianBean);
+                    zhuJiBeanHDao.removeAll();
+                    zhuJiBeanHDao.put(zhaoPianBean);
                     getOkHttpClient(1);
                 }catch (Exception e){
 
@@ -1395,7 +1393,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
 
     //首先登录-->获取所有主机-->创建或者删除或者更新门禁
     public void getOkHttpClient(final int type){
-        zhuJiBeanH=zhuJiBeanHDao.loadAll().get(0);
+        zhuJiBeanH=zhuJiBeanHDao.getAll().get(0);
         okHttpClient = new OkHttpClient.Builder()
                 .writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
                 .connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
@@ -1468,13 +1466,13 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
     @Override
     protected void onResume() {
         super.onResume();
-        if (zhuJiBeanHDao.loadAll().size()>0)
-        zhuJiBeanH=zhuJiBeanHDao.loadAll().get(0);
+        if (zhuJiBeanHDao.getAll().size()>0)
+        zhuJiBeanH=zhuJiBeanHDao.getAll().get(0);
     }
 
     //首先登录
     public void getOkHttpClient2(final List<Subject> subjectList, final String trg){
-        zhuJiBeanH=zhuJiBeanHDao.loadAll().get(0);
+        zhuJiBeanH=zhuJiBeanHDao.getAll().get(0);
         okHttpClient = new OkHttpClient.Builder()
                 .writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
                 .connectTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
@@ -1838,7 +1836,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                                 pp=1;
                                 //更新旷视人员信息//先传图片
                                 if (zhaoPianBean.getData().get(i).getPhotos().size()>0)
-                                subject.setLingshiZPID(zhaoPianBean.getData().get(i).getPhotos().get(0).getIdX());
+                             //   subject.setLingshiZPID(zhaoPianBean.getData().get(i).getPhotos().get(0).getIdX());
                                 link_P1(zhuJiBeanH,filePath,subject,zhaoPianBean.getData().get(i).getId());
                                // Log.d("MyReceiver", "333");
                                 break;
@@ -1891,14 +1889,14 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                 json.put("photo_ids",jsonArray);
             }else {
                 JSONArray jsonArray2= new JSONArray();
-                jsonArray2.put(renYuanInFo.getLingshiZPID());
+             //   jsonArray2.put(renYuanInFo.getLingshiZPID());
                 json.put("photo_ids",jsonArray2);
             }
             json.put("phone",renYuanInFo.getPhone());
-            json.put("department",renYuanInFo.getDepartment());
-            json.put("title",renYuanInFo.getTitle());
+          //  json.put("department",renYuanInFo.getDepartment());
+           // json.put("title",renYuanInFo.getTitle());
             json.put("job_number", renYuanInFo.getId());
-            json.put("description", renYuanInFo.getSourceMeeting());
+         //   json.put("description", renYuanInFo.getSourceMeeting());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1987,10 +1985,10 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
             json.put("remark",subject.getRemark());
             json.put("photo_ids",jsonArray);
             json.put("phone",subject.getPhone());
-            json.put("department",subject.getDepartment());
-            json.put("title",subject.getTitle());
+         //   json.put("department",subject.getDepartment());
+          //  json.put("title",subject.getTitle());
             json.put("job_number", subject.getId());
-            json.put("description", subject.getSourceMeeting());
+          //  json.put("description", subject.getSourceMeeting());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -2216,7 +2214,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                      camera_position=joo.get("camera_position").getAsString()==null?"":joo.get("camera_position").getAsString();
                     baoCunBean.setShipingIP(camera_address);
                     baoCunBean.setShiPingWeiZhi(camera_position);
-                    baoCunBeanDao.update(baoCunBean);
+                    baoCunBeanDao.put(baoCunBean);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -2233,7 +2231,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
     }
 
     public List<Subject> pull2xml(InputStream is) throws Exception {
-        List<Subject> list  = new ArrayList<>();;
+        List<Subject> list  = new ArrayList<>();
         Subject student = null;
         //创建xmlPull解析器
         XmlPullParser parser = Xml.newPullParser();
@@ -2268,7 +2266,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                     } else if ("Subject".equals(parser.getName())) {
 
                         student=new Subject();
-                        student.setId(parser.getAttributeValue(0));
+                       // student.setId(parser.getAttributeValue(0));
 
                     } else if ("name".equals(parser.getName())) {
                         //获取name值
@@ -2285,77 +2283,77 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setComeFrom(URLDecoder.decode(nickName, "UTF-8"));
+                           // student.setComeFrom(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("interviewee".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setInterviewee(URLDecoder.decode(nickName, "UTF-8"));
+                         //   student.setInterviewee(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("city".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setCity(URLDecoder.decode(nickName, "UTF-8"));
+                          //  student.setCity(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("department".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setDepartment(URLDecoder.decode(nickName, "UTF-8"));
+                        //    student.setDepartment(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("email".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setEmail(URLDecoder.decode(nickName, "UTF-8"));
+                         //   student.setEmail(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("title".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setTitle(URLDecoder.decode(nickName, "UTF-8"));
+                         //   student.setTitle(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("location".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setLocation(URLDecoder.decode(nickName, "UTF-8"));
+                          //  student.setLocation(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("assemblyId".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setAssemblyId(URLDecoder.decode(nickName, "UTF-8"));
+                          //  student.setAssemblyId(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("sourceMeeting".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setSourceMeeting(URLDecoder.decode(nickName, "UTF-8"));
+                          //  student.setSourceMeeting(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("remark".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setRemark(URLDecoder.decode(nickName, "UTF-8"));
+                          //  student.setRemark(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     else if ("photo".equals(parser.getName())) {
                         //获取nickName值
                         String nickName = parser.nextText();
                         if (nickName!=null){
-                            student.setPhoto(URLDecoder.decode(nickName, "UTF-8"));
+                           // student.setPhoto(URLDecoder.decode(nickName, "UTF-8"));
                         }
                     }
                     break;

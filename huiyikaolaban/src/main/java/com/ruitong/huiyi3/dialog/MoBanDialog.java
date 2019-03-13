@@ -21,10 +21,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ruitong.huiyi3.R;
 import com.ruitong.huiyi3.beans.BaoCunBean;
-import com.ruitong.huiyi3.beans.BaoCunBeanDao;
+
 import com.ruitong.huiyi3.utils.ImageUtil;
 import com.ruitong.huiyi3.utils.Utils;
 import com.sdsmdg.tastytoast.TastyToast;
+
+import io.objectbox.Box;
 
 
 /**
@@ -38,12 +40,12 @@ public class MoBanDialog extends Dialog  {
     private int dh,dw;
     private LinearLayoutManager linearLayoutManager;
     private int[] datas=new int[]{R.drawable.moban4};
-    private BaoCunBeanDao baoCunBeanDao;
+    private Box<BaoCunBean> baoCunBeanDao;
     private BaoCunBean baoCunBean;
 
 
 
-    public MoBanDialog(Context context,BaoCunBeanDao dao) {
+    public MoBanDialog(Context context,Box<BaoCunBean> dao) {
         super(context, R.style.dialog_style22);
         dw = Utils.getDisplaySize(context).x;
         dh = Utils.getDisplaySize(context).y;
@@ -144,9 +146,9 @@ public class MoBanDialog extends Dialog  {
                     animatorSet6.setDuration(300);
                     animatorSet6.addListener(new AnimatorListenerAdapter(){
                         @Override public void onAnimationEnd(Animator animation) {
-                            baoCunBean=baoCunBeanDao.load(123456L);
+                            baoCunBean=baoCunBeanDao.get(123456L);
                             baoCunBean.setMoban(position+1);
-                            baoCunBeanDao.update(baoCunBean);
+                            baoCunBeanDao.put(baoCunBean);
                             dismiss();
                             TastyToast.makeText(context,"已设置为模版"+(position+1),TastyToast.LENGTH_SHORT,TastyToast.INFO).show();
                         }

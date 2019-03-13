@@ -1,9 +1,8 @@
 package com.ruitong.huiyi3.beans;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
-import org.greenrobot.greendao.annotation.Generated;
+
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
 
 /**
  * Created by Administrator on 2018/4/9.
@@ -45,6 +44,8 @@ public class RenYuanInFo {
      * title : 普通员工
      */
 
+    @Id(assignable = true)
+    private Long id;
     private int accountId;
     private String assemblyId;
     private int channel;
@@ -55,8 +56,6 @@ public class RenYuanInFo {
     private String department;
     private int dtoResult;
     private int gender;
-    @NotNull@Id
-    private Long id;
     private String identity;
     private int jobStatus;
     private String location;
@@ -77,48 +76,7 @@ public class RenYuanInFo {
     private int status;
     private int subject_type;
     private String title;
-    @Generated(hash = 1991968164)
-    public RenYuanInFo(int accountId, String assemblyId, int channel,
-            String come_from, String companyName, String country, long createTime,
-            String department, int dtoResult, int gender, @NotNull Long id,
-            String identity, int jobStatus, String location, int meetingId,
-            long modifyTime, String name, String namePinyin, int num, int pageNum,
-            int pageSize, String phone, String photo_ids, String province,
-            String remark, int sid, String sourceMeeting, String sourceQuestionJson,
-            int status, int subject_type, String title) {
-        this.accountId = accountId;
-        this.assemblyId = assemblyId;
-        this.channel = channel;
-        this.come_from = come_from;
-        this.companyName = companyName;
-        this.country = country;
-        this.createTime = createTime;
-        this.department = department;
-        this.dtoResult = dtoResult;
-        this.gender = gender;
-        this.id = id;
-        this.identity = identity;
-        this.jobStatus = jobStatus;
-        this.location = location;
-        this.meetingId = meetingId;
-        this.modifyTime = modifyTime;
-        this.name = name;
-        this.namePinyin = namePinyin;
-        this.num = num;
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
-        this.phone = phone;
-        this.photo_ids = photo_ids;
-        this.province = province;
-        this.remark = remark;
-        this.sid = sid;
-        this.sourceMeeting = sourceMeeting;
-        this.sourceQuestionJson = sourceQuestionJson;
-        this.status = status;
-        this.subject_type = subject_type;
-        this.title = title;
-    }
-    @Generated(hash = 1243708610)
+
     public RenYuanInFo() {
     }
     public int getAccountId() {

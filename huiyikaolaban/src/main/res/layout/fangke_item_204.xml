@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:autofit="http://schemas.android.com/tools"
+    android:id="@+id/root_rl"
+    android:background="@drawable/fangkebg204"
+    android:layout_height="match_parent">
+
+
+        <com.ruitong.huiyi3.view.FKTopView_204
+            android:id="@+id/ygtopview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+
+        <!--<ScrollView-->
+            <!--android:layout_toRightOf="@+id/ygtopview"-->
+            <!--android:clipChildren="false"-->
+            <!--android:visibility="gone"-->
+            <!--android:id="@+id/scrollview_03"-->
+            <!--android:background="@drawable/zidonghuoqu_hui22"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+            <!--<LinearLayout-->
+                <!--android:orientation="vertical"-->
+                <!--android:id="@+id/xiaoxi_ll"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+
+
+            <!--</LinearLayout>-->
+        <!--</ScrollView>-->
+
+
+
+
+        <!--<com.airbnb.lottie.LottieAnimationView-->
+            <!--android:id="@+id/wangluo"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_width="80px"-->
+            <!--android:layout_height="80px"-->
+            <!--app:lottie_fileName="check.json"-->
+            <!--app:lottie_loop="false"-->
+            <!--app:lottie_autoPlay="true" />-->
+
+
+        <me.grantland.widget.AutofitTextView
+            android:maxLines="4"
+            android:gravity="center"
+            autofit:minTextSize="12sp"
+            android:layout_toRightOf="@+id/ygtopview"
+            android:id="@+id/bumen"
+            android:textColor="@color/blake"
+            android:textSize="42sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+</RelativeLayout>

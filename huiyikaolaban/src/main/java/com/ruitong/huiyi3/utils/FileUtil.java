@@ -26,6 +26,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
+import com.ruitong.huiyi3.MyApplication;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -37,10 +39,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.NetworkInterface;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -54,12 +58,14 @@ import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 
 
+
+
 /**
  * Created by chenjun on 2017/5/17.
  */
 
 public class FileUtil {
-    public static final String SDPATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+ //   public static final String SDPATH = Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"ruitongpopho";
 
     public static String getSerialNumber(Context context){
 
@@ -669,7 +675,7 @@ public class FileUtil {
             return false;
         }
         String name;
-        name = SDPATH + File.separator + path;
+        name = MyApplication.SDPATH + File.separator + path;
         File file = new File(name);
         if (!file.exists()) {
             file.mkdirs();
@@ -684,7 +690,7 @@ public class FileUtil {
         }
         String name;
 
-        name = SDPATH + File.separator + path;
+        name = MyApplication.SDPATH + File.separator + path;
 
         File file = new File(name);
         if (!file.exists()) {
@@ -796,9 +802,10 @@ public class FileUtil {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));// 设置两张图片相交时的模式,参考http://trylovecatch.iteye.com/blog/1189452
         canvas.drawBitmap(bitmap, src, dst, paint); // 以Mode.SRC_IN模式合并bitmap和已经draw了的Circle
 
+
+
         return output;
     }
-
 
     /**
      * 转换图片成圆形
@@ -859,7 +866,7 @@ public class FileUtil {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));// 设置两张图片相交时的模式,参考http://trylovecatch.iteye.com/blog/1189452
         canvas.drawBitmap(bitmap, src, dst, paint); // 以Mode.SRC_IN模式合并bitmap和已经draw了的Circle
         canvas.save();
-        // canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
+       // canvas.setDrawFilter(new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG));
         Paint pp=new Paint();
         pp.setAntiAlias(true);
         pp.setStyle(Paint.Style.STROKE);
@@ -950,7 +957,7 @@ public class FileUtil {
         pp.setStrokeWidth(2);
         pp.setColor(Color.WHITE);
         canvas2.drawCircle(newHeight/2, newHeight/2+20, newHeight/2-1, pp);
-        canvas2.drawBitmap(bitmap2,null,new RectF(newHeight+20-60,0,newHeight+20,top+60),pp);
+        canvas2.drawBitmap(bitmap2,null,new RectF(newHeight+20-60,0,newHeight+20,60),pp);
         canvas2.save();//保存   
         //store   
         canvas2.restore();//存储   
@@ -1004,5 +1011,35 @@ public class FileUtil {
 
         return newbmp;
     }
+    public static String getMacAddr() {
+        try {
+            List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface nif : all) {
+                //3C:D1:6E:51:18:D5
+                //0C:9A:42:C3:A8:CC
+               // if (!nif.getName().equalsIgnoreCase("wlan0")) continue;
+                if (!nif.getName().equalsIgnoreCase("eth0")) continue;
+                byte[] macBytes = nif.getHardwareAddress();
+                if (macBytes == null) {
+                    return "";
+                }
+
+                StringBuilder res1 = new StringBuilder();
+                for (byte b : macBytes) {
+                    res1.append(String.format("%02X:",b));
+                }
+
+                if (res1.length() > 0) {
+                    res1.deleteCharAt(res1.length() - 1);
+                }
+                return res1.toString();
+            }
+        } catch (Exception ex) {
+        }
+        return "02:00:00:00:00:00";
+    }
+
+
+
 
 }

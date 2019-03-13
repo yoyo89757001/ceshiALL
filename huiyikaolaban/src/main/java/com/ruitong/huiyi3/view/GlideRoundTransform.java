@@ -11,9 +11,7 @@ import android.graphics.RectF;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
-/**
- * Created by Administrator on 2017/9/13.
- */
+import java.security.MessageDigest;
 
 public class GlideRoundTransform extends BitmapTransformation {
 
@@ -24,8 +22,8 @@ public class GlideRoundTransform extends BitmapTransformation {
     }
 
     public GlideRoundTransform(Context context, int dp) {
-        super(context);
-        radius = Resources.getSystem().getDisplayMetrics().density * dp;
+        super();
+        this.radius = Resources.getSystem().getDisplayMetrics().density * dp;
     }
 
     @Override
@@ -50,7 +48,13 @@ public class GlideRoundTransform extends BitmapTransformation {
         return result;
     }
 
-    @Override public String getId() {
+    public String getId() {
         return getClass().getName() + Math.round(radius);
     }
+
+    @Override
+    public void updateDiskCacheKey(MessageDigest messageDigest) {
+
+    }
+
 }

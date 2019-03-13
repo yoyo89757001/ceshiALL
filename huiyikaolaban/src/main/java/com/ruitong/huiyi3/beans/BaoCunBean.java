@@ -1,22 +1,20 @@
 package com.ruitong.huiyi3.beans;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
+
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
 
 /**
  * Created by Administrator on 2017/9/15.
  */
 @Entity
 public class BaoCunBean {
-    @Id
-    @NotNull
+    @Id(assignable = true)
     private Long id;
     private String shipingIP;
     private String zhujiDiZhi;
     private int moban;
-    private String tuisongDiZhi;
+    private String tuisongDiZhi; //用来存信鸽的token
     private String gonggao;
     private boolean isShowMoshengren;
     private boolean isShowShiPingLiu;
@@ -36,183 +34,330 @@ public class BaoCunBean {
     private String shiPingWeiZhi;
     private String zhanhuiId;
     private String zhanhuiBianMa;
-    @Generated(hash = 1490855387)
-    public BaoCunBean(@NotNull Long id, String shipingIP, String zhujiDiZhi,
-            int moban, String tuisongDiZhi, String gonggao,
-            boolean isShowMoshengren, boolean isShowShiPingLiu, boolean isHengOrShu,
-            int yusu, int yudiao, int boyingren, String zhanghuId, String wenzi,
-            int size, String touxiangzhuji, String houtaiDiZhi, String huiyiId,
-            String wenzi1, int size1, String guanggaojiMing, String shiPingWeiZhi,
-            String zhanhuiId, String zhanhuiBianMa) {
-        this.id = id;
-        this.shipingIP = shipingIP;
-        this.zhujiDiZhi = zhujiDiZhi;
-        this.moban = moban;
-        this.tuisongDiZhi = tuisongDiZhi;
-        this.gonggao = gonggao;
-        this.isShowMoshengren = isShowMoshengren;
-        this.isShowShiPingLiu = isShowShiPingLiu;
-        this.isHengOrShu = isHengOrShu;
-        this.yusu = yusu;
-        this.yudiao = yudiao;
-        this.boyingren = boyingren;
-        this.zhanghuId = zhanghuId;
-        this.wenzi = wenzi;
-        this.size = size;
-        this.touxiangzhuji = touxiangzhuji;
-        this.houtaiDiZhi = houtaiDiZhi;
-        this.huiyiId = huiyiId;
-        this.wenzi1 = wenzi1;
-        this.size1 = size1;
-        this.guanggaojiMing = guanggaojiMing;
-        this.shiPingWeiZhi = shiPingWeiZhi;
-        this.zhanhuiId = zhanhuiId;
-        this.zhanhuiBianMa = zhanhuiBianMa;
+    private int shibieFaZhi;
+    private int shibieFaceSize;
+    private float ruKuMoHuDu;
+    private int ruKuFaceSize;
+    private boolean isHuoTi;
+    private int huoTiFZ;
+    private String dangqianChengShi;
+    private String dangqianChengShi2;
+    private String dangqianShiJian;
+    private boolean isTianQi;
+    private String shangBanTime;
+    private String xiaBanTime;
+    private int xiabandaka;
+    private String jihuoma;
+    private String xgToken;
+
+    public String getXgToken() {
+        return xgToken;
     }
-    @Generated(hash = 1469853663)
-    public BaoCunBean() {
+
+    public void setXgToken(String xgToken) {
+        this.xgToken = xgToken;
     }
+
+    public String getJihuoma() {
+        return jihuoma;
+    }
+
+    public void setJihuoma(String jihuoma) {
+        this.jihuoma = jihuoma;
+    }
+
+    public int getXiabandaka() {
+        return xiabandaka;
+    }
+
+    public void setXiabandaka(int xiabandaka) {
+        this.xiabandaka = xiabandaka;
+    }
+
+    public String getShangBanTime() {
+        return shangBanTime;
+    }
+
+    public void setShangBanTime(String shangBanTime) {
+        this.shangBanTime = shangBanTime;
+    }
+
+    public String getXiaBanTime() {
+        return xiaBanTime;
+    }
+
+    public void setXiaBanTime(String xiaBanTime) {
+        this.xiaBanTime = xiaBanTime;
+    }
+
+    public String getDangqianShiJian() {
+        return dangqianShiJian;
+    }
+
+    public void setDangqianShiJian(String dangqianShiJian) {
+        this.dangqianShiJian = dangqianShiJian;
+    }
+
+    public boolean isTianQi() {
+        return isTianQi;
+    }
+
+    public void setTianQi(boolean tianQi) {
+        isTianQi = tianQi;
+    }
+
+    public String getDangqianChengShi2() {
+        return dangqianChengShi2;
+    }
+
+    public void setDangqianChengShi2(String dangqianChengShi2) {
+        this.dangqianChengShi2 = dangqianChengShi2;
+    }
+
+    public String getDangqianChengShi() {
+        return dangqianChengShi;
+    }
+
+    public void setDangqianChengShi(String dangqianChengShi) {
+        this.dangqianChengShi = dangqianChengShi;
+    }
+
+    public int getHuoTiFZ() {
+        return huoTiFZ;
+    }
+
+    public void setHuoTiFZ(int huoTiFZ) {
+        this.huoTiFZ = huoTiFZ;
+    }
+
+    public int getShibieFaZhi() {
+        return shibieFaZhi;
+    }
+
+    public void setShibieFaZhi(int shibieFaZhi) {
+        this.shibieFaZhi = shibieFaZhi;
+    }
+
+    public int getShibieFaceSize() {
+        return shibieFaceSize;
+    }
+
+    public void setShibieFaceSize(int shibieFaceSize) {
+        this.shibieFaceSize = shibieFaceSize;
+    }
+
+    public float getRuKuMoHuDu() {
+        return ruKuMoHuDu;
+    }
+
+    public void setRuKuMoHuDu(float ruKuMoHuDu) {
+        this.ruKuMoHuDu = ruKuMoHuDu;
+    }
+
+    public int getRuKuFaceSize() {
+        return ruKuFaceSize;
+    }
+
+    public void setRuKuFaceSize(int ruKuFaceSize) {
+        this.ruKuFaceSize = ruKuFaceSize;
+    }
+
+    public boolean isHuoTi() {
+        return isHuoTi;
+    }
+
+    public void setHuoTi(boolean huoTi) {
+        isHuoTi = huoTi;
+    }
+
     public Long getId() {
-        return this.id;
+        return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getShipingIP() {
-        return this.shipingIP;
+        return shipingIP;
     }
+
     public void setShipingIP(String shipingIP) {
         this.shipingIP = shipingIP;
     }
+
     public String getZhujiDiZhi() {
-        return this.zhujiDiZhi;
+        return zhujiDiZhi;
     }
+
     public void setZhujiDiZhi(String zhujiDiZhi) {
         this.zhujiDiZhi = zhujiDiZhi;
     }
+
     public int getMoban() {
-        return this.moban;
+        return moban;
     }
+
     public void setMoban(int moban) {
         this.moban = moban;
     }
+
     public String getTuisongDiZhi() {
-        return this.tuisongDiZhi;
+        return tuisongDiZhi;
     }
+
     public void setTuisongDiZhi(String tuisongDiZhi) {
         this.tuisongDiZhi = tuisongDiZhi;
     }
+
     public String getGonggao() {
-        return this.gonggao;
+        return gonggao;
     }
+
     public void setGonggao(String gonggao) {
         this.gonggao = gonggao;
     }
-    public boolean getIsShowMoshengren() {
-        return this.isShowMoshengren;
+
+    public boolean isShowMoshengren() {
+        return isShowMoshengren;
     }
-    public void setIsShowMoshengren(boolean isShowMoshengren) {
-        this.isShowMoshengren = isShowMoshengren;
+
+    public void setShowMoshengren(boolean showMoshengren) {
+        isShowMoshengren = showMoshengren;
     }
-    public boolean getIsShowShiPingLiu() {
-        return this.isShowShiPingLiu;
+
+    public boolean isShowShiPingLiu() {
+        return isShowShiPingLiu;
     }
-    public void setIsShowShiPingLiu(boolean isShowShiPingLiu) {
-        this.isShowShiPingLiu = isShowShiPingLiu;
+
+    public void setShowShiPingLiu(boolean showShiPingLiu) {
+        isShowShiPingLiu = showShiPingLiu;
     }
-    public boolean getIsHengOrShu() {
-        return this.isHengOrShu;
+
+    public boolean isHengOrShu() {
+        return isHengOrShu;
     }
-    public void setIsHengOrShu(boolean isHengOrShu) {
-        this.isHengOrShu = isHengOrShu;
+
+    public void setHengOrShu(boolean hengOrShu) {
+        isHengOrShu = hengOrShu;
     }
+
     public int getYusu() {
-        return this.yusu;
+        return yusu;
     }
+
     public void setYusu(int yusu) {
         this.yusu = yusu;
     }
+
     public int getYudiao() {
-        return this.yudiao;
+        return yudiao;
     }
+
     public void setYudiao(int yudiao) {
         this.yudiao = yudiao;
     }
+
     public int getBoyingren() {
-        return this.boyingren;
+        return boyingren;
     }
+
     public void setBoyingren(int boyingren) {
         this.boyingren = boyingren;
     }
+
     public String getZhanghuId() {
-        return this.zhanghuId;
+        return zhanghuId;
     }
+
     public void setZhanghuId(String zhanghuId) {
         this.zhanghuId = zhanghuId;
     }
+
     public String getWenzi() {
-        return this.wenzi;
+        return wenzi;
     }
+
     public void setWenzi(String wenzi) {
         this.wenzi = wenzi;
     }
+
     public int getSize() {
-        return this.size;
+        return size;
     }
+
     public void setSize(int size) {
         this.size = size;
     }
+
     public String getTouxiangzhuji() {
-        return this.touxiangzhuji;
+        return touxiangzhuji;
     }
+
     public void setTouxiangzhuji(String touxiangzhuji) {
         this.touxiangzhuji = touxiangzhuji;
     }
+
     public String getHoutaiDiZhi() {
-        return this.houtaiDiZhi;
+        return houtaiDiZhi;
     }
+
     public void setHoutaiDiZhi(String houtaiDiZhi) {
         this.houtaiDiZhi = houtaiDiZhi;
     }
+
     public String getHuiyiId() {
-        return this.huiyiId;
+        return huiyiId;
     }
+
     public void setHuiyiId(String huiyiId) {
         this.huiyiId = huiyiId;
     }
+
     public String getWenzi1() {
-        return this.wenzi1;
+        return wenzi1;
     }
+
     public void setWenzi1(String wenzi1) {
         this.wenzi1 = wenzi1;
     }
+
     public int getSize1() {
-        return this.size1;
+        return size1;
     }
+
     public void setSize1(int size1) {
         this.size1 = size1;
     }
+
     public String getGuanggaojiMing() {
-        return this.guanggaojiMing;
+        return guanggaojiMing;
     }
+
     public void setGuanggaojiMing(String guanggaojiMing) {
         this.guanggaojiMing = guanggaojiMing;
     }
+
     public String getShiPingWeiZhi() {
-        return this.shiPingWeiZhi;
+        return shiPingWeiZhi;
     }
+
     public void setShiPingWeiZhi(String shiPingWeiZhi) {
         this.shiPingWeiZhi = shiPingWeiZhi;
     }
+
     public String getZhanhuiId() {
-        return this.zhanhuiId;
+        return zhanhuiId;
     }
+
     public void setZhanhuiId(String zhanhuiId) {
         this.zhanhuiId = zhanhuiId;
     }
+
     public String getZhanhuiBianMa() {
-        return this.zhanhuiBianMa;
+        return zhanhuiBianMa;
     }
+
     public void setZhanhuiBianMa(String zhanhuiBianMa) {
         this.zhanhuiBianMa = zhanhuiBianMa;
     }

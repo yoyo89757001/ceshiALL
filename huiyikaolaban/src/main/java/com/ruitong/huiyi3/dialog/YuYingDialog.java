@@ -14,7 +14,8 @@ import android.widget.SeekBar;
 import com.ruitong.huiyi3.MyApplication;
 import com.ruitong.huiyi3.R;
 import com.ruitong.huiyi3.beans.BaoCunBean;
-import com.ruitong.huiyi3.beans.BaoCunBeanDao;
+
+import io.objectbox.Box;
 
 
 /**
@@ -27,7 +28,7 @@ public class YuYingDialog extends Dialog implements View.OnFocusChangeListener, 
     private SeekBar seekBar,seekBar2,seekBar3;
     private LinearLayout l11,l22,l33;
     private Button l1,l2;
-    private BaoCunBeanDao baoCunBeanDao=null;
+    private Box<BaoCunBean> baoCunBeanDao=null;
     private BaoCunBean baoCunBean=null;
 
     public YuYingDialog(Context context) {
@@ -41,8 +42,8 @@ public class YuYingDialog extends Dialog implements View.OnFocusChangeListener, 
                 attr.gravity = Gravity.CENTER;//设置dialog 在布局中的位置
             }
         }
-        baoCunBeanDao= MyApplication.myApplication.getDaoSession().getBaoCunBeanDao();
-        baoCunBean=baoCunBeanDao.load(123456L);
+        baoCunBeanDao= MyApplication.myApplication.getBaoCunBeanBox();
+        baoCunBean=baoCunBeanDao.get(123456L);
         setCustomDialog();
     }
 
@@ -59,7 +60,7 @@ public class YuYingDialog extends Dialog implements View.OnFocusChangeListener, 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                baoCunBean.setBoyingren(progress);
-               baoCunBeanDao.update(baoCunBean);
+               baoCunBeanDao.put(baoCunBean);
             }
 
             @Override
@@ -79,7 +80,7 @@ public class YuYingDialog extends Dialog implements View.OnFocusChangeListener, 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 baoCunBean.setYusu(progress);
-                baoCunBeanDao.update(baoCunBean);
+                baoCunBeanDao.put(baoCunBean);
             }
 
             @Override
@@ -100,7 +101,7 @@ public class YuYingDialog extends Dialog implements View.OnFocusChangeListener, 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 baoCunBean.setYudiao(progress);
-                baoCunBeanDao.update(baoCunBean);
+                baoCunBeanDao.put(baoCunBean);
             }
 
             @Override

@@ -1,9 +1,8 @@
 package com.ruitong.huiyi3.beans;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.NotNull;
+
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
 
 /**
  * Created by Administrator on 2018/4/8.
@@ -35,7 +34,6 @@ public class ZhuJiBeanH {
     private int dtoResult;
     private String hostUrl;
     @Id
-    @NotNull
     private Long id;
     private String machineCode;
     private String machineName;
@@ -45,26 +43,7 @@ public class ZhuJiBeanH {
     private String pwd;
     private int status;
     private String username;
-    @Generated(hash = 1497634750)
-    public ZhuJiBeanH(int accountId, long createTime, int dtoResult, String hostUrl,
-                      @NotNull Long id, String machineCode, String machineName,
-                      long modifyTime, int pageNum, int pageSize, String pwd, int status,
-                      String username) {
-        this.accountId = accountId;
-        this.createTime = createTime;
-        this.dtoResult = dtoResult;
-        this.hostUrl = hostUrl;
-        this.id = id;
-        this.machineCode = machineCode;
-        this.machineName = machineName;
-        this.modifyTime = modifyTime;
-        this.pageNum = pageNum;
-        this.pageSize = pageSize;
-        this.pwd = pwd;
-        this.status = status;
-        this.username = username;
-    }
-    @Generated(hash = 59330943)
+
     public ZhuJiBeanH() {
     }
     public int getAccountId() {

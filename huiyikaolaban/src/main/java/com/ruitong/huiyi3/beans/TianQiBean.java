@@ -1,243 +1,343 @@
 package com.ruitong.huiyi3.beans;
 
-import java.util.List;
 
-/**
- * Created by chenjun on 2017/5/15.
- */
 
-public class TianQiBean {
+public class TianQiBean
+{
 
 
     /**
-     * desc : OK
-     * status : 1000
-     * data : {"wendu":"25","ganmao":"风较大，阴冷潮湿，较易发生感冒，体质较弱的朋友请注意适当防护。","forecast":[{"fengxiang":"南风","fengli":"3-4级","high":"高温 27℃","type":"暴雨","low":"低温 23℃","date":"15日星期一"},{"fengxiang":"北风","fengli":"3-4级","high":"高温 29℃","type":"多云","low":"低温 23℃","date":"16日星期二"},{"fengxiang":"无持续风向","fengli":"微风级","high":"高温 30℃","type":"多云","low":"低温 24℃","date":"17日星期三"},{"fengxiang":"无持续风向","fengli":"微风级","high":"高温 29℃","type":"多云","low":"低温 25℃","date":"18日星期四"},{"fengxiang":"无持续风向","fengli":"微风级","high":"高温 29℃","type":"多云","low":"低温 23℃","date":"19日星期五"}],"yesterday":{"fl":"微风","fx":"无持续风向","high":"高温 29℃","type":"多云","low":"低温 23℃","date":"14日星期日"},"aqi":"27","city":"广州"}
+     * resultcode : 200
+     * reason : successed!
+     * result : {"sk":{"temp":"27","wind_direction":"东风","wind_strength":"4级","humidity":"89%","time":"09:58"},"today":{"temperature":"25℃~31℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"东风3-5级","week":"星期三","city":"广州","date_y":"2018年08月15日","dressing_index":"热","dressing_advice":"天气热，建议着短裙、短裤、短薄外套、T恤等夏季服装。","uv_index":"弱","comfort_index":"","wash_index":"不宜","travel_index":"较不宜","exercise_index":"较不宜","drying_index":""},"future":{"day_20180815":{"temperature":"25℃~31℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"东风3-5级","week":"星期三","date":"20180815"},"day_20180816":{"temperature":"25℃~30℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期四","date":"20180816"},"day_20180817":{"temperature":"25℃~32℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期五","date":"20180817"},"day_20180818":{"temperature":"27℃~33℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期六","date":"20180818"},"day_20180819":{"temperature":"27℃~33℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期日","date":"20180819"},"day_20180820":{"temperature":"27℃~33℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期一","date":"20180820"},"day_20180821":{"temperature":"25℃~30℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期二","date":"20180821"}}}
+     * error_code : 0
      */
+//    {"resultcode":"200","reason":"successed!","result":{"sk":{"temp":"27","wind_direction":"东风","wind_strength":"4级",
+//            "humidity":"89%","time":"09:58"},"today":{"temperature":"25℃~31℃","weather":"雷阵雨","weather_id":{"fa":"04"
+//            ,"fb":"04"},"wind":"东风3-5级","week":"星期三","city":"广州","date_y":"2018年08月15日","dressing_index":"热",
+//            "dressing_advice":"天气热，建议着短裙、短裤、短薄外套、T恤等夏季服装。","uv_index":"弱","comfort_index":"","" +
+//            "wash_index":"不宜","travel_index":"较不宜","exercise_index":"较不宜","drying_index":""},"future":{"day_20180815"
+//        :{"temperature":"25℃~31℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"东风3-5级","week":"星期三",
+//                "date":"20180815"},"day_20180816":{"temperature":"25℃~30℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"" +
+//                "04"},"wind":"持续无风向微风","week":"星期四","date":"20180816"},"day_20180817":{"temperature":"25℃~32℃","" +
+//                "weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期五","date":"20180817" +
+//                ""},"day_20180818":{"temperature":"27℃~33℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":
+//            "持续无风向微风","week":"星期六","date":"20180818"},"day_20180819":{"temperature":"27℃~33℃","weather":"雷阵雨"
+//                ,"weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期日","date":"20180819"},"day_20180820"
+//        :{"temperature":"27℃~33℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"" +
+//                "星期一","date":"20180820"},"day_20180821":{"temperature":"25℃~30℃","weather":"雷阵雨","weather_id":{"fa" +
+//                "":"04","fb":"04"},"wind":"持续无风向微风","week":"星期二","date":"20180821"}}},"error_code":0}
 
-    private String desc;
-    private int status;
-    private DataBean data;
+    private long id ;
+    private String resultcode;
+    private String reason;
+    private ResultBean result;
+    private int error_code;
 
-    public String getDesc() {
-        return desc;
+    public long getId() {
+        return id;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public int getStatus() {
-        return status;
+    public String getResultcode() {
+        return resultcode;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setResultcode(String resultcode) {
+        this.resultcode = resultcode;
     }
 
-    public DataBean getData() {
-        return data;
+    public String getReason() {
+        return reason;
     }
 
-    public void setData(DataBean data) {
-        this.data = data;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
-    public static class DataBean {
+    public ResultBean getResult() {
+        return result;
+    }
+
+    public void setResult(ResultBean result) {
+        this.result = result;
+    }
+
+    public int getError_code() {
+        return error_code;
+    }
+
+    public void setError_code(int error_code) {
+        this.error_code = error_code;
+    }
+
+    public static class ResultBean {
         /**
-         * wendu : 25
-         * ganmao : 风较大，阴冷潮湿，较易发生感冒，体质较弱的朋友请注意适当防护。
-         * forecast : [{"fengxiang":"南风","fengli":"3-4级","high":"高温 27℃","type":"暴雨","low":"低温 23℃","date":"15日星期一"},{"fengxiang":"北风","fengli":"3-4级","high":"高温 29℃","type":"多云","low":"低温 23℃","date":"16日星期二"},{"fengxiang":"无持续风向","fengli":"微风级","high":"高温 30℃","type":"多云","low":"低温 24℃","date":"17日星期三"},{"fengxiang":"无持续风向","fengli":"微风级","high":"高温 29℃","type":"多云","low":"低温 25℃","date":"18日星期四"},{"fengxiang":"无持续风向","fengli":"微风级","high":"高温 29℃","type":"多云","low":"低温 23℃","date":"19日星期五"}]
-         * yesterday : {"fl":"微风","fx":"无持续风向","high":"高温 29℃","type":"多云","low":"低温 23℃","date":"14日星期日"}
-         * aqi : 27
-         * city : 广州
+         * sk : {"temp":"27","wind_direction":"东风","wind_strength":"4级","humidity":"89%","time":"09:58"}
+         * today : {"temperature":"25℃~31℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"东风3-5级","week":"星期三","city":"广州","date_y":"2018年08月15日","dressing_index":"热","dressing_advice":"天气热，建议着短裙、短裤、短薄外套、T恤等夏季服装。","uv_index":"弱","comfort_index":"","wash_index":"不宜","travel_index":"较不宜","exercise_index":"较不宜","drying_index":""}
+         * future : {"day_20180815":{"temperature":"25℃~31℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"东风3-5级","week":"星期三","date":"20180815"},"day_20180816":{"temperature":"25℃~30℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期四","date":"20180816"},"day_20180817":{"temperature":"25℃~32℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期五","date":"20180817"},"day_20180818":{"temperature":"27℃~33℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期六","date":"20180818"},"day_20180819":{"temperature":"27℃~33℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期日","date":"20180819"},"day_20180820":{"temperature":"27℃~33℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期一","date":"20180820"},"day_20180821":{"temperature":"25℃~30℃","weather":"雷阵雨","weather_id":{"fa":"04","fb":"04"},"wind":"持续无风向微风","week":"星期二","date":"20180821"}}
          */
 
-        private String wendu;
-        private String ganmao;
-        private YesterdayBean yesterday;
-        private String aqi;
-        private String city;
-        private List<ForecastBean> forecast;
+        private SkBean sk;
+        private TodayBean today;
 
-        public String getWendu() {
-            return wendu;
+        public SkBean getSk() {
+            return sk;
         }
 
-        public void setWendu(String wendu) {
-            this.wendu = wendu;
+        public void setSk(SkBean sk) {
+            this.sk = sk;
         }
 
-        public String getGanmao() {
-            return ganmao;
+        public TodayBean getToday() {
+            return today;
         }
 
-        public void setGanmao(String ganmao) {
-            this.ganmao = ganmao;
+        public void setToday(TodayBean today) {
+            this.today = today;
         }
 
-        public YesterdayBean getYesterday() {
-            return yesterday;
-        }
 
-        public void setYesterday(YesterdayBean yesterday) {
-            this.yesterday = yesterday;
-        }
-
-        public String getAqi() {
-            return aqi;
-        }
-
-        public void setAqi(String aqi) {
-            this.aqi = aqi;
-        }
-
-        public String getCity() {
-            return city;
-        }
-
-        public void setCity(String city) {
-            this.city = city;
-        }
-
-        public List<ForecastBean> getForecast() {
-            return forecast;
-        }
-
-        public void setForecast(List<ForecastBean> forecast) {
-            this.forecast = forecast;
-        }
-
-        public static class YesterdayBean {
+        public static class SkBean {
             /**
-             * fl : 微风
-             * fx : 无持续风向
-             * high : 高温 29℃
-             * type : 多云
-             * low : 低温 23℃
-             * date : 14日星期日
+             * temp : 27
+             * wind_direction : 东风
+             * wind_strength : 4级
+             * humidity : 89%
+             * time : 09:58
              */
 
-            private String fl;
-            private String fx;
-            private String high;
-            private String type;
-            private String low;
-            private String date;
+            private String temp;
+            private String wind_direction;
+            private String wind_strength;
+            private String humidity;
+            private String time;
 
-            public String getFl() {
-                return fl;
+            public String getTemp() {
+                return temp;
             }
 
-            public void setFl(String fl) {
-                this.fl = fl;
+            public void setTemp(String temp) {
+                this.temp = temp;
             }
 
-            public String getFx() {
-                return fx;
+            public String getWind_direction() {
+                return wind_direction;
             }
 
-            public void setFx(String fx) {
-                this.fx = fx;
+            public void setWind_direction(String wind_direction) {
+                this.wind_direction = wind_direction;
             }
 
-            public String getHigh() {
-                return high;
+            public String getWind_strength() {
+                return wind_strength;
             }
 
-            public void setHigh(String high) {
-                this.high = high;
+            public void setWind_strength(String wind_strength) {
+                this.wind_strength = wind_strength;
             }
 
-            public String getType() {
-                return type;
+            public String getHumidity() {
+                return humidity;
             }
 
-            public void setType(String type) {
-                this.type = type;
+            public void setHumidity(String humidity) {
+                this.humidity = humidity;
             }
 
-            public String getLow() {
-                return low;
+            public String getTime() {
+                return time;
             }
 
-            public void setLow(String low) {
-                this.low = low;
-            }
-
-            public String getDate() {
-                return date;
-            }
-
-            public void setDate(String date) {
-                this.date = date;
+            public void setTime(String time) {
+                this.time = time;
             }
         }
 
-        public static class ForecastBean {
+        public static class TodayBean {
             /**
-             * fengxiang : 南风
-             * fengli : 3-4级
-             * high : 高温 27℃
-             * type : 暴雨
-             * low : 低温 23℃
-             * date : 15日星期一
+             * temperature : 25℃~31℃
+             * weather : 雷阵雨
+             * weather_id : {"fa":"04","fb":"04"}
+             * wind : 东风3-5级
+             * week : 星期三
+             * city : 广州
+             * date_y : 2018年08月15日
+             * dressing_index : 热
+             * dressing_advice : 天气热，建议着短裙、短裤、短薄外套、T恤等夏季服装。
+             * uv_index : 弱
+             * comfort_index :
+             * wash_index : 不宜
+             * travel_index : 较不宜
+             * exercise_index : 较不宜
+             * drying_index :
              */
 
-            private String fengxiang;
-            private String fengli;
-            private String high;
-            private String type;
-            private String low;
-            private String date;
+            private String temperature;
+            private String weather;
+            private WeatherIdBean weather_id;
+            private String wind;
+            private String week;
+            private String city;
+            private String date_y;
+            private String dressing_index;
+            private String dressing_advice;
+            private String uv_index;
+            private String comfort_index;
+            private String wash_index;
+            private String travel_index;
+            private String exercise_index;
+            private String drying_index;
 
-            public String getFengxiang() {
-                return fengxiang;
+            public String getTemperature() {
+                return temperature;
             }
 
-            public void setFengxiang(String fengxiang) {
-                this.fengxiang = fengxiang;
+            public void setTemperature(String temperature) {
+                this.temperature = temperature;
             }
 
-            public String getFengli() {
-                return fengli;
+            public String getWeather() {
+                return weather;
             }
 
-            public void setFengli(String fengli) {
-                this.fengli = fengli;
+            public void setWeather(String weather) {
+                this.weather = weather;
             }
 
-            public String getHigh() {
-                return high;
+            public WeatherIdBean getWeather_id() {
+                return weather_id;
             }
 
-            public void setHigh(String high) {
-                this.high = high;
+            public void setWeather_id(WeatherIdBean weather_id) {
+                this.weather_id = weather_id;
             }
 
-            public String getType() {
-                return type;
+            public String getWind() {
+                return wind;
             }
 
-            public void setType(String type) {
-                this.type = type;
+            public void setWind(String wind) {
+                this.wind = wind;
             }
 
-            public String getLow() {
-                return low;
+            public String getWeek() {
+                return week;
             }
 
-            public void setLow(String low) {
-                this.low = low;
+            public void setWeek(String week) {
+                this.week = week;
             }
 
-            public String getDate() {
-                return date;
+            public String getCity() {
+                return city;
             }
 
-            public void setDate(String date) {
-                this.date = date;
+            public void setCity(String city) {
+                this.city = city;
+            }
+
+            public String getDate_y() {
+                return date_y;
+            }
+
+            public void setDate_y(String date_y) {
+                this.date_y = date_y;
+            }
+
+            public String getDressing_index() {
+                return dressing_index;
+            }
+
+            public void setDressing_index(String dressing_index) {
+                this.dressing_index = dressing_index;
+            }
+
+            public String getDressing_advice() {
+                return dressing_advice;
+            }
+
+            public void setDressing_advice(String dressing_advice) {
+                this.dressing_advice = dressing_advice;
+            }
+
+            public String getUv_index() {
+                return uv_index;
+            }
+
+            public void setUv_index(String uv_index) {
+                this.uv_index = uv_index;
+            }
+
+            public String getComfort_index() {
+                return comfort_index;
+            }
+
+            public void setComfort_index(String comfort_index) {
+                this.comfort_index = comfort_index;
+            }
+
+            public String getWash_index() {
+                return wash_index;
+            }
+
+            public void setWash_index(String wash_index) {
+                this.wash_index = wash_index;
+            }
+
+            public String getTravel_index() {
+                return travel_index;
+            }
+
+            public void setTravel_index(String travel_index) {
+                this.travel_index = travel_index;
+            }
+
+            public String getExercise_index() {
+                return exercise_index;
+            }
+
+            public void setExercise_index(String exercise_index) {
+                this.exercise_index = exercise_index;
+            }
+
+            public String getDrying_index() {
+                return drying_index;
+            }
+
+            public void setDrying_index(String drying_index) {
+                this.drying_index = drying_index;
+            }
+
+            public static class WeatherIdBean {
+                /**
+                 * fa : 04
+                 * fb : 04
+                 */
+
+                private String fa;
+                private String fb;
+
+                public String getFa() {
+                    return fa;
+                }
+
+                public void setFa(String fa) {
+                    this.fa = fa;
+                }
+
+                public String getFb() {
+                    return fb;
+                }
+
+                public void setFb(String fb) {
+                    this.fb = fb;
+                }
             }
         }
+
     }
 }
