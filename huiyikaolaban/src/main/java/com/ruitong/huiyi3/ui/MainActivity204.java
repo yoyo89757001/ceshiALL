@@ -100,6 +100,7 @@ import com.ruitong.huiyi3.utils.FileUtil;
 import com.ruitong.huiyi3.utils.GlideUtils;
 import com.ruitong.huiyi3.utils.GsonUtil;
 import com.ruitong.huiyi3.utils.RandomDataUtil;
+import com.ruitong.huiyi3.utils.TSXXChuLi;
 import com.ruitong.huiyi3.utils.ValueAnimatorIntface;
 import com.ruitong.huiyi3.utils.ValueAnimatorUtils;
 import com.ruitong.huiyi3.view.FKTopView_204;
@@ -299,7 +300,7 @@ public class MainActivity204 extends AppCompatActivity  {
             .build();
     private int count = -1;
     private Contents contents = null;
-
+    private TSXXChuLi tsxxChuLi=new TSXXChuLi();
     private MediaPlayer mediaPlayer = null;
     private IVLCVout vlcVout = null;
     private IVLCVout.Callback callback;
@@ -1159,6 +1160,8 @@ public class MainActivity204 extends AppCompatActivity  {
                         break;
                     }
                     case -100: {
+
+                        dabg.setVisibility(View.VISIBLE);
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -1183,6 +1186,7 @@ public class MainActivity204 extends AppCompatActivity  {
                                 .apply(myOptions2)
                                 .into(touxiang2);
 
+                        view_dk.setTag(bean2.getId()+"");
                         hengLiebiao.addView(view_dk);
 
                         RelativeLayout.LayoutParams layoutParams2 = (RelativeLayout.LayoutParams) touxiang2.getLayoutParams();
@@ -1232,6 +1236,7 @@ public class MainActivity204 extends AppCompatActivity  {
                                     touxiang.invalidate();
                                     //消失
                                     Message message = Message.obtain();
+                                    message.obj = bean2.getId() + "";
                                     message.what = 999;
                                     mHandler.sendMessageDelayed(message, 9000);
 
@@ -1642,7 +1647,7 @@ public class MainActivity204 extends AppCompatActivity  {
 
 //                if (usbPath != null) {
 //
-//                    ToastUtils.getInstances().showDialog("获取图片", "获取图片", 0);
+//                    ToastUtils2.getInstances().showDialog("获取图片", "获取图片", 0);
 //                    new Thread(new Runnable() {
 //                        @Override
 //                        public void run() {
@@ -1671,7 +1676,7 @@ public class MainActivity204 extends AppCompatActivity  {
 //                                        shibai++;
 //                                    }
 //
-//                                    ToastUtils.getInstances().showDialog("入库中", "失败了:" + shibai, (i / size) * 100);
+//                                    ToastUtils2.getInstances().showDialog("入库中", "失败了:" + shibai, (i / size) * 100);
 //                                } catch (FacePassException e) {
 //                                    e.printStackTrace();
 //                                }
@@ -2031,15 +2036,15 @@ public class MainActivity204 extends AppCompatActivity  {
     //信鸽信息处理
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onDataSynEvent(XGBean xgBean) {
-//        if (MyApplication.myApplication.getFacePassHandler()!=null){
-//            try {
-//                tsxxChuLi.setData(xgBean, MainActivity204.this, MyApplication.myApplication.getFacePassHandler());
-//
-//            }catch (Exception e){
-//                e.printStackTrace();
-//            }
-//
-//        }
+
+            try {
+
+               tsxxChuLi.setData(xgBean, MainActivity204.this);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+
 
     }
 
@@ -2972,6 +2977,7 @@ public class MainActivity204 extends AppCompatActivity  {
                                     personBeanSB.setImage(b[0]);
                                     personBeanSB.setName("陌生人");
                                     personBeanSB.setSubject_type(-1);
+                                    personBeanSB.setId(System.currentTimeMillis());
                                     linkedBlockingQueue.offer(personBeanSB);
 
 //                                    Message message = new Message();

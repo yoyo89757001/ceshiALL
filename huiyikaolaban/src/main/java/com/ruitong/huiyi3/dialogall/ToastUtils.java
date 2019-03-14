@@ -16,7 +16,8 @@ public class ToastUtils {
     }
 
     public void setListener(CommonDialogListener listener){
-        this.mListener = listener;
+        mListener = listener;
+      //  Log.d("ToastUtils2", "mListener:" + mListener);
     }
 
     public static  ToastUtils getInstances(){
@@ -33,9 +34,15 @@ public class ToastUtils {
         return instances;
     }
 
+    public void setDate(String a,float p, String t){
+        mListener.setDate(a, (int) p,t);
+    }
 
-    public void showDialog(String a,String t,int p){
+
+    public void showDialog(String a, String t, int p){
+       // Log.d("CommonDialogService", "ddddddddddddd");
         if(mListener!=null){
+         //   Log.d("CommonDialogService", "eeeeeeeee");
             mListener.show(a,t,p);
         }
     }

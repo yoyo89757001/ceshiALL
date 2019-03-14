@@ -9,4 +9,5 @@ package com.ruitong.huiyi3.dialogall;
 public interface CommonDialogListener {
     void show(String a, String t, int p);
     void cancel();
+    void setDate(String a, int p, String t);
 }

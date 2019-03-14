@@ -17,6 +17,8 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.liulishuo.filedownloader.FileDownloader;
+import com.liulishuo.filedownloader.connection.FileDownloadUrlConnection;
 import com.ruitong.huiyi3.beans.BaoCunBean;
 import com.ruitong.huiyi3.beans.BenDiJiLuBean;
 import com.ruitong.huiyi3.beans.ChengShiIDBean;
@@ -92,6 +94,14 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 
 				try {
 					ScreenAdapterTools.init(this);
+
+					FileDownloader.setupOnApplicationOnCreate(this)
+							.connectionCreator(new FileDownloadUrlConnection
+									.Creator(new FileDownloadUrlConnection.Configuration()
+									.connectTimeout(25_000) // set connection timeout.
+									.readTimeout(25_000) // set read timeout.
+							))
+							.commit();
 
 					BoxStore mBoxStore = MyObjectBox.builder().androidContext(this).build();
 
@@ -218,7 +228,7 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 			baoCunBean.setJihuoma("0000-0000-0000-0000-0000");
 			baoCunBean.setDangqianShiJian("d");
 			baoCunBean.setTianQi(false);
-			baoCunBean.setMoban(1);
+			baoCunBean.setMoban(201);
 			baoCunBeanBox.put(baoCunBean);
 		}
 

@@ -31,9 +31,9 @@ import com.ruitong.huiyi3.beans.Tishi;
 public class CommonDialogService extends Service implements CommonDialogListener {
 
     private static Dialog dialog;
-    private static TextView a1,tishi;
+    private  TextView a1,tishi;
 //    private static ImageView img_loading;
-    private static View view;
+    private  View view;
 //    private static AnimationDrawable animationDrawable;
     private ProgressBar progressBar;
     private Button button;
@@ -44,12 +44,13 @@ public class CommonDialogService extends Service implements CommonDialogListener
         public boolean handleMessage(Message msg) {
             if (msg.what==111){
                 Tishi tishi1= (Tishi) msg.obj;
-
-                a1.setText(tishi1.getA());
-                tishi.setText(tishi1.getTishi());
-                progressBar.setProgress(tishi1.getP());
+              //  Log.d("CommonDialogService", "a1:" + a1);
+                if (a1!=null){
+                    a1.setText(tishi1.getA());
+                    tishi.setText(tishi1.getTishi());
+                    progressBar.setProgress(tishi1.getP());
+                }
             }
-
             return false;
         }
     });
@@ -64,53 +65,63 @@ public class CommonDialogService extends Service implements CommonDialogListener
     public void onCreate() {
         super.onCreate();
         ToastUtils.getInstances().setListener(this);//绑定
-
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if(dialog!=null&&dialog.isShowing()){
             dialog.cancel();
             dialog=null;
         }
+        super.onDestroy();
+
     }
 
-    private void showDialog(String a,String t,int p){
-       // Log.d("CommonDialogService", "显示");
-        if(dialog==null&&CommonData.mNowContext!=null){
+    private void showDialog(String a, String t, int p){
+      //  Log.d("CommonDialogService", "显示弹窗");
+
+        if(dialog==null && CommonData.mNowContext!=null){
           //  Log.d("CommonDialogService", "显示2");
-            dialog = new Dialog(CommonData.mNowContext,R.style.dialog_style);
-            view = LayoutInflater.from(this).inflate(R.layout.alldialog,null,false);
-            a1 = (TextView) view.findViewById(R.id.a1);
-            tishi = (TextView) view.findViewById(R.id.tishi);
-            button = (Button) view.findViewById(R.id.guanbi);
-            button.setOnClickListener(new View.OnClickListener() {
+            handler.post(new Runnable() {
                 @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                    dialog=null;
+                public void run() {
+                    dialog = new Dialog(CommonData.mNowContext,R.style.dialog_style);
+                    view = LayoutInflater.from(CommonData.mNowContext).inflate(R.layout.alldialog,null,false);
+                    a1 =  view.findViewById(R.id.a1);
+                    tishi =  view.findViewById(R.id.tishi);
+                    button =  view.findViewById(R.id.guanbi);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (dialog!=null)
+                            dialog.dismiss();
+                            dialog=null;
+                        }
+                    });
+
+                    progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+                    dialog.setContentView(view);
+                    dialog.setCanceledOnTouchOutside(false);
+
+                    Window window= dialog.getWindow();
+                    if ( window != null) {
+                        WindowManager.LayoutParams attr = window.getAttributes();
+                        if (attr != null) {
+                            attr.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                            attr.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                            attr.gravity = Gravity.CENTER;//设置dialog 在布局中的位置
+                            dialog.getWindow().setAttributes(attr);
+                        }
+                    }
+
+                    if (!dialog.isShowing()){
+                        Log.d("CommonDialogService", "xianshi");
+                        dialog.show();
+                    }
+
+
                 }
             });
-
-            progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
-
-            dialog.setContentView(view);
-            dialog.setCanceledOnTouchOutside(false);
-
-            dialog.show();
-
-            Window window= dialog.getWindow();
-            if ( window != null) {
-                WindowManager.LayoutParams attr = window.getAttributes();
-                if (attr != null) {
-                    attr.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    attr.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    attr.gravity = Gravity.CENTER;//设置dialog 在布局中的位置
-                    dialog.getWindow().setAttributes(attr);
-                }
-            }
 
 //            WindowManager.LayoutParams lp = dialog.getWindow()
 //                    .getAttributes();
@@ -119,31 +130,69 @@ public class CommonDialogService extends Service implements CommonDialogListener
 //
 //            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
-        }else {
             Tishi tishi=new Tishi();
             tishi.setA(a);
             tishi.setP(p);
             tishi.setTishi(t);
-            Message message=Message.obtain();
+
+            Message message= Message.obtain();
+            message.what=111;
+            message.obj=tishi;
+            handler.sendMessage(message);
+
+        }else {
+
+            Tishi tishi=new Tishi();
+            tishi.setA(a);
+            tishi.setP(p);
+            tishi.setTishi(t);
+
+            Message message= Message.obtain();
             message.what=111;
             message.obj=tishi;
            handler.sendMessage(message);
-
 
         }
     }
 
     @Override
     public void show(String a, String t, int p) {
-       showDialog(a,t,p);
+        if(dialog!=null && dialog.isShowing()){
+            Tishi tishi=new Tishi();
+            tishi.setA(a);
+            tishi.setP(p);
+            tishi.setTishi(t);
+
+            Message message= Message.obtain();
+            message.what=111;
+            message.obj=tishi;
+            handler.sendMessage(message);
+        }else {
+            showDialog(a,t,p);
+        }
+
     }
+
 
     @Override
     public void cancel() {
-         if(dialog!=null){
+         if(dialog!=null && dialog.isShowing()){
                 dialog.dismiss();
                 dialog=null;
 
          }
+    }
+
+    @Override
+    public void setDate(String a, int p, String t) {
+        Tishi tishi=new Tishi();
+        tishi.setA(a);
+        tishi.setP(p);
+        tishi.setTishi(t);
+
+        Message message= Message.obtain();
+        message.what=111;
+        message.obj=tishi;
+        handler.sendMessage(message);
     }
 }

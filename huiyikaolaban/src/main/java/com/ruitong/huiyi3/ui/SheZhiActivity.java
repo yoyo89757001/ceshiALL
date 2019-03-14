@@ -16,8 +16,10 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.Xml;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -30,6 +32,7 @@ import com.ruitong.huiyi3.beans.ZhuJiBean;
 import com.ruitong.huiyi3.beans.ZhuJiBeanH;
 
 import com.ruitong.huiyi3.cookies.CookiesManager;
+import com.ruitong.huiyi3.dialog.BangDingDialog;
 import com.ruitong.huiyi3.dialog.DuQuDialog;
 import com.ruitong.huiyi3.dialog.GaiNiMaBi;
 import com.ruitong.huiyi3.dialog.MoBanDialog;
@@ -40,6 +43,7 @@ import com.ruitong.huiyi3.dialog.XiuGaiXinXiDialog;
 import com.ruitong.huiyi3.dialog.XuanIPDialog;
 import com.ruitong.huiyi3.dialog.YuYingDialog;
 import com.ruitong.huiyi3.utils.DateUtils;
+import com.ruitong.huiyi3.utils.FaceInit;
 import com.ruitong.huiyi3.utils.FileUtil;
 import com.ruitong.huiyi3.utils.GsonUtil;
 
@@ -53,6 +57,9 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,6 +106,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
     private StringBuilder stringBuilder=new StringBuilder();
     //private UnzipFileListener mUnzipFileListener;
     private int curpercent = 0;
+    private BangDingDialog bangDingDialog;
 
 
     @Override
@@ -112,6 +120,8 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
         if (baoCunBean.getWenzi()==null){
             baoCunBean.setWenzi("");
         }
+
+        EventBus.getDefault().register(this);//订阅
 
         baoCunBeanDao.put(baoCunBean);
         baoCunBean=baoCunBeanDao.get(123456L);
@@ -194,12 +204,30 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
 
 }
 
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onDataSynEvent(String event) {
+        if (bangDingDialog != null && bangDingDialog.isShowing()) {
+            bangDingDialog.setContents(event);
+        }
+
+        Toast tastyToast = TastyToast.makeText(SheZhiActivity.this, event, TastyToast.LENGTH_LONG, TastyToast.INFO);
+        tastyToast.setGravity(Gravity.CENTER, 0, 0);
+        tastyToast.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);//解除订阅
+    }
+
     @Override
     protected void onPause() {
         //开启Activity
         //  Log.d("SheZhiActivity", "baoCunBean.getMoban():" + baoCunBean.getMoban());
         switch (baoCunBean.getMoban()){
-            case 1:
+            case 201:
                 startActivity(new Intent(SheZhiActivity.this,MainActivity204.class));
                 SystemClock.sleep(1600);
 
@@ -494,6 +522,34 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                 animatorSet8.setDuration(300);
                 animatorSet8.addListener(new AnimatorListenerAdapter(){
                     @Override public void onAnimationEnd(Animator animation) {
+
+                        bangDingDialog = new BangDingDialog(SheZhiActivity.this);
+                        bangDingDialog.setCanceledOnTouchOutside(false);
+                        bangDingDialog.setContents(baoCunBean.getJihuoma()+"",null);
+                        bangDingDialog.setOnQueRenListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String jihuoma=bangDingDialog.getZhuCeMa();
+                                String jhm[] =jihuoma.split("-");
+                                if (jhm.length==5){
+                                    baoCunBean.setJihuoma(jihuoma);
+                                    baoCunBeanDao.put(baoCunBean);
+                                    Log.d("SheZhiActivity2", "保存激活码成功");
+                                }
+
+                                FaceInit init = new FaceInit(SheZhiActivity.this);
+                                init.init(bangDingDialog.getZhuCeMa(), baoCunBean);
+                                bangDingDialog.jiazai();
+                            }
+                        });
+                        bangDingDialog.setQuXiaoListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                bangDingDialog.dismiss();
+                            }
+                        });
+                        bangDingDialog.show();
+
 //                        final ShanChuKuDialog shanChuKuDialog=new ShanChuKuDialog(SheZhiActivity.this);
 //                        shanChuKuDialog.setOnQueRenListener(new View.OnClickListener() {
 //                            @Override
