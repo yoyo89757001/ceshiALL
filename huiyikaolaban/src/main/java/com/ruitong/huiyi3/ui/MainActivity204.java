@@ -243,11 +243,11 @@ public class MainActivity204 extends AppCompatActivity  {
     /* 人脸识别Group */
 
     private boolean isAnXia = true;
-    private ConcurrentHashMap<Long, Integer> concurrentHashMap = new ConcurrentHashMap<Long, Integer>();
+   // private ConcurrentHashMap<Long, Integer> concurrentHashMap = new ConcurrentHashMap<Long, Integer>();
     private static boolean cameraFacingFront = true;
-    private int cameraRotation;
-    private static final int cameraWidth = 1280;
-    private static final int cameraHeight = 720;
+   // private int cameraRotation;
+   // private static final int cameraWidth = 1280;
+  //  private static final int cameraHeight = 720;
     // private IjkVideoView shipingView;
     private int heightPixels;
     private int widthPixels;
@@ -257,7 +257,7 @@ public class MainActivity204 extends AppCompatActivity  {
     LinkedBlockingQueue<Toast> mToastBlockQueue;
     // private static boolean isDH = false;
     private static boolean isLink = true;
-    private long tID = -1;
+   // private long tID = -1;
     // private boolean isNet = false;
     /*DetectResult queue*/
 

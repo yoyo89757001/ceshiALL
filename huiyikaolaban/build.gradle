@@ -21,6 +21,7 @@ android {
 
     }
 
+
     dexOptions {
         jumboMode true
         preDexLibraries false
@@ -35,6 +36,10 @@ android {
         }
     }
 
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }
 
 //afterEvaluate {

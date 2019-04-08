@@ -17,6 +17,7 @@
             android:gravity="center"
             android:id="@+id/checkbox"
             android:checked="false"
+            android:enabled="false"
             android:layout_marginLeft="20dp"
             style="@style/Base.Widget.AppCompat.CompoundButton.CheckBox"
             android:layout_width="40dp"

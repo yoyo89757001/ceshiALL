@@ -2,14 +2,14 @@ package com.ruitong.huiyi3.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
+
 
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 
 import android.view.View;
-import android.view.ViewGroup;
+
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
@@ -73,7 +73,7 @@ public class XuanIPDialog extends Dialog  {
         this.context=context;
         baoCunBeanDao = MyApplication.myApplication.getBaoCunBeanBox();
         baoCunBean = baoCunBeanDao.get(123456L);
-        if (baoCunBean.getWenzi()==null || baoCunBean.getWenzi1()==null){
+        if (baoCunBean.getWenzi()==null || baoCunBean.getGonggao()==null){
             Toast tastyToast= TastyToast.makeText(context,"请先设置账号密码!",TastyToast.LENGTH_LONG,TastyToast.ERROR);
             tastyToast.setGravity(Gravity.CENTER,0,0);
             tastyToast.show();
@@ -178,7 +178,7 @@ public class XuanIPDialog extends Dialog  {
 
         RequestBody body = new FormBody.Builder()
                 .add("username",baoCunBean.getWenzi())
-                .add("password",baoCunBean.getWenzi1())
+                .add("password",baoCunBean.getGonggao())
                 .build();
 
         Request.Builder requestBuilder = new Request.Builder()
@@ -288,6 +288,7 @@ public class XuanIPDialog extends Dialog  {
                                             iPbean.setText(bb.getCamera_address());
                                             iPbean.setTrue(false);
                                             iPbeanList.add(iPbean);
+                                            Log.d("XuanIPDialog", "视频流地址"+bb.getCamera_address());
                                         }
                                     }
 

@@ -138,13 +138,6 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
    private ArrayBlockingQueue<byte[]> mDetectResultQueue;
    private ArrayBlockingQueue<CameraPreviewData> mFeedFrameQueue;
 
-    private static final String authIP = "https://api-cn.faceplusplus.com";
-    private static final String apiKey = "zIvtfbe_qPHpLZzmRAE-zVg7-EaVhKX2";
-    private static final String apiSecret = "-H4Ik0iZ_5YTyw5NPT8LfnJREz_NCbo7";
-
-//    private static final String authIP = "https://api-cn.faceplusplus.com";
-//    private static final String apiKey = "JHt8TdGoELfkEKYkjQMogR8GPLIPAfRM";
-//    private static final String apiSecret = "qgPwtgw9Yiqn2aL9KQyv1ukigAV7xWup";
 
     // private BaoCunBean baoCunBean = null;
    // private Box<BaoCunBean> baoCunBeanDao = null;
@@ -228,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
 
                         }
                     }).start();
-
 
 
                     break;

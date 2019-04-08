@@ -46,7 +46,12 @@ public class MyApplication extends MultiDexApplication {
 
 	static
 	{
-		System.loadLibrary("humansensor_jni");
+		try {
+			System.loadLibrary("humansensor_jni");
+		}catch (Exception e){
+			Log.d(TAG, e.getMessage()+"fdsfdsf");
+		}
+
 	}
 
 

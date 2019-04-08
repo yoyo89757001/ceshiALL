@@ -280,6 +280,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                             dialog.setOnQueRenListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    Log.d("SheZhiActivity", "WebsocketPushMsg"+dialog.xuanze());
                                     baoCunBean.setShipingIP(dialog.xuanze());
                                     baoCunBeanDao.put(baoCunBean);
                                     baoCunBean=baoCunBeanDao.get(123456L);
@@ -637,17 +638,17 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                     @Override public void onAnimationEnd(Animator animation) {
                         //弹窗
                         final XiuGaiHouTaiDialog dialog=new XiuGaiHouTaiDialog(SheZhiActivity.this);
-                        if (baoCunBean.getTouxiangzhuji()==null && baoCunBean.getGuanggaojiMing()==null){
+                        if (baoCunBean.getTouxiangzhuji()==null){
                             dialog.setContents("http://192.168.2.78","账号","密码");
                         }else {
-                            dialog.setContents(baoCunBean.getTouxiangzhuji(),baoCunBean.getWenzi(),baoCunBean.getWenzi1());
+                            dialog.setContents(baoCunBean.getTouxiangzhuji(),baoCunBean.getWenzi(),baoCunBean.getGonggao());
                         }
                         dialog.setOnQueRenListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 baoCunBean.setTouxiangzhuji(dialog.getIp());
                                 baoCunBean.setWenzi(dialog.getZhanghao());
-                                baoCunBean.setWenzi1(dialog.getMima());
+                                baoCunBean.setGonggao(dialog.getMima());
                                 baoCunBeanDao.put(baoCunBean);
                                 baoCunBean=baoCunBeanDao.get(123456L);
                               //  try {

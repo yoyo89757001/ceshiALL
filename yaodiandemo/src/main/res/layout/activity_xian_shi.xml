@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/salepy_bg"
+    android:layout_height="match_parent"
+    tools:context=".ui.XianShiActivity">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_marginLeft="120dp"
+        android:layout_width="500dp"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:background="#09000000"
+            android:padding="20dp"
+            android:orientation="vertical"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:text="1.扫码关注集和堂，成为会员，即刻享受\n微信购药优惠和送药上门服务"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_gravity="right"
+                android:background="@drawable/jdbg"
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:padding="20dp"
+            android:layout_marginTop="20dp"
+            android:background="#09000000"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="2、购药伴侣智能推荐：您购买的氢溴酸右美沙芬口服溶液药品，\n主治止咳化痰症状，推荐购买太极急支糖浆，中西结合，搭配治疗，疗效更好哦"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+
+
+    <ImageView
+        android:id="@+id/fanhui"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/xiangzuo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>

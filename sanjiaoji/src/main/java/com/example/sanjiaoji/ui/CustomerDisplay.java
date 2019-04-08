@@ -191,10 +191,9 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
                     }
 
 
+
                     //红外状态,value判断
                     //  int value = humansensor_manager.get_gpio1_value(fd);
-
-
                     //开继电器，即闸机开关
                     humansensor_manager.set_gpio4_value(fd, 1);
 
@@ -225,7 +224,6 @@ public class CustomerDisplay extends Presentation implements CameraManager2.Came
                     logo.setVisibility(View.VISIBLE);
                     dabg.setVisibility(View.VISIBLE);
                     rlrlrl.setVisibility(View.INVISIBLE);
-
 
 //                    if (longList2.size() > 0)
 //                        longList2.remove(0);
