@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/newrl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bgks">
+
+        <RelativeLayout
+            android:id="@+id/toprl"
+            android:layout_width="match_parent"
+            app:layout_marginPercent="2%"
+            android:background="@drawable/new_view_bg"
+            app:layout_heightPercent="33%" />
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical"
+            app:layout_widthPercent="52%"
+            app:layout_marginLeftPercent="68%"
+            app:layout_marginRightPercent="3%"
+            app:layout_marginTopPercent="4.5%">
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/shijian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="15:36"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                app:minTextSize="12sp"
+                android:layout_marginRight="40dp"
+                android:layout_alignParentRight="true"/>
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/riqi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="4月18日"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                app:minTextSize="12sp" />
+
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/xingqi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:maxLines="1"
+                android:text="星期天"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                app:minTextSize="12sp"
+                android:layout_toRightOf="@id/riqi"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/line_layout_number"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            app:layout_widthPercent="52%"
+            app:layout_marginLeftPercent="72%"
+            app:layout_marginRightPercent="3%"
+            app:layout_marginTopPercent="30%">
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_sum_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="总人数："-->
+                <!--android:visibility="gone"-->
+                <!--android:textColor="#fff"-->
+                <!--android:textSize="25dp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_sum"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="500"-->
+                <!--android:visibility="gone"-->
+                <!--android:textColor="#fff"-->
+                <!--android:textSize="25dp"-->
+                <!--android:layout_toRightOf="@id/tv_sum_title"/>-->
+
+            <TextView
+                android:id="@+id/tv_son_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="打卡人数："
+                android:textColor="#fff"
+                android:textSize="25dp"/>
+
+            <TextView
+                android:id="@+id/tv_son"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="25dp"
+                android:layout_toRightOf="@id/tv_son_title"/>
+
+        </RelativeLayout>
+
+
+
+        <ImageView
+            android:id="@+id/img_logo"
+            android:background="#00ffffff"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:focusedByDefault="false"
+            app:layout_heightPercent="8%"
+            app:layout_widthPercent="15%" />
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/tv_meeting_name"
+            android:layout_alignParentRight="true"
+            android:gravity="left"
+            android:maxEms="6"
+            android:maxLines="2"
+            android:text="会议名称"
+            android:textColor="#fff"
+            android:textSize="60dp"
+            android:textStyle="bold"
+            app:layout_marginTopPercent="11%"
+            app:layout_widthPercent="52%"
+            app:layout_marginLeftPercent="30%"
+            app:layout_marginRightPercent="3%"
+            android:layout_height="wrap_content"/>
+
+
+        <SurfaceView
+            android:id="@+id/preview"
+            app:layout_marginLeftPercent="5%"
+            app:layout_marginTopPercent="4.7%"
+            app:layout_heightPercent="28%"
+            app:layout_widthPercent="58%" />
+
+        <!--<SurfaceView-->
+            <!--app:layout_marginLeftPercent="6%"-->
+            <!--app:layout_marginTopPercent="3.5%"-->
+            <!--app:layout_heightPercent="30%"-->
+            <!--app:layout_widthPercent="32%" />-->
+
+        <ImageView
+            android:background="@drawable/videobg"
+            app:layout_marginLeftPercent="4.8%"
+            app:layout_marginTopPercent="4.6%"
+            app:layout_heightPercent="28.3%"
+            app:layout_widthPercent="58.6%"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            app:layout_marginLeftPercent="3%"
+            app:layout_marginRightPercent="3%"
+            android:background="#0976"
+            app:layout_heightPercent="65%">
+
+            <LinearLayout
+                android:id="@+id/bottomsss"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </android.support.percent.PercentRelativeLayout>
+
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/gongsi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="36sp"
+        android:visibility="gone"
+        app:minTextSize="12sp" />
+
+    <TextView
+        android:id="@+id/tishi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/hongse_yjbg"
+        android:gravity="center"
+        android:text="识别中,请正对镜头..."
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/dialog_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:background="@drawable/dialog_bg"
+        android:layout_centerVertical="true"
+        android:visibility="gone">
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="1500dp"
+        android:background="#00FFC107"
+        android:layout_marginTop="500dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/relative2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="#0000BCD4"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/relative1"
+            android:layout_width="0dp"
+            android:layout_weight="2.1"
+            android:clipChildren="false"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="#00FFC107"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/relative3"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="#004CAF50"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"></LinearLayout>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/shezhi_tv"
+        android:background="@color/transparent"
+        android:layout_width="82dp"
+        android:layout_height="82dp"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/wangluo"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10px"
+        android:layout_marginTop="10px"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        app:lottie_fileName="wf.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true" />
+
+</RelativeLayout>

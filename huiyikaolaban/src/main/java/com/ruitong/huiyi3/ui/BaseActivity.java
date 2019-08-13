@@ -90,111 +90,115 @@ public class BaseActivity extends Activity {
             Log.d("ggg", "file.mkdirs():" + file2.mkdirs());
         }
 
-        //开启信鸽的日志输出，线上版本不建议调用
-        XGPushConfig.enableDebug(getApplicationContext(), true);
-        //ed02bf3dc1780d644f0797a9153963b37ed570a5
+        startActivity(new Intent(BaseActivity.this,MainActivitykuangshi2.class));
+        finish();
 
- /*
-        注册信鸽服务的接口
-        如果仅仅需要发推送消息调用这段代码即可
-        */
-        XGPushManager.registerPush(getApplicationContext(),
-                new XGIOperateCallback() {
-                    @Override
-                    public void onSuccess(Object data, int flag) {
-                        String deviceId=null;
-                        baoCunBean.setXgToken(data+"");
-                        Log.w("MainActivity", "+++ register push sucess. token:" + data + "flag" + flag);
-                        if (baoCunBean.getTuisongDiZhi()==null || baoCunBean.getTuisongDiZhi().equals("")) {
-                            deviceId = GetDeviceId.getDeviceId(BaseActivity.this);
-                            if (deviceId==null){
-                                ToastUtils2.show2(BaseActivity.this,"获取设备唯一标识失败");
-                                return;
-                            }else {
-                                Log.d("BaseActivity", deviceId+"设备唯一标识");
-                                baoCunBean.setTuisongDiZhi(deviceId);
-                                baoCunBeanDao.put(baoCunBean);
-                            }
-                        }else {
-                            Log.d("BaseActivity", baoCunBean.getTuisongDiZhi()+"设备唯一标识");
-                        }
-
-                        //1代表横  2代表竖
-                        switch (baoCunBean.getMoban()){
-                            case 101://横屏 第一版
-
-
-                                break;
-                            case 102:
-
-                                break;
-                            case 103:
-
-                                break;
-
-                            case 201:
-                                //默认模版 //竖屏 第一版
-                                startActivity(new Intent(BaseActivity.this,MainActivity204.class));
-                                finish();
-
-
-                                break;
-                            case 202:
-
-
-                                break;
-                            case 203:
-
-
-                                break;
-
-                        }
-                        link_uplod(baoCunBean.getHoutaiDiZhi(),data+"");
-
-                    }
-                    @Override
-                    public void onFail(Object data, int errCode, String msg) {
-                        Log.w("MainActivity",
-                                "+++ register push fail. token:" + data
-                                        + ", errCode:" + errCode + ",msg:"
-                                        + msg);
-                        ToastUtils2.show2(BaseActivity.this,"注册推送失败"+msg);
-                        //1代表横  2代表竖
-                        switch (baoCunBean.getMoban()){
-                            case 101://横屏 第一版
-                              //  startActivity(new Intent(BaseActivity.this,MainActivity102.class));
-                                finish();
-
-                                break;
-                            case 102:
-
-                                break;
-                            case 103:
-
-                                break;
-
-                            case 201:
-                                //默认模版 //竖屏 第一版
-                                startActivity(new Intent(BaseActivity.this,MainActivity204.class));
-                                finish();
-                                //  startActivity(new Intent(BaseActivity.this,MainActivity201.class));
-                                //   finish();
-
-                                break;
-                            case 202:
-                                //   startActivity(new Intent(BaseActivity.this,MainActivity202.class));
-                                //  finish();
-
-                                break;
-                            case 203:
-
-
-                                break;
-
-                        }
-
-                    }
-                });
+//        //开启信鸽的日志输出，线上版本不建议调用
+//        XGPushConfig.enableDebug(getApplicationContext(), true);
+//        //ed02bf3dc1780d644f0797a9153963b37ed570a5
+//
+// /*
+//        注册信鸽服务的接口
+//        如果仅仅需要发推送消息调用这段代码即可
+//        */
+//        XGPushManager.registerPush(getApplicationContext(),
+//                new XGIOperateCallback() {
+//                    @Override
+//                    public void onSuccess(Object data, int flag) {
+//                        String deviceId=null;
+//                        baoCunBean.setXgToken(data+"");
+//                        Log.w("MainActivity", "+++ register push sucess. token:" + data + "flag" + flag);
+//                        if (baoCunBean.getTuisongDiZhi()==null || baoCunBean.getTuisongDiZhi().equals("")) {
+//                            deviceId = GetDeviceId.getDeviceId(BaseActivity.this);
+//                            if (deviceId==null){
+//                                ToastUtils2.show2(BaseActivity.this,"获取设备唯一标识失败");
+//                                return;
+//                            }else {
+//                                Log.d("BaseActivity", deviceId+"设备唯一标识");
+//                                baoCunBean.setTuisongDiZhi(deviceId);
+//                                baoCunBeanDao.put(baoCunBean);
+//                            }
+//                        }else {
+//                            Log.d("BaseActivity", baoCunBean.getTuisongDiZhi()+"设备唯一标识");
+//                        }
+//
+//                        //1代表横  2代表竖
+//                        switch (baoCunBean.getMoban()){
+//                            case 101://横屏 第一版
+//
+//
+//                                break;
+//                            case 102:
+//
+//                                break;
+//                            case 103:
+//
+//                                break;
+//
+//                            case 201:
+//                                //默认模版 //竖屏 第一版
+//                               // startActivity(new Intent(BaseActivity.this,MainActivity204.class));
+//                              //  finish();
+//                                startActivity(new Intent(BaseActivity.this,MainActivitykuangshi2.class));
+//                                finish();
+//
+//                                break;
+//                            case 202:
+//
+//
+//                                break;
+//                            case 203:
+//
+//
+//                                break;
+//
+//                        }
+//                        link_uplod(baoCunBean.getHoutaiDiZhi(),data+"");
+//
+//                    }
+//                    @Override
+//                    public void onFail(Object data, int errCode, String msg) {
+//                        Log.w("MainActivity",
+//                                "+++ register push fail. token:" + data
+//                                        + ", errCode:" + errCode + ",msg:"
+//                                        + msg);
+//                        ToastUtils2.show2(BaseActivity.this,"注册推送失败"+msg);
+//                        //1代表横  2代表竖
+//                        switch (baoCunBean.getMoban()){
+//                            case 101://横屏 第一版
+//                              //  startActivity(new Intent(BaseActivity.this,MainActivity102.class));
+//                                finish();
+//
+//                                break;
+//                            case 102:
+//
+//                                break;
+//                            case 103:
+//
+//                                break;
+//
+//                            case 201:
+//                                //默认模版 //竖屏 第一版
+//                                startActivity(new Intent(BaseActivity.this,MainActivitykuangshi.class));
+//                                finish();
+//                                //  startActivity(new Intent(BaseActivity.this,MainActivity201.class));
+//                                //   finish();
+//
+//                                break;
+//                            case 202:
+//                                //   startActivity(new Intent(BaseActivity.this,MainActivity202.class));
+//                                //  finish();
+//
+//                                break;
+//                            case 203:
+//
+//
+//                                break;
+//
+//                        }
+//
+//                    }
+//                });
     }
 
 

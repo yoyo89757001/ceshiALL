@@ -49,6 +49,15 @@ public class BaoCunBean {
     private int xiabandaka;
     private String jihuoma;
     private String xgToken;
+    private String tishi;
+
+    public String getTishi() {
+        return tishi;
+    }
+
+    public void setTishi(String tishi) {
+        this.tishi = tishi;
+    }
 
     public String getXgToken() {
         return xgToken;

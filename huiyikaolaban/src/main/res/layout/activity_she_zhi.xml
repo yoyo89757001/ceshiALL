@@ -18,8 +18,8 @@
                 android:layout_marginTop="20dp"
                 android:textSize="16sp"
                 android:text="设置后台地址"
-                android:textColor="@color/lanse33"
-                android:background="@drawable/zidonghuoqu2"
+                android:textColor="@color/white"
+                android:background="@drawable/zidonghuoqu1"
                 android:layout_width="150dp"
                 android:layout_marginBottom="20dp"
                 android:layout_height="56dp" />
@@ -38,10 +38,9 @@
                 android:id="@+id/bt2"
                 android:layout_marginTop="20dp"
                 android:textSize="16sp"
-                android:visibility="gone"
-                android:text="设置主机地址"
-                android:textColor="@color/lanse33"
-                android:background="@drawable/zidonghuoqu2"
+                android:text="退出"
+                android:textColor="@color/white"
+                android:background="@drawable/zidonghuoqu1"
                 android:layout_width="150dp"
                 android:layout_height="56dp" />
 
@@ -105,6 +104,7 @@
                 android:layout_marginTop="20dp"
                 android:textSize="16sp"
                 android:text="机器绑定"
+                android:visibility="gone"
                 android:textColor="@color/lanse33"
                 android:background="@drawable/zidonghuoqu2"
                 android:layout_width="150dp"

@@ -107,7 +107,7 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
     //private UnzipFileListener mUnzipFileListener;
     private int curpercent = 0;
     private BangDingDialog bangDingDialog;
-
+    private boolean isT=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,9 +228,10 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
         //  Log.d("SheZhiActivity", "baoCunBean.getMoban():" + baoCunBean.getMoban());
         switch (baoCunBean.getMoban()){
             case 201:
-                startActivity(new Intent(SheZhiActivity.this,MainActivity204.class));
-                SystemClock.sleep(1600);
-
+                if (isT){
+                    startActivity(new Intent(SheZhiActivity.this,BaseActivity.class));
+                    SystemClock.sleep(1600);
+                }
                 break;
 
             case 2:
@@ -305,35 +306,36 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                         ObjectAnimator.ofFloat(bt2,"scaleY",1.0f,1.2f,1.0f)
                 );
                 //animatorSet.setInterpolator(new DescelerateInterpolator());
-                animatorSet2.setDuration(300);
-                animatorSet2.addListener(new AnimatorListenerAdapter(){
-                    @Override public void onAnimationEnd(Animator animation) {
-                        final XiuGaiXinXiDialog dialog=new XiuGaiXinXiDialog(SheZhiActivity.this);
-                        if (baoCunBean.getZhujiDiZhi()==null){
-                            dialog.setContents("设置主机地址","ws://192.168.2.78:9000/video");
-                        }else {
-                            dialog.setContents("设置主机地址",baoCunBean.getZhujiDiZhi());
-                        }
-                        dialog.setOnQueRenListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                baoCunBean.setZhujiDiZhi(dialog.getContents());
-                                baoCunBeanDao.put(baoCunBean);
-                                baoCunBean=baoCunBeanDao.get(123456L);
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.setQuXiaoListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
 
-                    }
-                });
-                animatorSet2.start();
+
+                        isT=false;
+                        kaiPing();
+                        finish();
+
+//                        final XiuGaiXinXiDialog dialog=new XiuGaiXinXiDialog(SheZhiActivity.this);
+//                        if (baoCunBean.getZhujiDiZhi()==null){
+//                            dialog.setContents("设置主机地址","ws://192.168.2.78:9000/video");
+//                        }else {
+//                            dialog.setContents("设置主机地址",baoCunBean.getZhujiDiZhi());
+//                        }
+//                        dialog.setOnQueRenListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                baoCunBean.setZhujiDiZhi(dialog.getContents());
+//                                baoCunBeanDao.put(baoCunBean);
+//                                baoCunBean=baoCunBeanDao.get(123456L);
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        dialog.setQuXiaoListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        dialog.show();
+
+
                 break;
             case R.id.bt3:
                 ChongsZHI();
@@ -2462,7 +2464,17 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
     }
 
 
+    private void kaiPing(){
 
+        sendBroadcast(new Intent("com.android.internal.policy.impl.showNavigationBar"));
+        sendBroadcast(new Intent("com.android.systemui.statusbar.phone.statusopen"));
+    }
+
+    private void guanPing(){
+
+        sendBroadcast(new Intent("com.android.internal.policy.impl.hideNavigationBar"));
+        sendBroadcast(new Intent("com.android.systemui.statusbar.phone.statusclose"));
+    }
 
     public static class  UsbBroadCastReceiver extends BroadcastReceiver {
 

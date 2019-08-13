@@ -8,7 +8,7 @@ package com.pingan.ai.cameraview.utils;
 
 public class SettingVar {
     public static int cameraID= 0;
-    public static int faceRotation = 270;
+    public static int faceRotation = 90;
     public static boolean isSettingAvailable = true;
     public static int cameraPreviewRotation = 90;
     public static boolean isCross = false;

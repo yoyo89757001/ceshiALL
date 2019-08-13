@@ -1735,51 +1735,11 @@ public class MainActivity204 extends AppCompatActivity  {
 
 
 
-//            if (todayBean.getTianqi2().contains("晴")) {
-//                tianqiIm2.setBackgroundResource(R.drawable.qing);
-//            } else if (todayBean.getTianqi2().contains("雨")) {
-//                tianqiIm2.setBackgroundResource(R.drawable.xiayu);
-//            } else if (todayBean.getTianqi2().contains("多云")) {
-//                tianqiIm2.setBackgroundResource(R.drawable.duoyun);
-//            } else if (todayBean.getTianqi2().contains("阴")) {
-//                tianqiIm2.setBackgroundResource(R.drawable.yintian);
-//            }
-//
-//
-//            if (todayBean.getTianqi3().contains("晴")) {
-//                tianqiIm3.setBackgroundResource(R.drawable.qing);
-//            } else if (todayBean.getTianqi3().contains("雨")) {
-//                tianqiIm3.setBackgroundResource(R.drawable.xiayu);
-//            } else if (todayBean.getTianqi3().contains("多云")) {
-//                tianqiIm3.setBackgroundResource(R.drawable.duoyun);
-//            } else if (todayBean.getTianqi3().contains("阴")) {
-//                tianqiIm3.setBackgroundResource(R.drawable.yintian);
-//            }
 
-//            shezhiTv.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.d("MainActivity102", "粉色的房贷首付");
-//                    startActivity(new Intent(MainActivity204.this,SheZhiActivity.class));
-//                    finish();
-//                }
-//            });
 
         }
 
-//        RelativeLayout.LayoutParams ppp0 = (RelativeLayout.LayoutParams) zidongtext.getLayoutParams();
-//        ppp0.width = (int) ((float) dw * 0.7f);
-//        ppp0.height = (int) ((float) dw * 0.21f);
-//        ppp0.topMargin = -10;
-//        zidongtext.setLayoutParams(ppp0);
-//        zidongtext.invalidate();
-//     //   Log.d("MainActivity101", baoCunBean.getWenzi1() + "jjjjj");
-//        if (baoCunBean.getWenzi1() != null)
-//            zidongtext.setText(baoCunBean.getWenzi1());
-//        if (baoCunBean.getTouxiangzhuji() != null)
-//            daBg.setImageBitmap(BitmapFactory.decodeFile(baoCunBean.getTouxiangzhuji()));
 
-        // ViewUpadte.updataViewGroup("RelativeLayout", fgrt, 0, (int) ((dh * 0.15f)/3.0), 0, 0, 0, 0);
 
 
         ViewUpadte.updataView("LinearLayout", tianqiIm, (int) (dw * 0.050f), (int) (dw * 0.050f), 0, 0, 0, 0);

@@ -94,7 +94,7 @@ public class FacePassUtil {
                                 config = new FacePassConfig(searchThreshold, livenessThreshold, livenessEnabled, smileEnabled, ageGenderEnabled,
                                         faceMinThreshold, poseThreshold, blurThreshold,
                                         lowBrightnessThreshold, highBrightnessThreshold, brightnessSTDThreshold,
-                                        retryCount, 0, fileRootPath,
+                                        retryCount, 90, fileRootPath,
                                         poseModel, blurModel, livenessModel, searchModel, detectModel,
                                         detectRectModel, landmarkModel, smileModel, ageGenderModel);
 

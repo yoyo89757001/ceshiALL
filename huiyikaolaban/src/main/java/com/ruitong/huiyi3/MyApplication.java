@@ -24,9 +24,11 @@ import com.ruitong.huiyi3.beans.BenDiJiLuBean;
 import com.ruitong.huiyi3.beans.ChengShiIDBean;
 
 
+import com.ruitong.huiyi3.beans.DaKaBean;
 import com.ruitong.huiyi3.beans.GuanHuai;
 import com.ruitong.huiyi3.beans.LunBoBean;
 import com.ruitong.huiyi3.beans.MyObjectBox;
+import com.ruitong.huiyi3.beans.SingInSubject;
 import com.ruitong.huiyi3.beans.Subject;
 import com.ruitong.huiyi3.beans.TodayBean;
 import com.ruitong.huiyi3.beans.XinXiAll;
@@ -40,7 +42,8 @@ import com.ruitong.huiyi3.dialogall.CommonDialogService;
 import com.ruitong.huiyi3.dialogall.ToastUtils;
 import com.ruitong.huiyi3.utils.GsonUtil;
 import com.tencent.bugly.Bugly;
-import com.ruitong.huiyi3.utils.Utils;
+
+
 import com.yatoooon.screenadaptation.ScreenAdapterTools;
 
 import java.io.File;
@@ -81,6 +84,8 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 	private Box<BenDiJiLuBean> benDiJiLuBeanBox = null;
 	private Box<ZhuJiBeanH> zhuJiBeanBox = null;
 	private BaoCunBean baoCunBean=null;
+	private Box<SingInSubject> singInSubjectBox = null;
+	private Box<DaKaBean> daKaBeanBox = null;
 
 	public static final String SDPATH = Environment.getExternalStorageDirectory().getAbsolutePath()+
 			File.separator+"ruitongzipyqt";
@@ -104,26 +109,26 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 							.commit();
 
 					BoxStore mBoxStore = MyObjectBox.builder().androidContext(this).build();
-
-//				// /搜集本地tbs内核信息并上报服务器，服务器返回结果决定使用哪个内核。
-//				QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
 //
-//					@Override
-//					public void onViewInitFinished(boolean arg0) {
-//						//x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
-//						//	Log.d("app", " onViewInitFinished is " + arg0);
-//					}
+//					QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
 //
-//					@Override
-//					public void onCoreInitFinished() {
+//						@Override
+//						public void onViewInitFinished(boolean arg0) {
+//							// TODO Auto-generated method stub
+//							//x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
+//							Log.d("app", " onViewInitFinished is " + arg0);
+//						}
 //
-//					}
-//				};
-//				//x5内核初始化接口
-//				QbSdk.initX5Environment(getApplicationContext(),  cb);
+//						@Override
+//						public void onCoreInitFinished() {
+//							// TODO Auto-generated method stub
+//						}
+//					};
+//					//x5内核初始化接口
+//					QbSdk.initX5Environment(getApplicationContext(),  cb);
 
 
-				Bugly.init(getApplicationContext(), "1f18c0b4d8", false);
+				    Bugly.init(getApplicationContext(), "1f18c0b4d8", false);
 
 					this.registerActivityLifecycleCallbacks(this);//注册
 
@@ -136,7 +141,7 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 					Intent dialogservice = new Intent(this, CommonDialogService.class);
 					startService(dialogservice);
 
-
+					singInSubjectBox = mBoxStore.boxFor(SingInSubject.class);
 					baoCunBeanBox= mBoxStore.boxFor(BaoCunBean.class);
 					subjectBox= mBoxStore.boxFor(Subject.class);
 					lunBoBeanBox= mBoxStore.boxFor(LunBoBean.class);
@@ -147,6 +152,7 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 					todayBeanBox= mBoxStore.boxFor(TodayBean.class);
 					benDiJiLuBeanBox= mBoxStore.boxFor(BenDiJiLuBean.class);
 					zhuJiBeanBox= mBoxStore.boxFor(ZhuJiBeanH.class);
+					daKaBeanBox= mBoxStore.boxFor(DaKaBean.class);
 				} catch (Exception e) {
 					Log.d(TAG, e.getMessage()+"主程序");
 				}
@@ -220,6 +226,7 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 			baoCunBean.setShibieFaZhi(70);
 			baoCunBean.setYudiao(5);
 			baoCunBean.setYusu(5);
+			baoCunBean.setWenzi("test@megvii.com");
 			baoCunBean.setBoyingren(4);
 			baoCunBean.setRuKuFaceSize(60);
 			baoCunBean.setRuKuMoHuDu(0.3f);
@@ -245,7 +252,9 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 	public Box<TodayBean> getTodayBeanBox(){
 		return todayBeanBox;
 	}
-
+	public Box<DaKaBean> getDaKaBeanBox(){
+		return daKaBeanBox;
+	}
 	public Box<BenDiJiLuBean> getBenDiJiLuBeanBox(){
 		return benDiJiLuBeanBox;
 	}
@@ -278,7 +287,9 @@ public class MyApplication extends MultiDexApplication implements Application.Ac
 		return zhuJiBeanBox;
 	}
 
-
+	public Box<SingInSubject> getSingInSubjectBox() {
+		return singInSubjectBox;
+	}
 	public static MyApplication getAppContext() {
 		return myApplication;
 	}

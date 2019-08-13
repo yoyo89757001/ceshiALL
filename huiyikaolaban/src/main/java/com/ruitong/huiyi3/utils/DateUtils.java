@@ -16,15 +16,13 @@ public class DateUtils {
                 Locale.getDefault());
         return format.format(new Date());
     }
-
-    public static String nyr(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+    public static String yrn(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
 //        int i = Integer.parseInt(time);
         return sdr.format(new Date(lcc));
     }
-
     /**
      * 掉此方法输入所要转换的时间输入例如（"2014年06月14日16时09分00秒"）返回时间戳
      *
@@ -45,6 +43,24 @@ public class DateUtils {
             e.printStackTrace();
         }
         return times;
+    }
+
+    public static String timesThree(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("MM月dd日", Locale.CHINA);
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+        //  int i = Integer.parseInt(time);
+        String times = sdr.format(new Date(lcc));
+        return times;
+    }
+
+    public static String timeMinuteSecond(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+        //   int i = Integer.parseInt(time);
+        return sdr.format(new Date(lcc));
+
     }
 
     public static String getTodayDateTimes() {
@@ -83,6 +99,22 @@ public class DateUtils {
             e.printStackTrace();
         }
         return times;
+    }
+
+    public static String timeyry(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+//        int i = Integer.parseInt(time);
+        return sdr.format(new Date(lcc));
+    }
+
+    public static String timeshijian(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("HH : mm", Locale.CHINA);
+        @SuppressWarnings("unused")
+        long lcc = Long.valueOf(time);
+//        int i = Integer.parseInt(time);
+        return sdr.format(new Date(lcc));
     }
 
     public static String getTimestamp(String time, String type) {
@@ -148,12 +180,12 @@ public class DateUtils {
      * @return
      */
     public static String timeHore(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("HH:mm:ss", Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyy_mm_dd_HH_mm_ss", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
-        int i = Integer.parseInt(time);
-        String times = sdr.format(new Date(i * 1000L));
-        return times;
+        // int i = Integer.parseInt(time);
+
+        return sdr.format(new Date(lcc));
 
     }
     /**
@@ -230,8 +262,8 @@ public class DateUtils {
         return sdr.format(new Date(lcc));
     }
 
-    public static String yrn(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
+    public static String nyr(String time) {
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
 //        int i = Integer.parseInt(time);
@@ -288,7 +320,7 @@ public class DateUtils {
     }
 
     public static String timesTwo(String time) {
-        SimpleDateFormat sdr = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+        SimpleDateFormat sdr = new SimpleDateFormat("yyyy.MM.dd", Locale.CHINA);
         @SuppressWarnings("unused")
         long lcc = Long.valueOf(time);
       //  int i = Integer.parseInt(time);

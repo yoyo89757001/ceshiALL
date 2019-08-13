@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:clipChildren="false"
+    android:id="@+id/llllll"
+    android:background="@drawable/new_dialog"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/touxiang"
+        android:scaleType="fitXY"
+        android:padding="8dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="310dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="座位号："
+        android:textSize="20sp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="680dp"
+        android:textColor="@color/blake"/>
+
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/name"
+        android:maxLines="1"
+        android:textColor="@color/blake"
+        app:minTextSize="12sp"
+        android:gravity="center"
+        android:textSize="60sp"
+        android:layout_below="@+id/touxiang"
+        android:text="name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <me.grantland.widget.AutofitTextView
+        android:id="@+id/bumen"
+        android:maxLines="1"
+        android:layout_below="@+id/name"
+        android:gravity="center"
+        android:textColor="@color/blake"
+        android:text="type"
+        app:minTextSize="12sp"
+        android:textSize="40sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

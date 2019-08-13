@@ -14,7 +14,8 @@
     <color name="blake">#ff111111</color>
     <color name="textcolor">#8c050505</color>
     <!-- 半透明 -->
-
+    <color name="on">#48FFFFFF</color>
+    <color name="of">#00ffffff</color>
     <!-- 用于页面背景 -->
     <!-- 用于页面背景 -->
     <!-- actionbar背景 ,即是所有标题栏背景 主题色 -->

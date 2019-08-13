@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/hjhjh"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/boot_layout"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+
+    <ImageView
+        android:id="@+id/dialog_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/dialog_bg"
+        android:visibility="gone">
+
+    </ImageView>
+
+
+    <RelativeLayout
+        android:gravity="center"
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </RelativeLayout>
+
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/wangluo"
+        android:visibility="gone"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:lottie_fileName="wf.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true" />
+
+
+    <ImageView
+        android:background="@color/transparent"
+        android:id="@+id/shezhi_tv"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+</RelativeLayout>

@@ -666,7 +666,8 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
 
                 if (detectionResult != null && detectionResult.faceList.length > 0) {
                     //开灯
-                    humansensor_manager.set_gpio2_value(fd, 1);
+                  //  humansensor_manager.set_gpio2_value(fd, 1);
+                    Log.d("ffffff", "fdsfsf");
                     showFacePassFace(detectionResult.faceList, image);
 
 //                    runOnUiThread(new Runnable() {
@@ -798,7 +799,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
             float top = 0;
             float right = 0;
             float bottom = 0;
-            switch (0) {
+            switch (90) {
                 case 0:
                     left = face.rect.left;
                     top = face.rect.top;
@@ -877,14 +878,15 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
                         //截取单个人头像
                         final Bitmap bitmap = Bitmap.createBitmap(bmp, x1, y1, x2, y2);
 
-                      //  Bitmap fileBitmap = FileUtil.adjustPhotoRotation(bitmap, 270);
+                        Bitmap fileBitmap = FileUtil.adjustPhotoRotation(bitmap, 270);
 
                         File file=null;
                         try {
-
-                            file=compressImage(bitmap);
+                            Log.d("fffffff", "dadasad");
+                            file=compressImage(fileBitmap);
                             link_P2(file);
                         }catch (Exception e){
+                            Log.d("ffffgggg", e.getMessage());
                             if (file!=null)
                                 file.delete();
                             isLink = true;
@@ -999,7 +1001,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
        // baoCunBean = baoCunBeanDao.get(123456L);
 
         screen_token = sharedPreferencesHelper.getSharedPreference("screen_token", "").toString().trim();
-        url = sharedPreferencesHelper.getSharedPreference("url", "http://192.168.2.2").toString().trim();
+        url = sharedPreferencesHelper.getSharedPreference("url", "http://192.168.2.61").toString().trim();
 
 
         Log.d(TAG, url);
@@ -1014,7 +1016,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
     // 1:N 对比
     private void link_P2(final File file) {
         if (screen_token.equals("") || url.equals("")) {
-            //Log.d(TAG, "gfdgfdg3333");
+            Log.d("rrrrrr", "gfdgfdg3333");
             file.delete();
 
           //  SystemClock.sleep(1000);
@@ -1022,6 +1024,7 @@ public class MainActivity extends AppCompatActivity implements CameraManager.Cam
             return;
         }
 
+        Log.d("rrrrrr", "etetetert");
 
         MultipartBody mBody;
         final MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);

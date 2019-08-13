@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="20dp"
+    android:layout_height="wrap_content">
+
+
+
+    <ImageView
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="38dp"
+        android:background="@drawable/xtanc2"
+        android:layout_width="match_parent"
+        android:layout_height="80dp" />
+
+    <ImageView
+        android:layout_alignParentRight="true"
+        android:id="@+id/touxiang"
+        android:padding="20dp"
+        android:background="@drawable/xtanc1"
+        android:layout_width="110dp"
+        android:layout_height="110dp" />
+
+
+<TextView
+    android:layout_marginLeft="10dp"
+    android:text="00:00:00"
+    android:id="@+id/time"
+    android:layout_marginTop="16dp"
+    android:textColor="@color/white"
+    android:textSize="12sp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:text="先生"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:id="@+id/name"
+        android:paddingRight="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="12dp"
+        android:background="@drawable/jianbian2"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+
+
+
+</RelativeLayout>
