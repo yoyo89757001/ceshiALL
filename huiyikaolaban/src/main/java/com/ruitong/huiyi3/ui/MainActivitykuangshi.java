@@ -119,8 +119,6 @@ import com.ruitong.huiyi3.view.GlideRoundTransform;
 
 import com.ruitong.huiyi3.view.X5WebView;
 import com.sdsmdg.tastytoast.TastyToast;
-import com.tencent.smtt.sdk.TbsVideo;
-import com.tencent.smtt.sdk.WebView;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoader;
 
@@ -143,7 +141,6 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;

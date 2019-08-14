@@ -57,14 +57,10 @@ import com.ruitong.huiyi3.beans.ShiBieBean;
 
 import com.ruitong.huiyi3.beans.WBBean;
 import com.ruitong.huiyi3.beans.WeiShiBieBean;
-
-import com.ruitong.huiyi3.beans.XGBean;
-import com.ruitong.huiyi3.service.AlarmReceiver;
 import com.ruitong.huiyi3.utils.FileUtil;
 import com.ruitong.huiyi3.utils.GsonUtil;
 import com.ruitong.huiyi3.view.GlideCircleTransform;
 import com.ruitong.huiyi3.view.GlideRoundTransform;
-import com.ruitong.huiyi3.web.HttpServer;
 import com.ruitong.huiyi3.web.MyWebServer;
 
 import org.greenrobot.eventbus.EventBus;
@@ -173,15 +169,15 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
         intentFilter.addAction("guanbi");
 
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                SystemClock.sleep(10000);
-                sendBroadcast(new Intent(MainActivitykuangshi2.this, AlarmReceiver.class));
-
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                SystemClock.sleep(10000);
+//                sendBroadcast(new Intent(MainActivitykuangshi2.this, AlarmReceiver.class));
+//
+//            }
+//        }).start();
 
         intentFilter.addAction(Intent.ACTION_TIME_TICK);//每分钟变化
         intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);//设置了系统时区
@@ -230,15 +226,16 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
 
                         try {
                             if (bean.getAvatar() != null) {
-
+                               // Log.d("MainActivitykuangshi2", bean.getAvatar());
                                 Glide.with(MainActivitykuangshi2.this)
-                                        .load(baoCunBean.getTouxiangzhuji()+bean.getAvatar())
+                                        .load(bean.getAvatar())
                                         .apply(myOptions2)
                                         .into(touxiang);
                             }else {
+
                                 Glide.get(MainActivitykuangshi2.this).clearMemory();
                                 Glide.with(MainActivitykuangshi2.this)
-                                        .load("http://www.123.cc.cc.cc.com")
+                                        .load("http://")
                                         .apply(myOptions2)
                                         .into(touxiang);
                             }
@@ -258,11 +255,10 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
                             bg.setBackgroundResource(R.drawable.tc11);
                             yuyue.setText("已预约");
                             yuyue.setTextColor(Color.parseColor("#00ff00"));
-                            beifangren.setText("被访人:");
+                            beifangren.setText("被访人: "+ bean.getRemark());
                         }
-                        name.setText(bean.getName());
+                        name.setText("姓名:\n\n"+bean.getName());
                         gongsi.setText("公司:");
-                        beifangren.setText("被访人: "+ bean.getRemark());
 
                         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) bg.getLayoutParams();
                         params.width = (int) (dw*0.6);
@@ -426,6 +422,7 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
             ShiBieBean.PersonBeanSB personBeanSB = new ShiBieBean.PersonBeanSB();
             personBeanSB.setName("陌生人");
             personBeanSB.setSubject_type(-1);
+            personBeanSB.setRemark(beans.getInterviewees());
             personBeanSB.setId(System.currentTimeMillis());
             linkedBlockingQueue.offer(personBeanSB);
 

@@ -61,14 +61,6 @@ public class MyWebServer extends NanoHTTPD  {
            // Log.d("MyWebServer", parms.get("name").get(0));
             try {
 
-//                if (parms.get("name")!=null){
-//
-//                    for (Object o : parms.get("name")){
-//                        Log.d("MyWebServer", o.toString());
-//                    }
-//                }
-
-
 
                 String name = parms.get("name")==null? "" : parms.get("name").get(0);
                 String headImage = parms.get("headImage")==null? "" : parms.get("headImage").get(0);
