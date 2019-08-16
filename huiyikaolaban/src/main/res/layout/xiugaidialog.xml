@@ -31,7 +31,7 @@
         <EditText
             android:textColor="@color/textcolor"
             android:textSize="14sp"
-            android:text="192.166.2.56"
+            android:inputType="number"
             android:background="@null"
             android:gravity="center"
             android:id="@+id/xiangce"

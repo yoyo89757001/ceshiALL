@@ -46,7 +46,7 @@ public class BaoCunBean {
     private boolean isTianQi;
     private String shangBanTime;
     private String xiaBanTime;
-    private int xiabandaka;
+    private int xiabandaka;//用来存密码
     private String jihuoma;
     private String xgToken;
     private String tishi;

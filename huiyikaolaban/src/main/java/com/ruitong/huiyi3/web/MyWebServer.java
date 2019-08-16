@@ -20,15 +20,14 @@ import fi.iki.elonen.NanoHTTPD;
 
 public class MyWebServer extends NanoHTTPD  {
 
-    private final static int PORT = 9020;
+  //  private final static int PORT = 9020;
 
 
     /*
     主构造函数，也用来启动http服务
     */
-    public MyWebServer() throws IOException {
-        super(PORT);
-
+    public MyWebServer(int port) throws IOException {
+        super(port);
         start();
     }
 

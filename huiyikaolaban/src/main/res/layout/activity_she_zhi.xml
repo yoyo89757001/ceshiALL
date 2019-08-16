@@ -21,7 +21,6 @@
                 android:textColor="@color/white"
                 android:background="@drawable/zidonghuoqu1"
                 android:layout_width="150dp"
-                android:layout_marginBottom="20dp"
                 android:layout_height="56dp" />
 
             <Button
@@ -35,6 +34,26 @@
                 android:textSize="16sp" />
 
             <Button
+                android:id="@+id/bt3"
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"
+                android:text="修改密码"
+                android:textColor="@color/white"
+                android:background="@drawable/zidonghuoqu1"
+                android:layout_width="150dp"
+                android:layout_height="56dp" />
+
+            <Button
+                android:id="@+id/bt4"
+                android:layout_width="150dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/zidonghuoqu1"
+                android:text="修改端口"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <Button
                 android:id="@+id/bt2"
                 android:layout_marginTop="20dp"
                 android:textSize="16sp"
@@ -44,27 +63,9 @@
                 android:layout_width="150dp"
                 android:layout_height="56dp" />
 
-            <Button
-                android:id="@+id/bt3"
-                android:textSize="16sp"
-                android:visibility="gone"
-                android:layout_marginTop="20dp"
-                android:text="预览摄像头"
-                android:textColor="@color/lanse33"
-                android:background="@drawable/zidonghuoqu2"
-                android:layout_width="150dp"
-                android:layout_height="56dp" />
 
-            <Button
-                android:id="@+id/bt4"
-                android:layout_width="150dp"
-                android:layout_height="56dp"
-                android:visibility="gone"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/zidonghuoqu2"
-                android:text="设置头像主机地址"
-                android:textColor="@color/lanse33"
-                android:textSize="16sp" />
+
+
 
             <Button
                 android:id="@+id/bt5"

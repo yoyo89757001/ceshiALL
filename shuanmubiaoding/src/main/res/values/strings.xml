@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RgbirImageRegistrationDemo</string>
+
+    <string name="CALIBRATION">CALIBRATION</string>
+    <string name="CALIBRATION_INFO">图像配准信息</string>
+    <string name="camera_preview">Camera Preview</string>
+</resources>

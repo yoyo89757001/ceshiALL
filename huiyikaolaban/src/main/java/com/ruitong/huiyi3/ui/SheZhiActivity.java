@@ -18,6 +18,7 @@ import android.util.Log;
 import android.util.Xml;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ import com.ruitong.huiyi3.dialog.GaiNiMaBi;
 import com.ruitong.huiyi3.dialog.MoBanDialog;
 import com.ruitong.huiyi3.dialog.XiuGaiHouTaiDialog;
 
+import com.ruitong.huiyi3.dialog.XiuGaiMiMaDialog;
 import com.ruitong.huiyi3.dialog.XiuGaiXinXiDialog;
 
 import com.ruitong.huiyi3.dialog.XuanIPDialog;
@@ -352,6 +354,43 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
                 animatorSet3.setDuration(300);
                 animatorSet3.addListener(new AnimatorListenerAdapter(){
                     @Override public void onAnimationEnd(Animator animation) {
+
+                        final XiuGaiMiMaDialog diZhiDialog2 = new XiuGaiMiMaDialog(SheZhiActivity.this);
+                        diZhiDialog2.setCanceledOnTouchOutside(false);
+                        diZhiDialog2.setContents(baoCunBean.getXiabandaka()+"", "修改设置密码");
+                        diZhiDialog2.setOnQueRenListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                try {
+                                    if (Integer.valueOf(diZhiDialog2.getUrl()).equals(Integer.valueOf(diZhiDialog2.getUrl2()))){
+                                        baoCunBean.setXiabandaka(Integer.valueOf(diZhiDialog2.getUrl()));
+                                        baoCunBeanDao.put(baoCunBean);
+                                        diZhiDialog2.dismiss();
+                                    }else {
+                                        Toast tastyToast = TastyToast.makeText(SheZhiActivity.this, "两次密码不一致", TastyToast.LENGTH_LONG, TastyToast.INFO);
+                                        tastyToast.setGravity(Gravity.CENTER, 0, 0);
+                                        tastyToast.show();
+                                    }
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                    Toast tastyToast = TastyToast.makeText(SheZhiActivity.this, "密码非数字", TastyToast.LENGTH_LONG, TastyToast.INFO);
+                                    tastyToast.setGravity(Gravity.CENTER, 0, 0);
+                                    tastyToast.show();
+                                }
+
+                            }
+                        });
+                        diZhiDialog2.setQuXiaoListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                diZhiDialog2.dismiss();
+                            }
+                        });
+                        WindowManager.LayoutParams params= diZhiDialog2.getWindow().getAttributes();
+                        diZhiDialog2.getWindow().setGravity(Gravity.CENTER);
+                        diZhiDialog2.getWindow().setAttributes(params);
+                        diZhiDialog2.show();
+
 //                        final XiuGaiXinXiDialog dialog=new XiuGaiXinXiDialog(SheZhiActivity.this);
 //                        if (baoCunBean.getTuisongDiZhi()==null){
 //                            dialog.setContents("设置推送地址","http://192.168.2.50");
@@ -399,14 +438,14 @@ public class SheZhiActivity extends Activity implements View.OnClickListener, Vi
 
                         final XiuGaiXinXiDialog dialog=new XiuGaiXinXiDialog(SheZhiActivity.this);
                         if (baoCunBean.getTouxiangzhuji()==null){
-                            dialog.setContents("设置头像主机地址","http://192.168.2.58");
+                            dialog.setContents("修改端口","9020");
                         }else {
-                            dialog.setContents("设置头像主机地址",baoCunBean.getTouxiangzhuji());
+                            dialog.setContents("修改端口",baoCunBean.getWenzi1());
                         }
                         dialog.setOnQueRenListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                baoCunBean.setTouxiangzhuji(dialog.getContents());
+                                baoCunBean.setWenzi1(dialog.getContents());
                                 baoCunBeanDao.put(baoCunBean);
                                 baoCunBean=baoCunBeanDao.get(123456L);
                                 dialog.dismiss();

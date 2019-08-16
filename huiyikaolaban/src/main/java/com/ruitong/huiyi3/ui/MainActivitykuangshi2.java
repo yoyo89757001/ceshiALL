@@ -6,11 +6,15 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -31,6 +35,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import android.widget.RelativeLayout;
@@ -57,6 +62,7 @@ import com.ruitong.huiyi3.beans.ShiBieBean;
 
 import com.ruitong.huiyi3.beans.WBBean;
 import com.ruitong.huiyi3.beans.WeiShiBieBean;
+import com.ruitong.huiyi3.dialog.MiMaDialog4;
 import com.ruitong.huiyi3.utils.FileUtil;
 import com.ruitong.huiyi3.utils.GsonUtil;
 import com.ruitong.huiyi3.view.GlideCircleTransform;
@@ -79,6 +85,7 @@ import java.net.URLEncoder;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
@@ -94,6 +101,8 @@ import sun.misc.BASE64Decoder;
 
 public class MainActivitykuangshi2 extends AppCompatActivity  {
 
+    private final MediaPlayer mp1 = new MediaPlayer();;
+    private final MediaPlayer mp2 = new MediaPlayer();
     private LinearLayoutManager manager;
     private LottieAnimationView wangluo;
     private static WebSocketClient webSocketClient = null;
@@ -139,16 +148,37 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
     private List<ShiBieBean.PersonBeanSB> personBeanSBList=new ArrayList<>();
     private DemoAdapter adapter=null;
     private int times = 0;
+    private AssetFileDescriptor yiyuyueMP ;
+    private AssetFileDescriptor wuquanxianMP ;
+    SoundPool soundPool;
+    //定义一个HashMap用于存放音频流的ID
+    private  HashMap<Integer, Integer>musicId= new HashMap<>();
+    private MyWebServer server=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
 
+        //初始化soundPool,设置可容纳12个音频流，音频流的质量为5，
+        AudioAttributes abs = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build() ;
+        soundPool =  new SoundPool.Builder()
+                .setMaxStreams(10)   //设置允许同时播放的流的最大值
+                .setAudioAttributes(abs)   //完全可以设置为null
+                .build() ;
+        //通过load方法加载指定音频流，并将返回的音频ID放入musicId中
+
+        musicId.put(1, soundPool.load(this, R.raw.wuquanxian, 1));
+        musicId.put(2, soundPool.load(this, R.raw.yiyuyue, 1));
+
         mToastBlockQueue = new LinkedBlockingQueue<>();
         baoCunBeanDao = MyApplication.myApplication.getBaoCunBeanBox();
         baoCunBean = baoCunBeanDao.get(123456L);
-
+        yiyuyueMP = getResources().openRawResourceFd(R.raw.yiyuyue);
+        wuquanxianMP = getResources().openRawResourceFd(R.raw.wuquanxian);
         //网络状态关闭
         if (netWorkStateReceiver == null) {
             netWorkStateReceiver = new NetWorkStateReceiver();
@@ -204,6 +234,26 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
         tanChuangThread.start();
 
 
+            try {
+                mp1.setDataSource(wuquanxianMP.getFileDescriptor(), wuquanxianMP.getStartOffset(),
+                        wuquanxianMP.getLength());
+                mp1.prepare();
+               // wuquanxianMP.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                mp2.setDataSource(yiyuyueMP.getFileDescriptor(), yiyuyueMP.getStartOffset(),
+                        yiyuyueMP.getLength());
+                mp2.prepare();
+               // yiyuyueMP.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
         mHandler = new WeakHandler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
@@ -250,12 +300,21 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
                             yuyue.setText("未预约");
                             gou.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.xxx));
                             beifangren.setText("请到保安亭进行预约登记");
+
+                           // soundPool.setRate(musicId.get(1),2);//播放速率
+                            //播放指定的音频流
+                            soundPool.play(musicId.get(1),1,1, 0, 0, 1);
+                          //  Log.d("MainActivitykuangshi2", "播放陌生人");
                         } else {
                             gou.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.yyy));
                             bg.setBackgroundResource(R.drawable.tc11);
                             yuyue.setText("已预约");
                             yuyue.setTextColor(Color.parseColor("#00ff00"));
                             beifangren.setText("被访人: "+ bean.getRemark());
+
+                           // soundPool.setRate(musicId.get(2),2);//播放速率
+                            soundPool.play(musicId.get(2),1,1, 0, 0, 1);
+                         //   Log.d("MainActivitykuangshi2", "播放已预约");
                         }
                         name.setText("姓名:\n\n"+bean.getName());
                         gongsi.setText("公司:");
@@ -319,11 +378,34 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
 //        }).start();
 
         try {
-            MyWebServer server =new MyWebServer();
+            if (baoCunBean.getWenzi1()==null || baoCunBean.getWenzi1().equals("")){
+                baoCunBean.setWenzi1("9020");
+            }
+            Log.d("MainActivitykuangshi2", baoCunBean.getWenzi1());
+            server =new MyWebServer(Integer.parseInt(baoCunBean.getWenzi1()));
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true){
+//                   // SystemClock.sleep(100);
+//
+//                    synchronized (mp1){
+//                        mp1.start();
+//                    }
+//                    synchronized (mp2){
+//                        mp2.start();
+//                    }
+//                }
+//
+//
+//            }
+//        }).start();
 
     }
 
@@ -332,9 +414,6 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
 
         super.onResume();
     }
-
-
-
 
 
     private class TanChuangThread extends Thread {
@@ -437,12 +516,18 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
             linkedBlockingQueue.offer(personBeanSB);
         }
 
-
-
-            Log.d("MainActivitykuangshi2", beans.toString());
-
+     //   Log.d("MainActivitykuangshi2", beans.toString());
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
+    public void onDataSynEvent2(String beans) {
+
+        if (beans.equals("guanbi")){
+            finish();
+        }
+    }
+
 
     @Override
     protected void onPause() {
@@ -459,8 +544,16 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
         shezhiTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(MainActivitykuangshi2.this,SheZhiActivity.class));
-               finish();
+                if (baoCunBean.getXiabandaka()==0){
+                    baoCunBean.setXiabandaka(123456);
+                }
+                MiMaDialog4 miMaDialog=new MiMaDialog4(MainActivitykuangshi2.this,baoCunBean.getXiabandaka());
+                WindowManager.LayoutParams params= miMaDialog.getWindow().getAttributes();
+                params.width=dw;
+                params.height=dh;
+//                miMaDialog.getWindow().setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+                miMaDialog.getWindow().setAttributes(params);
+                miMaDialog.show();
             }
         });
         dialogBg = findViewById(R.id.dialog_bg);
@@ -520,12 +613,29 @@ public class MainActivitykuangshi2 extends AppCompatActivity  {
         //marqueeView.startFlipping();
     }
 
+    /**
+     * 释放资源
+     */
+    private void releaseSoundPool() {
+        if (soundPool != null) {
+            soundPool.autoPause();
+            soundPool.release();
+            soundPool = null;
+        }
+    }
+
+
     @Override
     protected void onDestroy() {
         if (timer != null)
             timer.cancel();
         if (task != null)
             task.cancel();
+
+        releaseSoundPool();
+
+        if (server!=null)
+            server.stop();
 
         if (mToastBlockQueue != null) {
             mToastBlockQueue.clear();
